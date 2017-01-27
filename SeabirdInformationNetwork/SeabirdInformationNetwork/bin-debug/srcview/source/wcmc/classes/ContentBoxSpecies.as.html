@@ -1,0 +1,72 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ContentBoxSpecies.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/* file            contentboxspecies.as
+date            oct 2009
+author            andrew cottam
+hierarchy        contentbox &gt; contentboxspecies
+description        this file is a descendent class from the content box which introduces custom behavior for all species content boxes and descendents
+                the class has a species content box header which has a common name label and a latin name label both of which are populated when the content box&apos;s parameter value is set
+                descendent classes therefore inherit this species content box header and will have their own specific content as well
+*/</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">classes</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Image</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">core</span>.<span class="ActionScriptDefault_Text">Application</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">components</span>.<span class="ActionScriptDefault_Text">SpeciesContentBoxHeader</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ContentBoxSpecies</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">ContentBox</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_SpeciesContentBoxHeader</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SpeciesContentBoxHeader</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">SpeciesContentBoxHeader</span><span class="ActionScriptBracket/Brace">()</span>;
+           <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">][</span><span class="ActionScriptDefault_Text">Embed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;../../images/iucncat_LC.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">IUCN_LC</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span>;
+           <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">][</span><span class="ActionScriptDefault_Text">Embed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;../../images/iucncat_CR.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">IUCN_CR</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span>;
+           <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">][</span><span class="ActionScriptDefault_Text">Embed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;../../images/iucncat_EN.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">IUCN_EN</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span>;
+           <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">][</span><span class="ActionScriptDefault_Text">Embed</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;../../images/iucncat_VU.png&quot;</span><span class="ActionScriptBracket/Brace">)]</span><span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">IUCN_VU</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Class</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">species</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">Species</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ContentBoxSpecies</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;ContentBoxParameterSet&quot;</span>,<span class="ActionScriptDefault_Text">loadData</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_SpeciesContentBoxHeader</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">loadData</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ContentBoxParameterSetEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">for</span> <span class="ActionScriptReserved">each</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_species</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Species</span> <span class="ActionScriptReserved">in</span> <span class="ActionScriptDefault_Text">Application</span>.<span class="ActionScriptDefault_Text">application</span>.<span class="ActionScriptDefault_Text">speciesArray</span><span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptComment">//parse the abbreviated species code to a full name
+</span>            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_species</span>.<span class="ActionScriptDefault_Text">speciesID</span><span class="ActionScriptOperator">==</span><span class="ActionScriptDefault_Text">parameter</span><span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptDefault_Text">species</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">_species</span>;<span class="ActionScriptComment">//set the value of the content box&apos;s species parameter
+</span>                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptDefault_Text">_SpeciesContentBoxHeader</span>.<span class="ActionScriptDefault_Text">CommonNameLabel</span>.<span class="ActionScriptDefault_Text">text</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">_species</span>.<span class="ActionScriptDefault_Text">CommonName</span>; <span class="ActionScriptComment">//set the common name in the species content box header
+</span>            <span class="ActionScriptDefault_Text">_SpeciesContentBoxHeader</span>.<span class="ActionScriptDefault_Text">LatinNameLabel</span>.<span class="ActionScriptDefault_Text">text</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">_species</span>.<span class="ActionScriptDefault_Text">ScientificName</span>; <span class="ActionScriptComment">//set the latin name in the species content box header
+</span>            <span class="ActionScriptDefault_Text">_SpeciesContentBoxHeader</span>.<span class="ActionScriptDefault_Text">iucnCategoryImage</span>.<span class="ActionScriptDefault_Text">visible</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_species</span>.<span class="ActionScriptDefault_Text">SpcRedCategory</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;LC&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">_SpeciesContentBoxHeader</span>.<span class="ActionScriptDefault_Text">iucnCategoryImage</span>.<span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">IUCN_LC</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;CR&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">_SpeciesContentBoxHeader</span>.<span class="ActionScriptDefault_Text">iucnCategoryImage</span>.<span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">IUCN_CR</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;EN&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">_SpeciesContentBoxHeader</span>.<span class="ActionScriptDefault_Text">iucnCategoryImage</span>.<span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">IUCN_EN</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;VU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">_SpeciesContentBoxHeader</span>.<span class="ActionScriptDefault_Text">iucnCategoryImage</span>.<span class="ActionScriptDefault_Text">source</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">IUCN_VU</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;NA&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">_SpeciesContentBoxHeader</span>.<span class="ActionScriptDefault_Text">iucnCategoryImage</span>.<span class="ActionScriptDefault_Text">visible</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">false</span>;
+                    <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

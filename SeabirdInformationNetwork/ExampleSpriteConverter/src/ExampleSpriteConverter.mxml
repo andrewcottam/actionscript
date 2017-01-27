@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:classes="wcmc.classes.*">
+	<mx:Button click="convert(event)"/>
+	<mx:Image id="image" x="40"/>
+	<classes:SpriteUIComponent id="spriteholder" x="20"/>
+	<mx:Image source="images/amap.png" id="test" x="300"/>
+	<mx:DataGrid id="grid" x="70"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.effects.Fade;
+			import wcmc.classes.Top10MapSymbol;
+	   		[Bindable][Embed(source="/images/amap.png")]public var distribution:Class;
+			private var _image:Image=new Image();
+			private function convert(event:MouseEvent):void
+			{
+//				var _tt:Top10MapSymbol=	new Top10MapSymbol("1",0.7);
+//				spriteholder.sprite=_tt;
+//				var imgBitmap:BitmapData=new BitmapData(_tt.width, _tt.height,true,0x0); 
+//				imgBitmap.draw(_tt); 
+//				var bitmap:Bitmap = new Bitmap(imgBitmap);
+//				image.source=bitmap;
+				_image.source=distribution;
+				_image.x=400;
+				_image.y=0;
+				addChild(_image);
+				var fade:Fade=new Fade(_image);
+				fade.duration=300;
+				fade.alphaFrom=1;
+				fade.alphaTo=0;
+				fade.play();
+//				_image.setStyle("hideEffect", fade);
+//				_image.visible=false;
+//				var timer:Timer=new Timer(1,1);
+//				timer.addEventListener("timer",timesUp);
+//				timer.start();
+			}
+			private function timesUp(event:TimerEvent):void
+			{
+				_image.visible=false;
+			}
+		]]>
+	</mx:Script>
+</mx:Application>

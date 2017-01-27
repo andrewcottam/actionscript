@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:List xmlns:mx="http://www.adobe.com/2006/mxml" itemRenderer="wcmc.components.SiteListRenderer" change="dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.SITES,selectedItem.siteName))" width="100%">
+<mx:Script>
+	<![CDATA[
+		import wcmc.classes.*;
+	]]>
+</mx:Script>	
+</mx:List>

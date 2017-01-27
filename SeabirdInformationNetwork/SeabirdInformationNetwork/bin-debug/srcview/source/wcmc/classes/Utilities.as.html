@@ -1,0 +1,59 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Utilities.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">classes</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Utilities</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptReserved">static</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getToolName</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">state</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">state</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SPECIES_DISTRIBUTION_MAP</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Species distribution map&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SPECIES_ABUNDANCE_MAP</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Species abundance map&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SPECIES_TOP_10</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Top 10 sites&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SPECIES_SITE_COUNTS</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Species counts by site&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SPECIES_PA_COUNTS</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Species counts by protected area&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SPECIES_COUNTRY_COUNTS</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Species counts by country&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SPECIES_UDA_COUNTS</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Species counts by user-defined area&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SPECIES_UDA_TRENDS</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Species trends by user-defined area&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SPECIES_PRODUCTIVITY_MAP</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Species productivity map&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SITE_DISTRIBUTION_MAP</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Site location&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SITE_ABUNDANCE_MAP</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Site species list&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">case</span> <span class="ActionScriptDefault_Text">EnumStates</span>.<span class="ActionScriptDefault_Text">SITE_UDA_TRENDS</span><span class="ActionScriptOperator">:</span>
+            <span class="ActionScriptBracket/Brace">{</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;Species trends by user-defined area&quot;</span>;
+            <span class="ActionScriptReserved">break</span>;<span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptString">&quot;&quot;</span>;        
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

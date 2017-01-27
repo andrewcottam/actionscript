@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:fc="http://ns.adobe.com/flashcatalyst/2009" width="300" height="162" xmlns:iwcuserservices="services.iwcuserservices.*" xmlns:mx="library://ns.adobe.com/flex/mx" skinClass="wcmc.skins.Popup">	
+	<fx:Declarations>
+		<iwcuserservices:IWCUserServices id="iwcUserService" result="registerUserResult(event)" fault="registerUserFault(event)"/>
+		<mx:EmailValidator id="emailValidator" valid="emailValidator_valid(event);" invalid="emailValidator_invalid(event);" />
+	</fx:Declarations>
+	<s:Label x="25" y="29" text="Username:"/>
+	<s:Label x="25" y="59" text="Password:"/>
+	<s:Label x="25" y="89" text="email address:"/>
+	<s:TextInput x="118" y="19" id="userName"/>
+	<s:TextInput x="118" y="49" id="password" displayAsPassword="true"/>
+	<s:TextInput x="118" y="79" id="email" enter="registerUser(null)"/>
+	<s:Button x="176" y="121" label="Register" click="registerUser(event)" enabled="{!registering}"/>
+	<s:Button x="98" y="121" label="Cancel" click="closeMe(event)"/>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.events.ValidationResultEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			[Bindable] private var registering:Boolean=false;
+			protected function registerUser(event:MouseEvent):void
+			{
+				emailValidator.validate(email.text);
+			}
+			protected function closeMe(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			private function registerUserResult(event:ResultEvent):void
+			{
+				switch(event.result)
+				{
+					case "true":
+					{
+						Alert.show("Registration successful."); 
+						login();
+						break;
+					}
+					case "false":
+					{
+						Alert.show("Registration unsuccessful."); 
+						break;
+					}
+						
+					default:
+					{
+						Alert.show(event.result.toString());
+						break;
+					}
+				}
+				registering=false;
+			}
+			private function registerUserFault(event:FaultEvent):void
+			{
+				Alert.show("The registration service is currently unavailable.");
+			}
+			private function login():void
+			{
+				closeMe(null);
+				parentApplication.login(userName.text);
+			}
+			private function emailValidator_valid(evt:ValidationResultEvent):void 
+			{
+				registering=true;
+				iwcUserService.RegisterUser(userName.text,password.text,email.text);
+			}
+			private function emailValidator_invalid(evt:ValidationResultEvent):void 
+			{
+				email.errorString = evt.message;
+				Alert.show("Invalid email address");
+			}
+		]]>
+	</fx:Script>
+</s:SkinnableContainer>

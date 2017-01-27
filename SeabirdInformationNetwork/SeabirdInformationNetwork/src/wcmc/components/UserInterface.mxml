@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" >
+    <mx:Metadata>
+        [Event(name="ContentAreaChangeEvent", type="wcmc.classes.ContentAreaChangeEvent")]
+    </mx:Metadata>	
+    <mx:Metadata>
+        [Event(name="Error", type="wcmc.classes.ErrorEvent")]
+    </mx:Metadata>
+    <mx:Metadata>
+        [Event(name="StartDataLoad")]
+    </mx:Metadata>
+    <mx:Metadata>
+        [Event(name="EndDataLoad")]
+    </mx:Metadata>
+    <mx:Metadata>
+        [Event(name="ToolStop", type="wcmc.classes.ToolStopEvent")]
+    </mx:Metadata>
+    <mx:Metadata>
+        [Event(name="ToolClicked", type="wcmc.classes.ToolClickedEvent")]
+    </mx:Metadata>
+</mx:Canvas>

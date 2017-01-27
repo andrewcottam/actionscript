@@ -1,0 +1,73 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ICoral_Reefs_MapServer.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre>
+<span class="ActionScriptASDoc">/**
+ * Service.as
+ * This file was auto-generated from WSDL by the Apache Axis2 generator modified by Adobe
+ * Any change made to this file will be overwritten when the code is re-generated.
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span><span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">rpc</span>.<span class="ActionScriptDefault_Text">AsyncToken</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ByteArray</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">rpc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">types</span>.<span class="ActionScriptOperator">*</span>;
+               
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptinterface">interface</span> <span class="ActionScriptDefault_Text">ICoral_Reefs_MapServer</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptComment">//Stub functions for the GetLegendInfo operation
+</span>        <span class="ActionScriptASDoc">/**
+         * Call the operation on the server passing in the arguments defined in the WSDL file
+         * @param MapName
+         * @param LayerIDs
+         * @param LegendPatch
+         * @param ImageType
+         * @return An AsyncToken
+         */</span>
+        <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getLegendInfo</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">mapName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>,<span class="ActionScriptDefault_Text">layerIDs</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ArrayOfInt</span>,<span class="ActionScriptDefault_Text">legendPatch</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MapServerLegendPatch</span>,<span class="ActionScriptDefault_Text">imageType</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ImageType</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">AsyncToken</span>;
+        <span class="ActionScriptASDoc">/**
+         * Method to call the operation on the server without passing the arguments inline.
+         * You must however set the _request property for the operation before calling this method
+         * Should use it in MXML context mostly
+         * @return An AsyncToken
+         */</span>
+        <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getLegendInfo_send</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">AsyncToken</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * The getLegendInfo operation lastResult property
+         */</span>
+        <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">getLegendInfo_lastResult</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ArrayOfMapServerLegendInfo</span>;
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">getLegendInfo_lastResult</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lastResult</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ArrayOfMapServerLegendInfo</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>;
+       <span class="ActionScriptASDoc">/**
+        * Add a listener for the getLegendInfo operation successful result event
+        * @param The listener function
+        */</span>
+       <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addgetLegendInfoEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">listener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>;
+       
+       
+        <span class="ActionScriptASDoc">/**
+         * The getLegendInfo operation request wrapper
+         */</span>
+        <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">getLegendInfo_request_var</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">GetLegendInfo_request</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">getLegendInfo_request_var</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">request</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">GetLegendInfo_request</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>;
+                   
+        <span class="ActionScriptASDoc">/**
+         * Get access to the underlying web service that the stub uses to communicate with the server
+         * @return The base service that the facade implements
+         */</span>
+        <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getWebService</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BaseCoral_Reefs_MapServer</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

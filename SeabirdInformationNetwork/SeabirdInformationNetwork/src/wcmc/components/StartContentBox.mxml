@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Class: 			StartContentBox
+Description:	MXML Component Class that holds information on Surveys.	
+-->
+<wcmc_classes:ContentBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:wcmc_classes="wcmc.classes.*">
+	<mx:Canvas top="0">
+ 		<mx:Button upSkin="@Embed(source='images/logo_cbmp.gif')" toolTip="Circumpolar Biodiversity Monitoring Programme" overSkin="@Embed(source='images/logo_cbmp.gif')" useHandCursor="true" mouseChildren="false" buttonMode="true" click="navigateToURL(new URLRequest('http://http://cbmp.arcticportal.org/'))"/>	
+ 		<mx:Button upSkin="@Embed(source='images/logo_cbird.png')" toolTip=" Circumpolar Seabird Group (CBird)" overSkin="@Embed(source='images/logo_cbird.png')"  useHandCursor="true" mouseChildren="false" buttonMode="true" click="navigateToURL(new URLRequest('http://arcticportal.org/en/caff/cbird'))" x="75"/>	
+ 		<mx:Button upSkin="@Embed(source='images/logo_caff.jpg')" toolTip="Conservation of Arctic Flora and Fauna" overSkin="@Embed(source='images/logo_caff.jpg')" useHandCursor="true" mouseChildren="false" buttonMode="true"  click="navigateToURL(new URLRequest('http://www.caff.is//'))" x="200" y="20"/>	
+ 		<mx:Button upSkin="@Embed(source='images/logo_fws.jpg')" toolTip="US Fish and Wildlife Service" overSkin="@Embed(source='images/logo_fws.jpg')"  useHandCursor="true" mouseChildren="false" buttonMode="true" click="navigateToURL(new URLRequest('http://www.fws.gov/'))" y="130"/>	
+ 		<mx:Button upSkin="@Embed(source='images/logo_geoconnections.jpg')" toolTip="GeoConnections" overSkin="@Embed(source='images/logo_geoconnections.jpg')" useHandCursor="true" mouseChildren="false" buttonMode="true"  click="navigateToURL(new URLRequest('http://www.geoconnections.org/'))" y="140" x="100"/>	
+ 		<mx:Button upSkin="@Embed(source='images/logo_wcmc.jpg')" toolTip="UNEP World Conservation Monitoring Centre" overSkin="@Embed(source='images/logo_wcmc.jpg')"  useHandCursor="true" mouseChildren="false" buttonMode="true" click="navigateToURL(new URLRequest('http://www.unep-wcmc.org/'))" y="140" x="210"/>	
+	</mx:Canvas>
+	<mx:Canvas width="100%" height="40"/>  
+	<mx:HBox width="100%" top="500">
+		<mx:TextArea text="Welcome to the Seabird Information Network mapping system" styleName="startText1" width="100%" height="140" />	
+	</mx:HBox>
+	<mx:HBox width="100%">
+		<mx:TextArea text="Please select an item from below" styleName="startText2" width="100%" />	
+	</mx:HBox>
+	<mx:HBox width="25%" verticalAlign="middle">
+			<mx:Image id="speciesImage" toolTip="Species" source="@Embed(source='images/puffinsmall2.png')" alpha="0.6" styleName="imageButton" click="dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.ALLSPECIES))" mouseOver="speciesImage.alpha=1" mouseOut="speciesImage.alpha=0.6"/>
+			<mx:Label text="Show species information"/>
+	</mx:HBox>
+	<mx:HBox width="25%" verticalAlign="middle">
+			<mx:Image id="sitesImage" toolTip="Sites" source="@Embed(source='images/sitessmall.png')" alpha="0.6" styleName="imageButton" click="dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.ALLSITES))" mouseOver="sitesImage.alpha=1" mouseOut="sitesImage.alpha=0.6"/>
+			<mx:Label text="Show site information"/>
+	</mx:HBox>
+	<mx:HBox width="25%" verticalAlign="middle">
+			<mx:Image id="analysisImage" toolTip="Analysis tools" source="@Embed(source='images/toolbox.png')" alpha="0.6" styleName="imageButton" click="dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.ANALYSIS))" mouseOver="analysisImage.alpha=1" mouseOut="analysisImage.alpha=0.6"/>
+			<mx:Label text="Analysis tools"/>
+	</mx:HBox>
+	<mx:HBox width="25%" verticalAlign="middle">
+			<mx:Image id="surveysImage" toolTip="Surveys" source="@Embed(source='images/ClipboardBsmall.png')" alpha="0.6" styleName="imageButton" click="dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.SURVEYS))" mouseOver="surveysImage.alpha=1" mouseOut="surveysImage.alpha=0.6"/>
+			<mx:Label text="View the list of surveys"/>
+	</mx:HBox>
+	<mx:HBox width="25%" verticalAlign="middle">
+			<mx:Image id="mapConfigImage" toolTip="Map configure" source="@Embed(source='images/configsmall.png')" alpha="0.6" styleName="imageButton" click="dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.MAP_CONFIG))" mouseOver="mapConfigImage.alpha=1" mouseOut="mapConfigImage.alpha=0.6"/>
+			<mx:Label text="Configure the map"/>
+	</mx:HBox>
+	<mx:Canvas bottom="10" height="100%">
+		<mx:LinkButton bottom="10" label="Feedback/bug reports" click="navigateToURL(new URLRequest('http://code.google.com/p/seabirdinformationnetwork/issues/list'),'_blank')" toolTip="Click here to provide feedback or to submit and bug reports."/>
+	</mx:Canvas>
+	<mx:Script>
+		<![CDATA[
+			import flash.net.navigateToURL;
+			import wcmc.classes.EnumStates;
+			import wcmc.classes.ContentAreaChangeEvent;
+		]]>
+	</mx:Script>
+</wcmc_classes:ContentBox>

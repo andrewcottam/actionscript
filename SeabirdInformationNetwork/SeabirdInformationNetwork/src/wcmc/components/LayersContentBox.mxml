@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ContentBox xmlns="wcmc.classes.*" xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" height="100%" xmlns:components="wcmc.components.*">
+<mx:Metadata>
+    [Event(name="ChangeBaseMap", type="wcmc.classes.ChangeBaseMapEvent")]
+</mx:Metadata>	
+<mx:HBox width="95%" height="40">	
+    <mx:Image source="@Embed(source='../../images/configsmall.png')"/>
+	<mx:Label text="Customise the map" styleName="speciesSearchBox"/>	
+</mx:HBox>
+ 	<mx:RadioButtonGroup itemClick="changeBaseMap(event)" id="baseMaps"/>
+   	<mx:RadioButton groupName="baseMaps" id="googleTerrain" label="Google Terrain base layer" selected="true" value="{EnumBaseMap.GOOGLE_TERRAIN}"/>
+    <mx:RadioButton groupName="baseMaps" id="googleRoad" label="Google Road base layer" value="{EnumBaseMap.GOOGLE_ROAD}"/>
+    <mx:RadioButton groupName="baseMaps" id="googleImagery" label="Google Imagery base layer" value="{EnumBaseMap.GOOGLE_IMAGERY}"/>
+<!--    <components:MapServiceRadioButton groupName="baseMaps" label="ESRI Imagery base layer" MapServiceURL="http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer" layerManager="{Application.application.layerManager}"/>
+    <components:MapServiceRadioButton groupName="baseMaps" label="ESRI Road base layer" MapServiceURL="http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer" layerManager="{Application.application.layerManager}"/>
+    <components:MapServiceRadioButton groupName="baseMaps" label="ESRI Topological base layer" MapServiceURL="http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer" layerManager="{Application.application.layerManager}"/>-->
+    <mx:Spacer height="20"/>
+    <mx:Label text="Additional contextural layers:" styleName="toolLabel"/>
+	<components:MapServiceCheckBox MapServiceURL="http://maps.unep-wcmc.org/ArcGIS/rest/services/WDPAv2_0/wdpa_all/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="World Database of Protected Areas"/>
+	<components:MapServiceCheckBox MapServiceURL="http://dev.unep-wcmc.org/ArcGIS/rest/services/WingsOverWetlands/IBAs/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="IBA layer"/>
+	<components:MapServiceCheckBox MapServiceURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Iceland_Shipping_Routes/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="Iceland shipping routes"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.events.ItemClickEvent;
+			import mx.core.Application;
+			import wcmc.classes.*;
+			private function changeBaseMap(event:ItemClickEvent):void
+			{
+				dispatchEvent(new ChangeBaseMapEvent("ChangeBaseMap",event.currentTarget.selectedValue));
+			}
+	]]>
+	</mx:Script>
+</ContentBox>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:fc="http://ns.adobe.com/flashcatalyst/2009">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import mx.collections.ArrayList;
+			import mx.controls.DataGrid;
+			import mx.core.IVisualElement;
+			import mx.core.UIComponent;
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			
+			import spark.components.DataGrid;
+			import spark.components.gridClasses.GridColumn;
+			
+			import wcmc.classes.SpeciesCountsGridColumn;
+			private var _speciesCountsGrid:SpeciesCountsGrid;
+			[Bindable]public var columnWidths:ArrayCollection;
+			[Bindable]
+			public function get speciesCountsGrid():SpeciesCountsGrid
+			{
+				return _speciesCountsGrid;
+			}
+			public function set speciesCountsGrid(value:SpeciesCountsGrid):void
+			{
+				_speciesCountsGrid = value;
+				for each (var col:SpeciesCountsGridColumn in (value.columns as ArrayList).source)
+				{
+					if (col.validator) //the column has a validator - so add a summary
+					{
+						var validatorSummary:ValidatorSummary=new ValidatorSummary(); //create a new summary object
+						validatorSummary.validator=col.validator; //point it to the column validator
+						addElement(validatorSummary as IVisualElement);
+					}
+					else
+					{
+						var group:Group=new Group();
+						addElement(group as IVisualElement);
+					}
+				}
+				value.addEventListener(FlexEvent.CREATION_COMPLETE,creationComplete); //we want to listen for changes to the column widths, but the grid property of the datagrid is not available until the creation is complete
+			}
+			private function creationComplete(event:FlexEvent):void
+			{
+				var dataGrid:spark.components.DataGrid=event.target as spark.components.DataGrid;
+				dataGrid.grid.addEventListener(ResizeEvent.RESIZE,gridResized); //when the columns are resized we need to move the validator summaries				
+			}
+			private function gridResized(event:ResizeEvent):void
+			{
+				columnWidths=new ArrayCollection();
+				var offset:uint;
+				for (var i:uint = 0; i < _speciesCountsGrid.columns.length; i++)
+				{
+					var width:uint=_speciesCountsGrid.grid.getColumnWidth(i);
+					var displayObject:DisplayObject=getChildAt(i);
+					displayObject.x=offset;
+					displayObject.width=width;
+					offset+=width;
+				}
+			}
+		]]>
+	</fx:Script>
+</s:Group>

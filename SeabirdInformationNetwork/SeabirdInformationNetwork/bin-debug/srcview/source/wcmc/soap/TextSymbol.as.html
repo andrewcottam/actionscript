@@ -1,0 +1,71 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>TextSymbol.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptASDoc">/**
+ * TextSymbol.as
+ * This file was auto-generated from WSDL by the Apache Axis2 generator modified by Adobe
+ * Any change made to this file will be overwritten when the code is re-generated.
+ */</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span><span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ObjectProxy</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ByteArray</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">rpc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">types</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptASDoc">/**
+     * Wrapper class for a operation required type
+     */</span>
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">TextSymbol</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">Symbol</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * Constructor, initializes the type class
+         */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">TextSymbol</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">{}</span>
+                
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Color</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">Color</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">BreakCharIndex</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">VerticalAlignment</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">EsriTextVerticalAlignment</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">HorizontalAlignment</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">EsriTextHorizontalAlignment</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Clip</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">RightToLeft</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Angle</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">XOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">YOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ShadowColor</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">Color</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ShadowXOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ShadowYOffset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TextPosition</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">EsriTextPosition</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TextCase</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">EsriTextCase</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">CharacterSpacing</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">CharacterWidth</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">WordSpacing</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Kerning</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Leading</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TextDirection</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">EsriTextDirection</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FlipAngle</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TypeSetting</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TextPathClass</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FillSymbol</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">Symbol</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Text</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Size</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">MaskStyle</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">EsriMaskStyle</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">MaskSize</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">MaskSymbol</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">Symbol</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FontName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FontItalic</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FontUnderline</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FontStrikethrough</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FontWeight</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FontCharset</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FontSizeHi</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FontSizeLo</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TextParserClass</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+               <span class="ActionScriptBracket/Brace">}</span>
+           <span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

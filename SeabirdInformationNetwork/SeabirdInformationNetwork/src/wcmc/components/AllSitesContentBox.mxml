@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Class: 			AllSitesContentBox
+Description:	MXML Component Class that shows information and allows you to look at outputs for a list of sites. 
+				It also allows you to search for a site. 	
+-->
+<wcmc_classes:ContentBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:esri="http://www.esri.com/2008/ags" xmlns:wcmc="wcmc.components.*" xmlns:wcmc_classes="wcmc.classes.*"	ContentBoxParameterSet="SiteSearchTextBox.setFocus()">	
+	<mx:HBox width="95%" height="40" verticalAlign="middle">
+	    <mx:Image source="@Embed(source='../../images/sitessmall.png')"/>
+		<mx:Label text="Enter site name:" styleName="speciesSearchBox"/>
+		<wcmc_classes:SearchBox  id="SiteSearchTextBox" change="changeText()" keyUp="changeText()"/>
+	</mx:HBox>	
+    <esri:QueryTask id="queryTask" url="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Axiom_WFS_North_Pacific/MapServer/0" showBusyCursor="true"/>
+    <esri:Query id="query" where="SITENAME LIKE '%'" returnGeometry="false">
+        <esri:outFields>
+            <mx:String>SITENAME</mx:String>
+        </esri:outFields>
+    </esri:Query>
+	<mx:VBox creationComplete="loadItems()" width="95%" id="SitesListBox">
+	<wcmc:SiteList id="SitesList" dataProvider="{shortsites}" rowCount="{sites.length}" visible="{sites.length>0}"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.controls.List;
+			import mx.collections.SortField;
+			import mx.collections.Sort;
+			import mx.collections.ICollectionView;
+			import com.esri.ags.Graphic;
+			import mx.controls.Alert;
+			import mx.rpc.AsyncResponder;
+			import com.esri.ags.tasks.*;
+			import mx.collections.ArrayCollection;
+			import wcmc.classes.*;
+	        [Bindable]
+			private var sites:ArrayCollection = new ArrayCollection; 
+	        [Bindable]
+			private var shortsites:ArrayCollection = new ArrayCollection;
+	        [Bindable]
+	        [Embed(source="/images/sites.png")]
+	        public var site:Class;	
+	        private function loadItems():void
+	        {
+	        	//get the data from ArcGIS Server REST service
+               	var siteArray:ArrayCollection = new ArrayCollection;
+                queryTask.execute(query,new AsyncResponder(onResult,null));
+	        }	
+	        private function onResult(featureSet:FeatureSet,token:Object=null):void
+	        {
+	        	sites = new ArrayCollection;
+	            for each (var _Graphic:Graphic in featureSet.features)
+	            {
+	            	var site:Site = new Site();
+	            	site.label =_Graphic.attributes["SITENAME"];
+	            	site.siteName =_Graphic.attributes["SITENAME"];
+	            	site.siteID =1;
+	            	sites.addItem(site);
+	            }
+	        	//sort the sites array
+	        	sites.source.sortOn("siteName");
+	        	changeText();
+	        }
+            private function changeText():void
+            {
+            	if (SiteSearchTextBox.text=="")
+            	{
+            		sites.filterFunction=null;
+            	}
+            	else
+            	{
+	            	sites.filterFunction=filter;
+	            }
+            	sites.refresh();
+	        	//get a short version of the sites array to render
+				var _tmpArray:ArrayCollection = new ArrayCollection(sites.toArray());
+				shortsites.source = _tmpArray.source.slice(0,40);
+            }
+			private function filter(obj:Object):Boolean 
+			{
+				var _testName:String = obj["siteName"].toUpperCase();
+				var pos:int = _testName.indexOf(SiteSearchTextBox.text.toUpperCase());
+				if ((pos ==0) || (SiteSearchTextBox.text==""))
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}			
+		]]>
+	</mx:Script>
+</mx:VBox>
+</wcmc_classes:ContentBox>

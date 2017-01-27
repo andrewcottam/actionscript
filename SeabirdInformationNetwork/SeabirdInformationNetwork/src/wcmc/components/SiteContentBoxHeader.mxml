@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" styleName="speciesContentBoxHeader">
+	<mx:VBox width="100%">
+		<mx:HBox styleName="commonNameHBox" width="100%">
+			<mx:Label id="SiteNameLabel" styleName="commonNameLabel" width="100%"/>
+		</mx:HBox>
+	</mx:VBox>
+</mx:VBox>

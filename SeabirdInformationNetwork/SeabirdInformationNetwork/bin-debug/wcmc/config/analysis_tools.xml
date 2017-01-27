@@ -1,0 +1,12 @@
+<Toolbox>
+	<Category name = "Climate change">
+		<Tools name='SeaLevelRise' image='images/zoomToSite.png' label='Sea level rise' description='Analysis tool that shows the potential impact on seabird colonies given a user-defined sea level rise.'/>
+	</Category>
+	<Category name = "Marine threat">
+		<Tools name='ToolSiteAbundanceMap' image='images/scounts.png' label='Abundances for all species' description= 'Shows a table of the abundances for all species at this site'/>
+	</Category>
+	<Category name = "Disturbance">
+		<Tools name='ToolSiteUDATrends' image= 'images/trend.png' label= 'Species trends by user-defined area' description= 'Shows a table of species trends by user-defined area'/>
+		<Tools name='ToolSiteUDAbundance' image= 'images/trend.png' label= 'Species abundances by user-defined area' description= 'Shows a table of species abundances by user-defined area'/>
+	</Category>
+</Toolbox>		

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:CheckBox xmlns:mx="http://www.adobe.com/2006/mxml" click="toggleLayer(event)" xmlns:classes="wcmc.classes.*">
+	<mx:String id="MapServiceURL"/>
+	<mx:Number id="mapAlpha"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			import com.google.maps.interfaces.IOverlay;
+			import wcmc.classes.LayerManager;
+			import wcmc.classes.Layer;
+			import wcmc.classes.ChangeLayerVisibilityEvent;
+			private var _layerManager:LayerManager;
+			private var layer:Layer;
+			private function toggleLayer(event:MouseEvent):void
+			{
+				if (!layer) layer=new Layer(MapServiceURL,mapAlpha);
+				if (!layerManager) layerManager=Application.application.layerManager;
+				layerManager.dispatchEvent(new ChangeLayerVisibilityEvent(layer,ChangeLayerVisibilityEvent.CHANGE_LAYER_VISIBILITY_EVENT));
+			}
+			public function get layerManager():LayerManager
+			{
+				return _layerManager;
+			}
+			public function set layerManager(value:LayerManager):void
+			{
+				_layerManager=value;
+				_layerManager.layers.push(layer);
+			}
+		]]>
+	</mx:Script>
+</mx:CheckBox>

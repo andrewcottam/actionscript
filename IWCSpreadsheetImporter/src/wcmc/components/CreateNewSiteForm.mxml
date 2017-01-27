@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  xmlns:fc="http://ns.adobe.com/flashcatalyst/2009"
+					  xmlns:esri="http://www.esri.com/2008/ags"
+					  width="572" height="476" skinClass="wcmc.skins.Popup" xmlns:classes="wcmc.classes.*">
+	<fx:Declarations>
+		<!---The locator is a geolocation service that ESRI provide to locate geographic places in the world.-->
+		<esri:Locator id="locator" url="http://tasks.arcgisonline.com/ArcGIS/rest/services/Locators/ESRI_Places_World/GeocodeServer" showBusyCursor="true" addressToLocationsComplete="locator_addressToLocationsCompleteHandler(event)"/>
+		<esri:SimpleMarkerSymbol id="newsite" size="15" color="0xFF0000" style="circle" alpha="0.7" outline="{lineSymbol}"/>
+		<esri:SimpleLineSymbol id="lineSymbol" width="1" color="#000000" style="solid"/>
+		<classes:ValidateDataServiceClient id="serviceClient" NearestFeaturesFound="serviceClient_NearestFeaturesFoundHandler(event)"/>
+	</fx:Declarations>
+	<s:Label x="29" y="24" styleName="defaultFont" text="Select an existing site or click on the map to create a new site:"/>
+	<s:TextInput id="siteName" x="100" y="47" width="177"/>
+	<s:Label x="29" y="57" text="Site name:"/>
+	<s:Label x="63" y="425" id="lat"/>
+	<s:Label x="181" y="425" id="lng"/>
+	<s:Button x="460" y="428" label="Create" click="button2_clickHandler(event)" enabled="{(candidateLocation)&amp;&amp;(siteName.text.length>0)}"/>
+	<s:Button x="382" y="428" label="Cancel" click="closeMe(event)"/>
+	<s:TextInput x="285" y="81" width="126" id="location" enter="location_enterHandler(event)"/>
+	<s:Label x="29" y="91" text="Enter a location and press ENTER to go there:"/>
+	<esri:Map id="map" x="56" y="130" width="474" height="281" mapClick="map_mapClickHandler(event)">
+		<esri:ArcGISTiledMapServiceLayer url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"/>
+		<esri:FeatureLayer id="iwcSites" url="http://dev.unep-wcmc.org/ArcGIS/rest/services/CSN/Sites/MapServer/4" visible="{map.level>11}" outFields="[Name,SiteCode]" graphicAdd="featurelayer1_graphicAddHandler(event)"/>
+		<esri:GraphicsLayer id="graphicsLayer"/>
+	</esri:Map>
+	<fx:Script>
+		<![CDATA[
+			import com.esri.ags.Graphic;
+			import com.esri.ags.events.GraphicEvent;
+			import com.esri.ags.events.LocatorEvent;
+			import com.esri.ags.events.MapMouseEvent;
+			import com.esri.ags.geometry.Geometry;
+			import com.esri.ags.geometry.MapPoint;
+			import com.esri.ags.symbols.MarkerSymbol;
+			import com.esri.ags.tasks.supportClasses.AddressCandidate;
+			import com.esri.ags.utils.WebMercatorUtil;
+			
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			
+			import wcmc.classes.NearestFeaturesFoundEvent;
+			private const SEARCH_THRESHOLD:uint=3000; //3Km default
+			private var _siteNameInDataGrid:String;
+			[Bindable]private var candidateLocation:MapPoint; //to pass to the SOE for checking
+			[Embed(source="assets/images/crosshair.png")] [Bindable]static public var crosshair:Class; 
+			public function get siteNameInDataGrid():String
+			{
+				return _siteNameInDataGrid;
+			}
+			public function set siteNameInDataGrid(value:String):void
+			{
+				_siteNameInDataGrid = value;
+				siteName.text=siteNameInDataGrid;
+			}
+
+			private function closeMe(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+			protected function location_enterHandler(event:FlexEvent):void
+			{
+				var myAddress:Object = {PlaceName:location.text};
+				locator.outSpatialReference = map.spatialReference;
+				locator.addressToLocations(myAddress);
+			}
+			protected function locator_addressToLocationsCompleteHandler(event:LocatorEvent):void
+			{
+				if (event.addressCandidates.length>0)
+				{
+					var addressCandidate:AddressCandidate = event.addressCandidates[0];
+					map.centerAt(addressCandidate.location as MapPoint); //move to that location
+					map.level = 12; 
+				}
+			}
+			protected function map_mapClickHandler(event:MapMouseEvent):void
+			{
+				candidateLocation=event.mapPoint;
+				siteName.text=siteNameInDataGrid;
+				var point:Geometry=WebMercatorUtil.webMercatorToGeographic(event.mapPoint as Geometry);
+				lat.text=String((point as MapPoint).y);
+				lng.text=String((point as MapPoint).x);
+				graphicsLayer.clear();
+				var graphic:Graphic=new Graphic(event.mapPoint,newsite,{Name:location.text});
+				graphicsLayer.add(graphic);
+			}
+			protected function featurelayer1_graphicAddHandler(event:GraphicEvent):void
+			{
+				event.graphic.toolTip = event.graphic.attributes.Name + "\n" + event.graphic.attributes.SiteCode;
+				event.graphic.addEventListener(MouseEvent.CLICK,selectFeature);
+			}
+			private function selectFeature(event:MouseEvent):void
+			{
+				var graphic:Graphic=event.target as Graphic;
+				graphicsLayer.clear(); //not creating a new site
+				candidateLocation=graphic.geometry as MapPoint;
+				siteName.text=graphic.attributes.Name;
+				var point:Geometry=WebMercatorUtil.webMercatorToGeographic(graphic.geometry);
+				lat.text=String((point as MapPoint).y);
+				lng.text=String((point as MapPoint).x);
+			}
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				if (candidateLocation) serviceClient.validateSitePosition(candidateLocation,SEARCH_THRESHOLD);
+			}
+			protected function serviceClient_NearestFeaturesFoundHandler(event:NearestFeaturesFoundEvent):void
+			{
+				var nearestFeatures:Array=event.nearestFeatures.features;
+				switch(nearestFeatures.length)
+				{
+					case 0:
+					{
+						createSite();
+						break;
+					}
+					case 1:
+					{
+						
+						Alert.show("There is 1 site within " + String(SEARCH_THRESHOLD) + "m of this site. Unable to create a new site");
+						break;
+					}
+					default:
+					{
+						Alert.show("There are " + String(nearestFeatures.length) + " sites within " + String(SEARCH_THRESHOLD) + "m of this site. Unable to create a new site");
+						break;
+					}
+				}
+			}
+			private function createSite():void
+			{
+				Alert.show('creating new site');
+			}
+		]]>
+	</fx:Script>
+</s:SkinnableContainer>

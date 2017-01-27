@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" styleName="speciesContentBoxHeader">
+	<mx:VBox width="100%" height="10%">
+		<mx:HBox styleName="commonNameHBox" width="100%">
+			<mx:Label id="CommonNameLabel" styleName="commonNameLabel" width="100%"/>
+		</mx:HBox>
+		<mx:HBox styleName="latinNameHBox" width="100%">
+			<mx:Label id="LatinNameLabel" styleName="latinNameLabel" width="100%"/>
+			<mx:Image id="iucnCategoryImage" alpha="0.8"/>
+		</mx:HBox>
+	</mx:VBox>
+</mx:VBox>

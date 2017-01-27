@@ -1,0 +1,8 @@
+<MapLayers>
+	<Category name = "Other">
+		<Layers ESRIURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/UNEP-WCMC_WDPA/MapServer" GoogleURL="http://maps.unep-wcmc.org/ArcGIS/rest/services/WDPAv2_0/wdpa_all/MapServer" image='images/wdpa.gif' label='World database of protected areas' description='The World database of protected areas from UNEP-WCMC represents the best available information on protected areas collated from a wide range of individuals and organisations.' legendImage=''/>
+		<Layers ESRIURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/UNEP-WCMC_WDPA/MapServer" GoogleURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Accidents_Incidents/MapServer" image='images/accidents.png' label='Shipping accidents and incidents' description='Much of the information found here has been collected and developed via the Arctic Marine Shipping Assessment (AMSA).' legendImage='images/accidents2.png'/>
+		<Layers ESRIURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/UNEP-WCMC_WDPA/MapServer" GoogleURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Iceland_Shipping_Routes/MapServer" image='images/shipping.png' label='Iceland Shipping Routes' description='No description yet.' legendImage=''/>
+		<Layers ESRIURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/UNEP-WCMC_WDPA/MapServer" GoogleURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/NSR_NWP/MapServer" image='images/nsr.png' label='NSR NWP dataset' description='No description yet.' legendImage=''/>
+	</Category>
+</MapLayers>		

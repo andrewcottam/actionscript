@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<mx:Application
+
+    xmlns:mx="http://www.adobe.com/2006/mxml"
+
+    xmlns:esri="http://www.esri.com/2008/ags"
+
+    pageTitle="Example - ArcGIS API for Flex connecting to a dynamic AGS service">
+
+    <esri:Map>
+
+        <esri:ArcGISDynamicMapServiceLayer
+
+            url="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/NorthPoleOrthographicTest/MapServer"/>
+
+    </esri:Map>
+
+</mx:Application>
+

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" styleName="InformationPanel" showEffect="{fader}" hideEffect="{fader}" y="{verticalCentre}" visible="false" right="{Right}" xmlns:components="wcmc.components.*" minWidth="200">
+	<mx:VBox styleName="ContentPanel" verticalCenter="0" horizontalCenter="0" width="100%">
+		<mx:List itemRenderer="wcmc.components.LegendRenderer" id="legendList" dataProvider="{legendItems}" rowCount="{legendItems.length}" mouseEnabled="false" visible="{legendItems.length>0}" includeInLayout="{legendItems.length>0}" width="100%"/>
+		<mx:Label text="No markers are present" visible="{legendItems.length==0}" includeInLayout="{legendItems.length==0}"/>
+	</mx:VBox>
+	<mx:Fade id="fader" duration="250" effectStart="setPosition()"/>
+	<mx:Parallel id="legendShow">
+		<mx:Fade duration="250"/>
+		<mx:Resize widthFrom="0" widthTo="150" duration="100"/>
+	</mx:Parallel>
+	<mx:Script>
+		<![CDATA[
+			import flash.utils.getQualifiedClassName;
+			import mx.collections.ArrayCollection;
+			import wcmc.classes.LegendItem;
+			import com.google.maps.overlays.MarkerOptions;
+			import wcmc.classes.myMarker;
+			import wcmc.classes.EnumMarkerType;
+			import mx.core.Application;
+			private var _tool:ToolControlSite;
+			[Bindable]private var legendItems:ArrayCollection=new ArrayCollection();
+			[Bindable]public var Right:Number=60;
+			[Bindable]private var verticalCentre:Number=0;
+			public function get tool():ToolControlSite
+			{
+				return _tool;
+			}
+			public function set tool(_Tool:ToolControlSite):void
+			{
+				_tool=_Tool;
+				if (_tool)
+				{
+					_tool.addEventListener("EndDataLoad",endDataLoad);
+				}
+			}
+			private function endDataLoad(event:Event):void
+			{
+				getUniqueLegendItems(_tool.markers);
+			}
+			private function setPosition():void
+			{
+				var point:Point= _tool.localToGlobal(new Point(0,0)); //get the stage position of the tool control
+				verticalCentre=point.y+(_tool.height/2);
+			}
+			private function getUniqueLegendItems(markers:Array):void
+			{
+				var legendItem:LegendItem;
+				var i:int=1;
+				for each (var marker:myMarker in markers)
+				{
+					var markerOptions:MarkerOptions= marker.getOptions();
+					if (!legendItemExists(markerOptions.icon))
+					{
+						var bitmap:Bitmap=Application.application.getBitmap(markerOptions.icon);
+						legendItem=new LegendItem();
+						legendItem.legendIcon=bitmap;
+						legendItem.legendClassName= getQualifiedClassName(markerOptions.icon);
+						switch (tool.markerType)
+						{
+							case (EnumMarkerType.TOP10):
+							{
+								legendItem.legendDescription="";
+								break;
+							}
+							case (EnumMarkerType.PRODUCTIVITY):
+							{
+								switch (legendItem.legendClassName)
+								{
+									case ("wcmc.components::ToolControl_red"): //hack!!
+									{
+										legendItem.legendDescription="<0.10 chicks/nest site for the nest sites counted for that colony";
+										break;
+									}
+									case ("wcmc.components::ToolControl_yellow"):
+									{
+										legendItem.legendDescription=">0.10 chicks/nest site to 50% above the long-term mean chicks/nest site for that colony";
+										break;
+									}
+									case ("wcmc.components::ToolControl_green"):
+									{
+										legendItem.legendDescription=">50% above the long-term chicks/nest site for that colony";
+										break;
+									}
+								}
+								minWidth=600;
+								break;
+							}
+							case (EnumMarkerType.PROTECTION):
+							{
+								switch (legendItem.legendClassName)
+								{
+									case ("wcmc.components::ToolControl_red"): //hack!!
+									{
+										legendItem.legendDescription="Not within a nationally protected area";
+										break;
+									}
+									case ("wcmc.components::ToolControl_green"):
+									{
+										legendItem.legendDescription="Within a nationally protected area";
+										break;
+									}
+								}
+								minWidth=300;
+								break;
+							}
+							default:
+							{
+								legendItem.legendDescription="Position of survey site";
+								break;
+							}
+						}
+						legendItems.addItem(legendItem);
+						i++;
+					}
+				}
+			}
+			private function legendItemExists(object:Object):Boolean
+			{
+				if (object is Sprite) return false; //sprites are assumed to be unique, e.g. the top 10 renderer
+				for each (var legendItem:LegendItem in legendItems)
+				{
+					if (legendItem.legendClassName==getQualifiedClassName(object)) return true;
+				}
+				return false;
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

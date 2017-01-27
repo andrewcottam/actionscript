@@ -1,0 +1,492 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="wcmc.classes.*" creationComplete="CreationComplete(event)" verticalGap="0" width="100%" paddingBottom="8" paddingLeft="4" paddingRight="4" paddingTop="8" mouseOver="MouseOver(event)" mouseOut="MouseOut(event)" rollOut="RollOut(event)" xmlns:components="wcmc.components.*">
+	<mx:String id="imageURL"/>
+	<mx:VBox width="10%" verticalAlign="middle" height="100%">
+		<mx:Image source="{imageURL}"/>
+	</mx:VBox>
+	<mx:VBox width="100%" verticalGap="0">
+		<mx:HBox>
+			<mx:CheckBox id="checkBox" click="toggleTool(event)"/>
+			<mx:Label text="{Label}" color="0x444444" fontSize="12"/>
+		</mx:HBox>
+		<mx:HBox width="100%">
+			<mx:Text id="toolDescriptionTextArea" text="{Description}" width="100%" fontSize="9" color="0xaaaaaa"/>	
+		</mx:HBox>
+	</mx:VBox>
+	<mx:Canvas right="0" top="0">
+		<mx:Image source="@Embed(source='images/info.png')" click="setLegendVisibility(event)" id="legendImage" visible="false" showEffect="{fader}" hideEffect="{fader}"/>
+	</mx:Canvas>
+	<mx:Fade id="fader" duration="250"/>
+	<mx:Script>
+		<![CDATA[
+			import wcmc.classes.NewLegend;
+			import mx.controls.Image;
+			import com.esri.ags.geometry.Geometry;
+			import mx.managers.CursorManagerPriority;
+			import mx.managers.CursorManager;
+			import wcmc.classes.UDACreatedEvent;
+			import wcmc.classes.ScribbleOverlayLayer; 
+			import wcmc.classes.Top10MapSymbol;
+			import wcmc.classes.EnumMarkerType;
+			import com.esri.ags.geometry.Multipoint;
+			import com.esri.ags.geometry.MapPoint;
+			import com.esri.ags.Graphic;
+			import com.esri.ags.tasks.FeatureSet;
+			import mx.core.Application;
+			import mx.binding.utils.BindingUtils;
+			import com.esri.ags.events.QueryEvent;
+			import mx.controls.Alert;
+			import wcmc.classes.myMarker;
+			import com.google.maps.LatLng;
+			import com.google.maps.overlays.MarkerOptions;
+			import mx.rpc.AsyncResponder;
+			import wcmc.classes.ContentBox;
+			import com.esri.ags.tasks.Query;
+			import com.esri.ags.tasks.QueryTask;
+			import com.google.maps.interfaces.IPaneManager;
+			import com.google.maps.Map3D;
+			import com.google.maps.interfaces.IPane;
+			import mx.controls.List;
+			import wcmc.classes.Tool;
+			import wcmc.classes.ToolClickedEvent;
+			[Bindable]public var Label:String;
+			[Bindable]public var Description:String;
+			[Bindable]public var map:Map3D;
+			[Bindable]public var showZeroAbundance:Boolean;
+			[Bindable]public var toolWindow:DisplayObject;
+			[Bindable]public var scribbleLayer:ScribbleOverlayLayer;
+			[Bindable]public var displayObjectsVisible:Boolean;
+			[Bindable]public var totalAbundance:Number;
+			[Bindable]public var totalAbundanceProtected:Number;
+		   	[Embed(source="/images/distribution.png")]private var distributionMapIcon:Class;
+		   	[Embed(source="/images/distributionGone.png")]private var distributionGone:Class;
+		   	[Embed(source="/images/distributionZero.png")]private var distributionZeroIcon:Class;
+		   	[Embed(source="/images/small.png")]private var small:Class;
+		   	[Embed(source="/images/medium.png")]private var medium:Class;
+		   	[Embed(source="/images/large.png")]private var large:Class;
+		   	[Embed(source="/images/red.png")]private var red:Class;
+		   	[Embed(source="/images/green.png")]private var green:Class;
+		   	[Embed(source="/images/yellow.png")]private var yellow:Class;
+		    [Embed(source="/images/draw.png")]private var draw:Class;
+			private var top10Index:int;
+			private var pane:IPane;
+			private var dataLoaded:Boolean=false;
+			public var infoBox:DisplayObject;
+			public var classValues:Array; //holds the class values for abundance renderers, e.g. 0-10, 10-50, 50-2500
+			public var parameter:String;
+			public var UDAGeometry:Geometry;
+			public var markers:Array=new Array();
+			public var tooltipField:String;
+			public var abundanceField:String;
+			public var distanceToPAField:String;
+			public var url:String;
+			public var returnFields:String;
+			public var markerType:String; 
+			public var cursorType:String;  
+			public var serviceType:String;
+			public var displayObjects:Array=new Array();
+			private function CreationComplete(event:Event):void
+			{
+				pane=createPane();
+				BindingUtils.bindSetter(reset,Application.application,"currentParameter");
+				switch (markerType)
+				{
+					case (EnumMarkerType.SEALEVELRISE):
+					{
+						infoBox=new seaLevelRiseInfo();
+						(infoBox as seaLevelRiseInfo).tool=this;
+						break;
+					}
+					default:
+					{
+						infoBox=new Legend();
+						(infoBox as Legend).tool=this;
+						break;	
+					}
+				}
+				Application.application.addChild(infoBox);
+			}
+			private function createPane():IPane
+			{
+				var mapPaneManager:IPaneManager=map.getPaneManager();
+				return mapPaneManager.createPane(mapPaneManager.paneCount); //create the new pane at the top of the pane stack
+			}
+			private function toggleTool(event:MouseEvent):void
+			{
+				(checkBox.selected) ? switchToolOn() : switchToolOff();
+			}
+			private function switchToolOff():void
+			{
+				if (scribbleLayer) finaliseScribbleLayer();
+				displayObjectsVisible=false;
+			}
+			private function switchToolOn():void
+			{
+				(scribbleLayer) ? initialiseScribbleLayer() : switchLayerOn(); //if the tool has a scribble layer then the user will need to create a UDA before loading any data
+			}
+			private function switchLayerOn():void
+			{
+				(!dataLoaded) ? loadData() : displayObjectsVisible=true; //turn display objects on straight away if the data is already loaded
+			}
+			public function loadData():void
+			{
+				dispatchEvent(new Event("StartDataLoad",true));
+				if (abundanceField) totalAbundance=0; //reset the total abundance count - sometimes a load might result in no markers, e.g. UDA query
+				if (distanceToPAField) totalAbundanceProtected=0; //reset the total abundance protected count - sometimes a load might result in no markers, e.g. UDA query
+				(serviceType=="wfs") ? loadWFSData() : loadMapServiceData();
+			}
+			private function loadMapServiceData():void
+			{
+				var _queryTask:QueryTask=new QueryTask(url);
+				var query:Query=new Query;
+				var whereClause:String="";
+				(showZeroAbundance) ? whereClause=">=0" : whereClause=">=1";
+				query.where=parameter + whereClause; //bit of a hack
+				query.outFields=returnFields.split(",");
+				query.returnGeometry=true;
+				if (UDAGeometry)
+				{
+					query.geometry = UDAGeometry;
+					query.spatialRelationship = "esriSpatialRelIntersects";
+				}
+				_queryTask.addEventListener(QueryEvent.EXECUTE_COMPLETE,queryComplete);
+	            _queryTask.execute(query,new AsyncResponder(createMarkers,onFault));
+			}
+			private function loadWFSData():void
+			{
+                var loader:URLLoader = new URLLoader(); //instantiate a new url loader to get the wfs data from axiom 
+                loader.addEventListener(Event.COMPLETE, onWfsLoaded); //add a callback function for when the data is loaded
+                var urlRequest:String=url + "'" + parameter + "'"; 
+                loader.load(new URLRequest(urlRequest));  //load the data
+			}
+			private function queryComplete(event:QueryEvent):void
+			{
+				(event.target as QueryTask).removeEventListener(QueryEvent.EXECUTE_COMPLETE,queryComplete);
+				dataLoadComplete();
+			}
+			private function onWfsLoaded(e:Event):void 
+			{ 
+				var _XML:XML = XML(e.target.data); //build an xml object with the returned gml data
+				var _axiomNS:Namespace = new Namespace("axiom", "http://maps.axiomalaska.com"); //add in all of the necessary namespace declarations to be able to query and work with the gml
+				var _ogcNS:Namespace = new Namespace("ogc", "http://www.opengis.net/ogc");
+				var _gmlNS:Namespace = new Namespace("gml", "http://www.opengis.net/gml");
+				var _owsNS:Namespace = new Namespace("ows", "http://www.opengis.net/ows");
+				var _wfsNS:Namespace = new Namespace("wfs", "http://www.opengis.net/wfs");
+				_XML.addNamespace(_axiomNS);
+				_XML.addNamespace(_ogcNS);
+				_XML.addNamespace(_gmlNS);
+				_XML.addNamespace(_owsNS);
+				_XML.addNamespace(_wfsNS);
+				var _XMLList:XMLList=_XML.._gmlNS::pos; //get tll of the <gml:pos> elements from the gml 
+	            var item:XML;
+	            var pointString:String;
+	            var _dateBegin:String;
+	            var _productivityName:String;
+	            for each(item in _XMLList) //iterate through all of the <gml:pos> elements to create all of the points for the species productivity data
+	            {
+	                pointString = item.toString(); //convert the pos to a string
+	                var _record:XML=item.parent().parent().parent(); //get the record that the pos is part of, i.e. the productivity record
+	                _dateBegin = _record._axiomNS::DateBegin; //get the <axiom:DateBegin> element
+	                _productivityName = _record._axiomNS::ProductivityName; //get the <axiom:ProductivityName> element
+	                var pointArray:Array = pointString.split(" "); //split the point string to get the lat and long
+					var latLng:LatLng=new LatLng(pointArray[0],pointArray[1]);  //create a lat/lng from the pos data
+					var _markerOptions:MarkerOptions=new MarkerOptions();
+					_markerOptions.hasShadow=false;
+					var attributes:Object={Productivity:_productivityName};
+					setIcon(_markerOptions,attributes);
+					_markerOptions.tooltip=_dateBegin; //set the tooltip for the marker to be the begin date
+					addMarkerToMap(latLng.lat(),latLng.lng(),_markerOptions,attributes); //add the marker to the map
+	            }
+				dataLoadComplete();
+			}
+			private function dataLoadComplete():void
+			{
+				dataLoaded=true;
+				displayObjectsVisible=true;
+				dispatchEvent(new Event("EndDataLoad",true));
+			}
+	        public function addMarkerToMap(_Lat:Number,_Lng:Number,_MarkerOptions:MarkerOptions,attributes:Object):void
+	        {
+		        var _marker:myMarker = new myMarker(new LatLng(_Lat,_Lng),_MarkerOptions); 
+		        _marker.attributes=attributes;
+		        _marker.abundanceField=abundanceField;
+		        BindingUtils.bindProperty(_marker,"visible",checkBox,"selected");
+		        markers.push(_marker);
+		        pane.addOverlay(_marker); 
+	        }    
+	        private function onFault(info:Object,token:Object=null):void
+	        {
+	            Alert.show(info.toString());
+				dispatchEvent(new Event("EndDataLoad",true));
+	        }
+	        public function reset(_parameter:String):void
+	        {
+	        	if (_parameter!="") parameter=_parameter;
+	        	if (Number(_parameter)<0) parameter="ALTE";
+        		checkBox.selected=false;
+        		dataLoaded=false;
+        		displayObjectsVisible=false; 
+        		clearMarkers();
+	        	if (scribbleLayer) finaliseScribbleLayer();
+	        }
+	        public function clearMarkers():void
+	        {
+	        	for each (var _marker:myMarker in markers)
+	        	{
+	        		if (_marker.changeWatcher) _marker.removeWatcher();
+	        		map.removeOverlay(_marker);
+	        	}
+        		markers=new Array();
+	        }
+			public function addDisplayObject(_displayObject:DisplayObject):void
+			{
+				var present:Boolean=false;
+				for each (var _do:DisplayObject in displayObjects)
+				{
+					if (_do===_displayObject)
+					{
+						present=true;
+						break;
+					} 
+				}
+				if (!present) displayObjects.push(_displayObject);
+				BindingUtils.bindProperty(_displayObject,"visible",this,"displayObjectsVisible");
+			}
+			private function createMarkers(featureSet:FeatureSet,token:Object=null):void
+			{
+				var features:Array=getFeatures(featureSet); //get the relevant features to create
+				for each (var myGraphic:Graphic in features) //iterate through the returned data 
+				{
+					var myPoint:MapPoint;
+					if (myGraphic.geometry is Multipoint)
+					{
+						myPoint = MapPoint((myGraphic.geometry as Multipoint).points[0]); //create a point to add the marker
+					} 
+					else
+					{
+						myPoint = MapPoint(myGraphic.geometry);
+					}
+					var _markerOptions:MarkerOptions=new MarkerOptions();
+					_markerOptions.hasShadow=false;
+					setIcon(_markerOptions,myGraphic.attributes);
+		        	_markerOptions.iconAlignment = MarkerOptions.ALIGN_HORIZONTAL_CENTER + MarkerOptions.ALIGN_VERTICAL_CENTER;
+		        	if (myGraphic.attributes[tooltipField]) _markerOptions.tooltip=myGraphic.attributes[tooltipField];
+		        	addMarkerToMap(myPoint.y,myPoint.x,_markerOptions,myGraphic.attributes); //add the marker to the distribution map
+		        	if (abundanceField)
+		        	{
+		        		var abundance:Number=myGraphic.attributes[abundanceField];
+		        		if (abundance!= 0.0001) totalAbundance += abundance;
+			        	if (distanceToPAField)
+			        	{
+			        		var distanceToPA:Number=myGraphic.attributes[distanceToPAField];
+			        		if (distanceToPA==0) totalAbundanceProtected+=abundance;
+			        	}
+		        	}
+				}   
+			}
+			private function getFeatures(featureSet:FeatureSet):Array
+			{
+				var features:Array;
+				switch (markerType)
+				{
+					case (EnumMarkerType.ABUNDANCE):
+					{
+						features=featureSet.features;
+						buildAbundanceClasses(featureSet.features,3);
+						break;
+					}
+					case (EnumMarkerType.TOP10):
+					{
+						var Top10Features:Array=sortFeaturesByAbundance(featureSet.features,false)
+						features=Top10Features.slice(0,10);
+						top10Index=1;
+						break;
+					}
+					default:
+					{
+						features=featureSet.features;
+						break;
+					}
+				}
+				return features;
+			}
+	        private function setIcon(_markerOptions:MarkerOptions,attributes:Object):void
+	        {
+	        	switch (markerType)
+	        	{
+	        		case (EnumMarkerType.DISTRIBUTION):
+	        		{
+						(attributes[abundanceField]==0) ? _markerOptions.icon=new distributionZeroIcon() : _markerOptions.icon=new distributionMapIcon();
+						break;
+	        		}
+	        		case (EnumMarkerType.ABUNDANCE_UDA):
+	        		{
+		                _markerOptions.icon= new large();
+						break;
+	        		}
+	        		case (EnumMarkerType.ABUNDANCE):
+	        		{
+	        			var classNum:int;
+	        			for (var i:int=0;i<classValues.length;i++)
+	        			{
+	        				if (attributes[abundanceField]>classValues[i])
+	        				{
+	        					classNum=i;
+	        				}
+	        			}
+	        			switch (classNum)
+	        			{
+		                	case 0: 
+		                		_markerOptions.icon= new small();
+		                		break;
+		                	case 1: 
+		                		_markerOptions.icon= new medium();
+		                		break;
+		                	case 2: 
+		                		_markerOptions.icon= new large();
+		                		break;
+	        			}
+	        			break;
+	        		}
+	        		case (EnumMarkerType.TOP10):
+	        		{
+	        			_markerOptions.icon = new Top10MapSymbol(top10Index.toString(),0.7);
+	        			top10Index++;
+	        			break;
+	        		}
+	        		case (EnumMarkerType.PRODUCTIVITY):
+	        		{
+						switch (attributes.Productivity) //set the marker style depending on the productivity
+							{
+							case "Failed":
+								{
+								_markerOptions.icon = new red();
+								break;
+								}
+							case "Good":
+								{
+								_markerOptions.icon = new green();
+								break;
+								}
+							case "Normal":
+								{
+								_markerOptions.icon = new yellow();
+								break;
+								}
+							}
+	        			break;
+	        		}
+	        		case (EnumMarkerType.PROTECTION):
+	        		{
+						switch (attributes.DistanceTo) //set the marker style depending on the productivity
+							{
+							case 0:
+								{
+								_markerOptions.icon = new green();
+								break;
+								}
+							default:
+								{
+								_markerOptions.icon = new red();
+								break;
+								}
+							}
+						break;
+	        		}
+	        		default:
+	        		{
+	        			_markerOptions.icon=new distributionMapIcon();
+	        			break;
+	        		}
+	        	}
+	        }
+			private function buildAbundanceClasses(objects:Array, numClasses:int):void
+			{
+				classValues=new Array();
+				if (numClasses>2)
+				{
+		            var sobjects:Array = sortFeaturesByAbundance(objects,true);
+					var gap:Number=(Math.ceil(sobjects.length/3)-1);
+					classValues.push(0);
+					classValues.push(sobjects[gap].attributes[abundanceField]);
+					classValues.push(sobjects[gap*2].attributes[abundanceField]);
+					classValues.push(sobjects[sobjects.length-1].attributes[abundanceField]);
+				}
+			}		
+			private function sortFeaturesByAbundance(objects:Array, ascending:Boolean):Array
+			{
+				var sobjects:Array;
+				if (ascending)
+				{
+		            sobjects = objects.sort(function(a:Object,b:Object):int 
+		            {
+		                if(a.attributes[abundanceField] < b.attributes[abundanceField])
+		                    return -1;
+		                else if (a.attributes[abundanceField] > b.attributes[abundanceField])
+		                    return 1;
+		                else
+		                    return 0;
+		            });
+			   }
+			   else
+			   {
+		            sobjects = objects.sort(function(a:Object,b:Object):int 
+		            {
+		                if(a.attributes[abundanceField] < b.attributes[abundanceField])
+		                    return 1;
+		                else if (a.attributes[abundanceField] > b.attributes[abundanceField])
+		                    return -1;
+		                else
+		                    return 0;
+		            });
+			   }
+	            return sobjects;
+			}  
+			private function initialiseScribbleLayer():void
+			{
+				CursorManager.setCursor(draw, CursorManagerPriority.HIGH, 3, 2);
+				scribbleLayer.initialise(map);
+				scribbleLayer.drawMode="Freehand";
+				scribbleLayer.addEventListener("UDACreated",UDACreated); //wire up an event to use the UDA to query the features on ArcGIS Server
+				scribbleLayer.addEventListener("StartUDADraw",startUDADraw);
+			}
+			private function finaliseScribbleLayer():void
+			{
+				CursorManager.removeAllCursors();
+				scribbleLayer.finalise(map);
+				scribbleLayer.removeEventListener("UDACreated",UDACreated); //wire up an event to use the UDA to query the features on ArcGIS Server
+				scribbleLayer.removeEventListener("StartUDADraw",startUDADraw);
+				UDAGeometry=null;
+				clearMarkers();
+			}
+			private function startUDADraw(event:Event):void
+			{
+				clearMarkers();	
+				dataLoaded=false;		
+			}
+			private function UDACreated(event:UDACreatedEvent):void
+			{
+				UDAGeometry=event.geometry;
+				switchLayerOn();
+			}
+			private function MouseOver(event:MouseEvent):void
+			{
+				setStyle('backgroundColor','0xb2e1ff');
+				legendImage.visible=true;
+			}
+			private function MouseOut(event:MouseEvent):void
+			{
+				setStyle('backgroundColor','0xffffff');
+			}
+			private function RollOut(event:MouseEvent):void
+			{
+				legendImage.visible=false;
+				infoBox.visible=false;
+			}
+			private function setLegendVisibility(event:MouseEvent):void
+			{
+				infoBox.visible=!infoBox.visible;
+			}
+		]]>
+	</mx:Script>
+</mx:HBox>

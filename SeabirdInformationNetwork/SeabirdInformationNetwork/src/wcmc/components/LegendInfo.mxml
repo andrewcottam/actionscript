@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="wcmc.components.*">
+	<mx:Label styleName="newLabel12" text="{_MapServerLegendInfo.Name}"/>
+	<mx:Repeater id="legendGroups">
+		<components:LegendGroup mapServerLegendGroup="{legendGroups.currentItem}"/>
+	</mx:Repeater>
+	<mx:Script>
+		<![CDATA[
+			import wcmc.soap.MapServerLegendInfo;
+			[Bindable]private var _MapServerLegendInfo:MapServerLegendInfo;
+			public function get mapServerLegendInfo():MapServerLegendInfo
+			{
+				return _MapServerLegendInfo;
+			}
+			public function set mapServerLegendInfo(value:MapServerLegendInfo):void
+			{
+				_MapServerLegendInfo = value;
+				legendGroups.dataProvider = _MapServerLegendInfo.LegendGroups;
+			}
+		]]>
+	</mx:Script>
+</mx:VBox>

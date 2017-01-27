@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" styleName="InformationPanel" showEffect="{fader}" hideEffect="{fader}" y="{verticalCentre}" visible="false" right="{Right}" initialize="init(event)" xmlns:components="wcmc.components.*" width="410">
+	<mx:VBox styleName="ContentPanel" verticalCenter="0" horizontalCenter="0">
+		<mx:Text id="TextBox" htmlText="{tool.metadata}" width="400" link="gotoLink(event)"/>
+		<components:RasterLegend id="legend" paddingTop="4" paddingLeft="5" paddingRight="5"/>
+	</mx:VBox>
+	<mx:Fade id="fader" duration="250" effectStart="setPosition()"/>
+	<mx:Script>
+		<![CDATA[
+			import flash.net.navigateToURL;
+			[Bindable]public var Right:Number=60;
+			[Bindable]private var verticalCentre:Number=0;
+			import mx.controls.Alert;
+			import mx.core.Application;
+			import wcmc.soap.ArrayOfMapServerLegendInfo;
+			import wcmc.soap.GetLegendInfoResultEvent;
+			import wcmc.soap.Coral_Reefs_MapServer;
+			import com.google.maps.extras.arcgislink.ArcGISMapOverlay;
+			import mx.events.FlexEvent;
+			import wcmc.classes.Layer;
+			public var mapServiceURL:String;
+			[Bindable]public var tool:RasterToolControl;
+			[Bindable]private var legendLoaded:Boolean=false;
+			private function setPosition():void
+			{
+				var point:Point= tool.localToGlobal(new Point(0,0)); //get the stage position of the tool control
+				verticalCentre=point.y+(tool.height/2);
+			}
+			private function init(event:FlexEvent):void
+			{
+				try
+				{
+				var SOAPEndpoint:String = mapServiceURL.replace("/rest","");
+				var myService:Coral_Reefs_MapServer= new Coral_Reefs_MapServer(null,SOAPEndpoint); //imported WSDL from the Coral Reef Layer - but the class can be used with any WSDL
+				myService.addgetLegendInfoEventListener(myResultHandlingFunction);
+				myService.addCoral_Reefs_MapServerFaultEventListener(webServiceFault);
+				myService.getLegendInfo("Layers",null,null,null);
+				}
+				catch (err:Error)
+				{
+					Alert.show(err.message);
+				}
+				finally
+				{
+					
+				}
+			}
+			private function myResultHandlingFunction(event:GetLegendInfoResultEvent):void
+			{
+				var _ArrayOfMapServerLegendInfo:ArrayOfMapServerLegendInfo=event.result;
+				legend.legendInfos.dataProvider=_ArrayOfMapServerLegendInfo;
+				legendLoaded=true;
+			}
+			private function webServiceFault(event:ErrorEvent):void
+			{
+				Alert.show(event.text);
+			}
+			private function closeMe():void
+			{
+				Application.application.removeChild(this);
+			}
+			private function gotoLink(event:TextEvent):void
+			{
+				navigateToURL(new URLRequest(event.text),"_blank");
+			}
+		]]>
+	</mx:Script>
+</mx:Canvas>

@@ -1,0 +1,41 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>FindParameters.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ * ArcGIS for Google Maps Flash API
+ *
+ * License http://www.apache.org/licenses/LICENSE-2.0
+ */</span>
+ <span class="ActionScriptASDoc">/**
+ * @author nianwei at gmail dot com
+ */</span> 
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">google</span>.<span class="ActionScriptDefault_Text">maps</span>.<span class="ActionScriptDefault_Text">extras</span>.<span class="ActionScriptDefault_Text">arcgislink</span>
+<span class="ActionScriptBracket/Brace">{</span>
+  <span class="ActionScriptASDoc">/**
+  * Find operation parameters. Returned geometry Spatial Reference will always set to WGS (4326)
+  */</span> 
+  <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">FindParameters</span>
+  <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">searchText</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">contains</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">searchFields</span> <span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">layerIds</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">returnGeometry</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">true</span>;
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">FindParameters</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">params</span><span class="ActionScriptOperator">:*=</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+      <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">params</span><span class="ActionScriptBracket/Brace">){</span>
+        <span class="ActionScriptDefault_Text">ArcGISUtil</span>.<span class="ActionScriptDefault_Text">augmentObject</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">params</span>,<span class="ActionScriptReserved">this</span>,<span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">)</span>;
+      <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+
+
+  <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

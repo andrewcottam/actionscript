@@ -1,0 +1,33 @@
+	<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml" styleName="InformationPanel" width="550" height="600" showEffect="{fader}" hideEffect="{fader}" y="{verticalCentre}" visible="false" right="{Right}" >
+		<mx:VBox styleName="ContentPanel" width="540" height="590" verticalCenter="0" horizontalCenter="0">
+			<mx:Label text="Sea level rise tool" styleName="toolHeader"/>
+			<mx:Label text="Background" styleName="toolLabel"/>
+			<mx:Text text="The sea level rise tool shows the potential impact of sea level rise on seabird colonies in the North East Pacific region. The tool shows the position of seabird colonies for an individual species and allows the user to set a sea-level rise scenario and view the potential impacts of that rise. " width="100%"/>
+			<mx:Label text="Using the tool" styleName="toolLabel"/>
+			<mx:Text text="    1. Select a species from the drop down list" width="100%"/>
+			<mx:Text text="    2. Drag the sea level rise slider to the new height" width="100%"/>
+			<mx:Text text="Three things will occur when you move the sea level rise slider:" width="100%"/>
+			<mx:Text text="    - The map will show in light blue those areas that will be inundated with that sea level rise" width="100%"/>
+			<mx:Text text="    - Colonies which are below that sea level will be removed from the map" width="100%"/>
+			<mx:Text text="    - The pie chart will show the total abundance from those colonies that were affected by the sea level rise compared with the overall population total." width="100%"/>
+			<mx:Label text="Assupmtions and caveats" styleName="toolLabel"/>
+			<mx:Text text="This tool has been developed as a proof-of-concept rather than a robust scientific tool and there are a number of assumptions and caveats." width="100%"/>
+			<mx:Text text="Firstly, the currently predicted worse-case scenarios for sea level rise are only for 1-2m. Secondly, it is assumed that all of the individuals within the affected colonies will be affected and will need to either move further inland or move elsewhere. The actual impact will depend on a number of factors including: rate of sea level rise; ecological requirements; habitat availability further inland; Finally, the analysis depends on the accurate height of the colonies (see data preparation below) and for cliff-nesting species the height accuracy is low." width="100%"/>
+			<mx:Label text="Data preparation" styleName="toolLabel"/>
+			<mx:Text htmlText="Sea level rise and colony heights have been calculated using the Global ASTER Digital Elevation Model (DEM) (http://www.ersdac.or.jp/GDEM/E/index.html) with a vertical resolution of 1m and a horizontal resolution of xx. The height for colonies was derived by overlaying the locations on the DEM and reading the height data. This is highly error-prone for colonies which are located on cliffs since a small change in location will result in a large change in height." width="100%"/>
+		</mx:VBox>
+	<mx:Fade id="fader" duration="250" effectStart="setPosition()"/>
+		<mx:Script>
+			<![CDATA[
+			[Bindable]public var Right:Number=60;
+			[Bindable]private var verticalCentre:Number=0;
+			public var tool:ToolControl;
+			private function setPosition():void
+			{
+				var point:Point= tool.localToGlobal(new Point(0,0)); //get the stage position of the tool control
+				verticalCentre=point.y+(tool.height/2);
+			}
+				
+			]]>
+		</mx:Script>
+	</mx:Canvas>

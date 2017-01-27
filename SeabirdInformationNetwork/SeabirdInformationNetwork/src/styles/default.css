@@ -1,0 +1,290 @@
+/* CSS file */
+.InformationPanel
+{
+	borderStyle: solid;
+	borderColor: #FFFFFF;
+	borderAlpha: 0.9;
+	borderThickness: 1;
+	header-height:10;
+	cornerRadius: 5;
+	backgroundAlpha: 0.4;
+	backgroundColor: #111111;
+	dropShadowEnabled: true;
+	shadowDirection: right;
+	shadowDistance: 5;
+	horizontalScrollPolicy: off;
+	verticalScrollPolicy:off;
+}
+.ContentBox
+{
+	padding-top:10;
+	padding-left:3;
+	padding-right:3;
+}
+.ToolWindow
+{
+	borderStyle: solid;
+	borderColor: #FFFFFF;
+	borderAlpha: 1;
+	borderThickness: 1;
+	cornerRadius: 4;
+	header-height:10;
+	backgroundAlpha: 1;
+	backgroundColor: #FFFFFF;
+	horizontalScrollPolicy: off;
+	verticalScrollPolicy:off;
+	padding-top:10;
+	padding-left:10;
+	padding-right:10;
+	padding-bottom:10;
+}
+.ToolWindowTitleHBox
+{
+ 	border-sides:bottom;
+	border-thickness-bottom:2;
+	border-color:#882222;
+	border-style:solid;
+}
+.ToolWindowTitle
+{
+	color:#444444;
+	font-size:17;
+}
+.ContentBoxContainer
+{
+	borderStyle: solid;
+	borderColor: #FFFFFF;
+	borderAlpha: 1;
+	borderThickness: 1;
+	cornerRadius: 4;
+	header-height:10;
+	backgroundAlpha: 1;
+	backgroundColor: #FFFFFF;
+	shadowDirection: right;
+	shadowDistance: 5;
+	horizontalScrollPolicy: off;
+	verticalScrollPolicy:off;
+}
+.ContentPanel
+{
+	borderStyle: solid;
+	borderColor: #FFFFFF;
+	borderAlpha: 1;
+	borderThickness: 1;
+	cornerRadius: 4;
+	header-height:10;
+	backgroundAlpha: 1;
+	backgroundColor: #FFFFFF;
+	horizontalScrollPolicy: off;
+	verticalScrollPolicy:off;
+}
+List
+{
+	horizontalScrollPolicy: off;
+	verticalScrollPolicy:off;
+	backgroundColor: #FFFFFF;
+}
+.table
+{
+	borderStyle: solid;
+	borderColor: #FFFFFF;
+	borderAlpha: 0.9;
+	borderThickness: 1;
+	header-height:10;
+	cornerRadius: 5;
+	backgroundAlpha: 0.4;
+	backgroundColor: #111111;
+	dropShadowEnabled: true;
+	shadowDirection: right;
+	shadowDistance: 5;
+	horizontalScrollPolicy: off;
+	verticalScrollPolicy:off;
+ 	padding-left:5;
+ 	padding-top:5;
+ 	padding-right:5;
+ 	padding-bottom:5;
+	
+}
+.imageButton
+{
+}	
+.centreAlign
+{
+	horizontal-align:centre;
+}
+/* start page styles */
+.startText1
+{
+	font-family:Tahoma;
+	font-size:26;
+	color:#444444;
+}
+.startText2
+{
+	font-family:Tahoma;
+	font-size:20;
+	color:#444444;
+	border-sides:none;
+}
+.startTextBox
+{
+	vertical-align:middle;
+	horizontal-align:middle;
+}
+/* all species content box styles */
+.speciesHeaderBox
+{
+	padding-bottom:20;
+}
+.speciesPhotoBox
+{
+	border-color:#999999;
+	border-thickness:1;
+	border-style:solid;
+	border-alpha:0.5;
+}
+.speciesSearchBox
+{
+	font-family:Tahoma;
+	font-size:17;
+	color:#444444;
+}
+.verticalCentreAlign
+{
+	vertical-align:middle
+}
+/* Species list content page styles */
+.CommonName
+{
+	
+}
+.ScientificName
+{
+	font-style:italic;
+}
+/* Species content page styles */
+.speciesContentBoxHeader
+{
+	border-color:#990000;
+	border-thickness:0;
+	border-style:solid;
+	border-alpha:0.5;
+}
+.commonNameHBox
+{
+ 	border-sides:bottom;
+	border-thickness-bottom:2;
+	border-color:#882222;
+	border-style:solid;
+}
+.latinNameHBox
+{
+}
+.commonNameLabel
+{
+	font-family:Tahoma;
+	font-size:26;
+	color:#444444;
+}
+.latinNameLabel
+{
+	font-family:Tahoma;
+	font-size:17;
+	color:#444444;
+	font-style:italic;
+}
+.textLabel
+{
+	font-family:Tahoma;
+	font-size:14;
+	color:#444444;
+}
+.speciesDescription
+{
+	verticalScrollPolicy:off;
+	border-thickness:0;
+	color:#444444;
+	font-size:10;
+	padding-left:7;
+	padding-right:5;
+}	
+.copyrightLabel
+{
+	font-size:8;
+	color:#777777;
+	text-align:left;
+}
+.toolbox
+{
+	border-color:#b7babc;
+	border-style:solid;
+	border-thickness:1;
+}
+/* Toolbox style definitions */
+.toolCategoryName
+{
+	color:#444444;
+	font-size:17;
+}
+.percentaffected
+{
+	color:#444444;
+	font-size:21;
+}
+.toolCategoryNameBox
+{
+	color:#444444;
+	font-size:17;
+}
+/* Tooset style definitions */
+.toolHeader
+{
+	color:#444444;
+	font-size:17;
+	padding-top:10;
+}
+.toolItem
+{
+	verticalScrollPolicy:off;
+	horizontalScrollPolicy: off;
+}
+.toolDescription
+{
+	verticalScrollPolicy:off;
+	color:#111111;
+	font-size:9;
+	border-sides:none;
+	background-alpha:0;
+}
+.toolLabel
+{
+	color:#444444;
+	font-size:12;
+	disabled-color:#444444;
+}
+/* tool styles */
+.noBorder
+{
+	border-sides:none;
+	font-family:Tahoma;
+	font-size:14;
+	color:#444444;
+	verticalScrollPolicy:off;
+}
+.lightBorder
+{
+	border-color:#B7BABC;
+	border-style:solid;
+	border-thickness:1;
+}
+TextInput
+{
+	borderStyle:solid;
+	borderThickness: 1;
+	borderColor: #888888;
+	cornerRadius: 10;
+	color: #000000;
+ 	vertical-align:middle;
+ 	padding-left:5;
+ 	padding-top:2;
+}

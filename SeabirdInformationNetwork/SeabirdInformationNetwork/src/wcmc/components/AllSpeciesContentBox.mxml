@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Class: 			AllSpeciesContentBox
+Description:	MXML Component Class that shows information and allows you to look at outputs for a list of species. 
+				It also allows you to search for a species. 	
+-->
+<wcmc_classes:ContentBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:wcmc="wcmc.components.*" xmlns:wcmc_classes="wcmc.classes.*" 
+	ContentBoxParameterSet="SpeciesSearchBox.SpeciesSearchTextBox.setFocus()" 
+	searchBox="{SpeciesSearchBox.SpeciesSearchTextBox}" 
+	resultsBox="{SpeciesListBox}" filterOn="CommonName"> 
+	<wcmc:SpeciesSearchBox id="SpeciesSearchBox" keyUp="dispatchEvent(new Event('change',true))"/>
+	<wcmc:SpeciesResults id="SpeciesListBox" width="95%"/>
+</wcmc_classes:ContentBox>

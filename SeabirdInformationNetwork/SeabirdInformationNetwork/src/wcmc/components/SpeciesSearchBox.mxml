@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Class: 			SpeciesSearchBox
+Description:	MXML Component Class that allows the user to search for species. 	
+-->
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" width="95%" height="40" xmlns:classes="wcmc.classes.*" verticalAlign="middle">
+    <mx:Metadata>
+        [Event(name="change", type="flash.events.Event")]
+    </mx:Metadata>	
+    <mx:Image source="@Embed(source='../../images/puffinsmall2.png')"/>
+	<mx:Label text="Enter species name:" left="200" styleName="speciesSearchBox" top="200"/>
+	<classes:SearchBox id="SpeciesSearchTextBox" x="120" change="dispatchEvent(new Event('change',true))"/>
+	<mx:Script>
+		<![CDATA[
+			import flash.events.Event;
+		]]>
+	</mx:Script>
+</mx:HBox>

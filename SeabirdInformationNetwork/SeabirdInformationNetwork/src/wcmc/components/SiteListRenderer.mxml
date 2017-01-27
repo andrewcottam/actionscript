@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:VBox>
+		<mx:Image source="{data.icon}"/>
+	</mx:VBox>
+	<mx:VBox>
+		<mx:Label text="{data.siteName}"/>
+	</mx:VBox>
+	<mx:Script>
+		<![CDATA[
+			
+		]]>
+	</mx:Script>
+</mx:HBox>

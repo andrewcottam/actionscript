@@ -1,0 +1,29 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace fc "http://ns.adobe.com/flashcatalyst/2009";
+
+.defaultFont
+{
+	color: #555;
+	font-size: 16px;
+	text-align: left;
+	text-shadow: 0 1px 0 #EEE;	
+}
+.whiteText
+{
+	color:#ffffff;
+}
+.invalid
+{
+	backgroundColor:#ff4444;
+	color:#ffffff;
+	cornerRadius:3px;
+	paddingBottom:5px;
+	paddingTop:5px;
+	paddingRight:5px;
+	paddingLeft:5px;
+}
+.valid
+{
+	
+}

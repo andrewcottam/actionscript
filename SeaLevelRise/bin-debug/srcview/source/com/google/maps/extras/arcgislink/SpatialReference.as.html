@@ -1,0 +1,55 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>SpatialReference.as</title>
+<link rel="stylesheet" type="text/css" href="../../../../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ * ArcGIS for Google Maps Flash API
+ *
+ * License http://www.apache.org/licenses/LICENSE-2.0
+ */</span>
+ <span class="ActionScriptASDoc">/**
+ * @author nianwei at gmail dot com
+ */</span> 
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">google</span>.<span class="ActionScriptDefault_Text">maps</span>.<span class="ActionScriptDefault_Text">extras</span>.<span class="ActionScriptDefault_Text">arcgislink</span>
+<span class="ActionScriptBracket/Brace">{</span>
+  <span class="ActionScriptASDoc">/**
+  * Used to convert LatLng to other coordinate systems.
+  */</span> 
+  <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">SpatialReference</span>
+  <span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">protected</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">RAD_DEG</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>  <span class="ActionScriptOperator">=</span>  <span class="ActionScriptDefault_Text">Math</span>.<span class="ActionScriptDefault_Text">PI</span> <span class="ActionScriptOperator">/</span> 180.0;
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">wkid_</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">SpatialReference</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">params</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+      <span class="ActionScriptComment">//TODO: implement function
+</span>      <span class="ActionScriptReserved">this</span>.<span class="ActionScriptDefault_Text">wkid_</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">params</span><span class="ActionScriptOperator">?</span><span class="ActionScriptDefault_Text">params</span>.<span class="ActionScriptDefault_Text">wkid</span><span class="ActionScriptOperator">:</span>4326;
+    <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">wkid</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptBracket/Brace">{</span>
+      <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">wkid_</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+     <span class="ActionScriptASDoc">/**
+   * Convert Lat Lng to real-world coordinates.
+   * Note both input and output are array of [x,y], although their values in different units.
+   * @param {Number[]} lnglat
+   * @return {Number[]}
+   */</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">forward</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lnglat</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">{</span>
+      <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">lnglat</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">reverse</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">coords</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Array</span><span class="ActionScriptBracket/Brace">{</span>
+      <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">coords</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getCircumference</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptBracket/Brace">{</span>
+      <span class="ActionScriptReserved">return</span> 360;
+    <span class="ActionScriptBracket/Brace">}</span>
+  
+    
+  <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

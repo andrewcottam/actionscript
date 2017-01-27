@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:VBox>
+		<mx:Image source="{data.icon}"/>
+	</mx:VBox>
+	<mx:VBox>
+		<mx:Label text="{data.CommonName}" styleName="CommonName"/>
+	</mx:VBox>
+	<mx:VBox>
+		<mx:Label text="{data.ScientificName}" styleName="ScientificName"/>
+	</mx:VBox>
+</mx:HBox>

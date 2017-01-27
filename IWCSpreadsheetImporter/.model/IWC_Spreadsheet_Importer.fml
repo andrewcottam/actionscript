@@ -1,0 +1,85 @@
+
+<model xmlns="http://ns.adobe.com/Fiber/1.0">
+  <annotation name="ActionScriptGeneration">
+    <item name="FullyQualifyReferences">true</item>
+  </annotation>
+  <service name="IWCUserServices">
+    <annotation name="ActionScriptGeneration">
+      <item name="WSDL-service">IWCUserServices</item>
+      <item name="ServiceType">WebService</item>
+      <item name="WSDL">http://dev.unep-wcmc.org/iwc/IWCSecurityWebServices/IWCUserServices.asmx?wsdl</item>
+      <item name="Package">services.iwcuserservices</item>
+      <item name="WSDL-port">IWCUserServicesSoap</item>
+    </annotation>
+    <annotation name="ServiceTypeGroup">
+      <item name="ServiceBackendType">WebService</item>
+    </annotation>
+    <annotation name="WSDLCollectionElementTypes">
+      <item name="http://dev.unep-wcmc.org/iwc,ArrayOfString">string::http://www.w3.org/2001/XMLSchema,string</item>
+    </annotation>
+    <annotation name="ServiceConfig">
+      <item name="DEFAULT_ENTITY_PACKAGE">valueObjects</item>
+      <item name="WSDL-endpoint">http://dev.unep-wcmc.org/iwc/IWCSecurityWebServices/IWCUserServices.asmx</item>
+      <item name="LINKED_FILE"></item>
+    </annotation>
+    <function name="RegisterUser" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="RegisterUser">http://dev.unep-wcmc.org/iwc,RegisterUser</item>
+        <item name="SOAPAction">http://dev.unep-wcmc.org/iwc/RegisterUser</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">string,string,string</item>
+        <item name="returnType">string</item>
+      </annotation>
+      <parameter name="username" type="string"/>
+      <parameter name="password" type="string"/>
+      <parameter name="email" type="string"/>
+    </function>
+    <function name="GetRoles" return-type="string[]">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://dev.unep-wcmc.org/iwc/GetRoles</item>
+        <item name="GetRoles">http://dev.unep-wcmc.org/iwc,GetRoles</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">string</item>
+        <item name="returnType">string</item>
+      </annotation>
+      <parameter name="username" type="string"/>
+    </function>
+    <function name="ValidateUser" return-type="boolean">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="SOAPAction">http://dev.unep-wcmc.org/iwc/ValidateUser</item>
+        <item name="ValidateUser">http://dev.unep-wcmc.org/iwc,ValidateUser</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">string,string</item>
+        <item name="returnType">boolean</item>
+      </annotation>
+      <parameter name="username" type="string"/>
+      <parameter name="password" type="string"/>
+    </function>
+    <function name="GetUser" return-type="string">
+      <annotation name="analyze group">
+        <item name="analyzed">true</item>
+      </annotation>
+      <annotation name="WSDLName">
+        <item name="GetUser">http://dev.unep-wcmc.org/iwc,GetUser</item>
+        <item name="SOAPAction">http://dev.unep-wcmc.org/iwc/GetUser</item>
+      </annotation>
+      <annotation name="original signature">
+        <item name="inputParams">string</item>
+        <item name="returnType">string</item>
+      </annotation>
+      <parameter name="username" type="string"/>
+    </function>
+  </service>
+</model>

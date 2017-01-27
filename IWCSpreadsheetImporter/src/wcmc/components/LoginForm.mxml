@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+		 xmlns:s="library://ns.adobe.com/flex/spark"
+		 xmlns:fc="http://ns.adobe.com/flashcatalyst/2009"
+		 xmlns:iwcuserservices="services.iwcuserservices.*"
+		 width="300" height="132"
+		 height.validLogin="124" skinClass="wcmc.skins.Popup">
+	<fx:Declarations>
+		<iwcuserservices:IWCUserServices id="iwcValidateUserService" result="validateUserResult(event)" fault="validateUserFault(event)"/>
+	</fx:Declarations>
+	<s:states>
+		<s:State name="validLogin"/>
+		<s:State name="invalidLogin"/>
+		<s:State name="serviceDown"/>
+	</s:states>
+	<s:Label x="25" y="29" text="Username:"/>
+	<s:Label x="25" y="59" text="Password:"/>
+	<s:TextInput x="118" y="19" id="userName"/>
+	<s:TextInput x="118" y="49" id="password" displayAsPassword="true" enter="validateUser(null)"/>
+	<s:Label x="25" y="99" text="Invalid login" includeIn="invalidLogin"/>
+	<s:Label x="25" y="99" text="The login service is unavailable" includeIn="serviceDown"/>
+	<s:Button x="176" y="90" label="Login" click="validateUser(event)" x.validLogin="176" y.validLogin="88" enabled="{!loggingIn}"/>
+	<s:Button x="98" y="90" label="Cancel" click="closeMe(event)" x.validLogin="98" y.validLogin="88"/>
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			[Bindable]private var loggingIn:Boolean=false;
+			private function validateUserResult(event:ResultEvent):void
+			{
+				if (event.result)
+				{
+					currentState="validLogin";
+					closeMe(null);
+					parentApplication.login(userName.text);
+				}
+				else
+				{
+					currentState="invalidLogin";
+				}
+				loggingIn=false;
+			}
+			private function validateUserFault(event:FaultEvent):void
+			{
+				currentState="invalidLogin";
+			}
+			protected function validateUser(event:MouseEvent):void
+			{
+				loggingIn=true;
+				iwcValidateUserService.ValidateUser(userName.text,password.text);
+			}
+			private function closeMe(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+	</fx:Script>
+</s:SkinnableContainer>

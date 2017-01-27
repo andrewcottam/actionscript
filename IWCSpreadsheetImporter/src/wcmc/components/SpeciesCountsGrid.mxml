@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:DataGrid xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			xmlns:s="library://ns.adobe.com/flex/spark" 
+			xmlns:fc="http://ns.adobe.com/flashcatalyst/2009" width="572" height="345" xmlns:mx="library://ns.adobe.com/flex/mx" editable="true" gridItemEditorSessionSave="datagrid1_gridItemEditorSessionSaveHandler(event)" xmlns:classes="wcmc.classes.*" gridItemEditorSessionStart="datagrid1_gridItemEditorSessionStartHandler(event)">	
+	<fx:Declarations>
+		<classes:Validators id="validators">
+			<classes:DatabaseValidator id="speciesCodeValidator"/>
+			<classes:DatabaseValidator id="siteNameValidator" NewSiteEntered="siteNameValidator_NewSiteEnteredHandler(event)"/>
+			<classes:NumericValidator id="countsValidator"/>
+		</classes:Validators>
+	</fx:Declarations>
+	<s:columns>
+		<s:ArrayList>
+			<classes:SpeciesCountsGridColumn id="idColumn" headerText="Row" width="40" dataField="id" itemRenderer="wcmc.renderers.SpeciesCountsColumn" />
+			<classes:SpeciesCountsGridColumn id="siteCodeColumn" headerText="Site Code" width="80" dataField="siteCode" itemRenderer="wcmc.renderers.SpeciesCountsColumn" />
+			<classes:SpeciesCountsGridColumn id="siteNameColumn" headerText="Site Name" width="140" dataField="siteName" validator="{siteNameValidator}" itemRenderer="wcmc.renderers.SpeciesCountsColumn"/>
+			<classes:SpeciesCountsGridColumn id="dateColumn" headerText="Date" dataField="date" width="60" itemRenderer="wcmc.renderers.SpeciesCountsColumn"/>
+			<classes:SpeciesCountsGridColumn id="speciesCodeColumn" headerText="Species" dataField="speciesCode" width="60" validator="{speciesCodeValidator}" itemRenderer="wcmc.renderers.SpeciesCountsColumn"/>
+			<classes:SpeciesCountsGridColumn id="countColumn" headerText="Count" dataField="count" width="50" validator="{countsValidator}" itemRenderer="wcmc.renderers.SpeciesCountsColumn"/>
+			<classes:SpeciesCountsGridColumn id="coverageColumn" headerText="Coverage" dataField="coverage" width="70" itemRenderer="wcmc.renderers.SpeciesCountsColumn"/>
+			<classes:SpeciesCountsGridColumn id="qualityColumn" headerText="Quality" dataField="quality" width="55" itemRenderer="wcmc.renderers.SpeciesCountsColumn"/>
+		</s:ArrayList>		
+	</s:columns>
+	<fx:Script>
+		<![CDATA[
+			import com.esri.ags.Map;
+			
+			import mx.collections.ArrayCollection;
+			import mx.collections.IList;
+			import mx.controls.Alert;
+			import mx.core.IFlexDisplayObject;
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			import mx.managers.PopUpManager;
+			import mx.utils.ObjectUtil;
+			
+			import spark.events.GridItemEditorEvent;
+			
+			import wcmc.classes.NewSiteEnteredEvent;
+			import wcmc.classes.SpeciesCount;
+			import wcmc.classes.Utils;
+			import wcmc.classes.ValidatorBase;
+			private var oldValue:String;
+			private var newValue:String;
+			[Bindable]public var validated:Boolean=false;
+			[Bindable]public var map:Map;
+			[Bindable]public var siteCodesString:String="'GB00008'";
+			[Bindable]public var siteCodes:Array;
+			[Bindable]public var main:Main;
+			override public function set dataProvider(value:IList):void
+			{
+				super.dataProvider = value;
+				for each (var speciesCountsGridColumn:SpeciesCountsGridColumn in columns.toArray())
+				{
+					if (speciesCountsGridColumn.validator) speciesCountsGridColumn.validator.speciesCounts=value as ArrayCollection;
+					if (speciesCountsGridColumn.dataField=="siteCode")
+					{
+						getSiteCodes();
+						mapData();
+					}
+				}
+			}
+			
+			public function validateAll():void
+			{
+				validators.validationStatus=ValidatorBase.VALIDATION_STATUS_IN_PROGRESS;
+				validators.removeFilters();
+				for each (var speciesCountsGridColumn:SpeciesCountsGridColumn in columns.toArray())
+				{
+					if (speciesCountsGridColumn.validator) speciesCountsGridColumn.validator.validate();
+				}
+			}
+			private function getSiteCodes():void
+			{
+				siteCodes=new Array();
+				for each (var speciesCount:SpeciesCount in dataProvider)
+				{
+					var code:String = speciesCount["siteCode"];
+					if (siteCodes.indexOf(code)==-1) siteCodes.push(code);
+				}
+				if (siteCodes.length>0)
+				{
+					var tmpSiteCodesString:String="";
+					for each (var item:String in siteCodes)
+					{
+						tmpSiteCodesString	= tmpSiteCodesString + "'" + item + "',";
+					}
+					//					siteCodesString = tmpSiteCodesString.substring(0,tmpSiteCodesString.length-1);
+				}
+			}
+			private function mapData():void
+			{
+				if (map==null) return;
+			}
+			protected function datagrid1_gridItemEditorSessionStartHandler(event:GridItemEditorEvent):void
+			{
+				if ((event.column as SpeciesCountsGridColumn).validator)
+				{
+					var validator:ValidatorBase=(event.column as SpeciesCountsGridColumn).validator;
+					Utils.copyObject(dataProvider[event.rowIndex],validator.speciesCountStartEditState);
+					oldValue=dataProvider[event.rowIndex][validator.gridColumn.dataField];
+				}
+			}
+			protected function datagrid1_gridItemEditorSessionSaveHandler(event:GridItemEditorEvent):void
+			{
+				if ((event.column as SpeciesCountsGridColumn).validator)
+				{
+					var validator:ValidatorBase=(event.column as SpeciesCountsGridColumn).validator;
+					newValue=dataProvider[event.rowIndex][validator.gridColumn.dataField];
+					if (oldValue==newValue) return;
+					dataProvider[event.rowIndex][validator.validationStatusField]=ValidatorBase.VALIDATION_STATUS_IN_PROGRESS;
+					var speciesCount:SpeciesCount=dataProvider[event.rowIndex] as SpeciesCount;
+					(event.column as SpeciesCountsGridColumn).validator.validate(speciesCount.id);
+				}
+			}
+			protected function siteNameValidator_NewSiteEnteredHandler(event:NewSiteEnteredEvent):void
+			{
+				var promptForm:IFlexDisplayObject=PopUpManager.createPopUp(this as DisplayObject,wcmc.components.CreateNewSitePrompt);
+				var point:Point=localToGlobal(new Point(mouseX,mouseY));
+				promptForm.x=point.x;
+				promptForm.y=point.y;
+				(promptForm as CreateNewSitePrompt).yesBtn.setFocus(); 
+				(promptForm as CreateNewSitePrompt).siteName=event.speciesCount.siteName;
+				promptForm.visible=true;
+			}
+		]]>
+	</fx:Script>
+	
+</s:DataGrid>

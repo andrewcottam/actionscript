@@ -1,0 +1,207 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>SpeciesLabel.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/* file            specieslabel.as
+date            oct 2009
+author            andrew cottam
+description        simple class to render a species name from an abbreviated name
+
+*/</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">classes</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">Label</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">formatters</span>.<span class="ActionScriptDefault_Text">NumberFormatter</span>;
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">SpeciesLabel</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">Label</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">SpeciesLabel</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">override</span> <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">data</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">switch</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;ALTE&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Aleutian tern&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;ANMU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Ancient murrelet&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;ARTE&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Arctic tern&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;AUSH&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Audubon&apos;s shearwater&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;BHGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Black-headed gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;BLGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Black guillemot&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;BLKI&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Black-legged kittiwake&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;BLOY&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Black oystercatcher&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;BOGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Bonaparte&apos;s gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;BRCO&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Brandt&apos;s cormorant&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;BTGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Black-tailed gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;CAAU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Cassin&apos;s auklet&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;CATE&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Caspian Tern&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;COEI&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Common eider&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;COMU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Common murre&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;COTE&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Common tern&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;CRAU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Crested auklet&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;DCCO&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Double-crested cormorant&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;DOVE&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Dovekie&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;FTSP&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Fork-tailed storm-petrel&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;GGGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Glaucous x glaucous-winged gul&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;GHGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Glaucous-wing x herring gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;GLGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Glaucous gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;GRCO&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Great cormorant&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;GWGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Glaucous-winged gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;HEGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Herring gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;HOPU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Horned puffin&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;KIMU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Kittlitz&apos;s murrelet&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;LEAU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Least auklet&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;LESP&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Leach&apos;s storm-petrel&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;MAMU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Marbled murrelet&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;MEGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Mew gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;NOFU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Northern fulmar&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;PAAU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Parakeet auklet&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;PECO&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Pelagic cormorant&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;PIGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Pigeon guillemot&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;RFCO&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Red-faced cormorant&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;RHAU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Rhinoceros auklet&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;RLKI&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Red-legged kittiwake&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;SAGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Sabine&apos;s gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;SBGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Slaty-backed gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;SPGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Spectacled guillemot&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;SWSP&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Swinhoe&apos;s storm-petrel&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;TBMU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Thick-billed murre&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;TECO&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Temminck&apos;s cormorant&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;TUPU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Tufted puffin&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UNAL&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unidentified alcid&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UNAU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unidentified auklet&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UNCO&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unidentified cormorant&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UNGU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unidentified gull&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UNIG&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unidentified guillemot&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UNKI&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unidentified kittiwake&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UNMU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unidentified murre&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UNPU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unidentified puffin&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UNSP&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unidentified storm petrel&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;UNTE&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Unidentified tern&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+                <span class="ActionScriptReserved">case</span> <span class="ActionScriptString">&quot;WHAU&quot;</span><span class="ActionScriptOperator">:</span>
+                    <span class="ActionScriptDefault_Text">value</span>.<span class="ActionScriptDefault_Text">species</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;Whiskered auklet&quot;</span>;
+                    <span class="ActionScriptReserved">break</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">super</span>.<span class="ActionScriptDefault_Text">data</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+        <span class="ActionScriptBracket/Brace">}</span>        
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

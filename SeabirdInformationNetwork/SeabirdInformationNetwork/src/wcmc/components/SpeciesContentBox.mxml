@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Class: 			SpeciesContentBox
+Description:	MXML Component Class that shows information and allows you to look at outputs for a single species. 	
+-->
+<wcmc_classes:ContentBoxSpecies xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:wcmc="wcmc.components.*" xmlns:wcmc_classes="wcmc.classes.*" ContentBoxParameterSet="loadData()" xmlns:esri="http://www.esri.com/2008/ags">
+	<mx:Canvas width="100%" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+		<mx:Image source="@Embed(source='/images/flickr.gif')" id="flickrImage" verticalCenter="-50" left="{(actualImageWidth/2)-24}"/>
+		<mx:SWFLoader source="@Embed(source='/images/loader.swf')" id="loaderIcon" verticalCenter="-25" left="{(actualImageWidth/2)-10}" visible="{imagesLoading}"/>
+		<mx:Canvas visible="{!imagesLoading}" showEffect="{fader}">
+			<mx:Image id="SpeciesImage" source="{currentPhoto.url}" maxHeight="{MAXIMAGEHEIGHT}" click="nextImage(event)" showEffect="{fader}" complete="showImage()" toolTip="Click here for additional images"/>
+			<mx:LinkButton id="imageDescription" label="{(currentPhoto.title=='')?'No description':currentPhoto.title}" visible="{imagesAvailable}" y="{MAXIMAGEHEIGHT}" styleName="copyrightLabel" toolTip="Click here to open this image in Flickr" click="handleClick(event)" width="{actualImageWidth}"/>
+		</mx:Canvas>
+		<mx:Label text="No images available" visible="{!imagesAvailable}" id="noImagesLabel"/>
+		<mx:TextArea id="SpeciesDescriptionTextArea" editable="false" height="90%" width="100%" showEffect="{fader}" left="{actualImageWidth}" condenseWhite="true" styleName="speciesDescription" />
+	</mx:Canvas>
+	<mx:HBox>
+		<mx:Label text="Distribution" styleName="toolCategoryName"/>
+	</mx:HBox>
+	<mx:VBox width="95%" styleName="toolbox">
+		<mx:VBox verticalGap="0" width="100%">
+			<wcmc:ToolControl map="{Application.application.map}" imageURL="images/speciesIWC.png" Label="Map" Description="Shows the distribution map for the species which can optionally include zero abundance counts." url="{AXIOM_DATA_URL}" returnFields="SITENAME,{parameter}" tooltipField="SITENAME" markerType="{EnumMarkerType.DISTRIBUTION}"/>
+		</mx:VBox>
+	</mx:VBox>
+	<mx:HBox>
+		<mx:Label text="Abundance" styleName="toolCategoryName"/>
+	</mx:HBox>
+	<mx:VBox width="95%" styleName="toolbox">
+		<mx:VBox verticalGap="0" width="100%">
+			<wcmc:ToolControl map="{Application.application.map}" imageURL="images/speciesAbundance.png" Label="Map" Description="Shows a map of the abundance for the species." url="{AXIOM_DATA_URL}" returnFields="SITENAME,{parameter}" abundanceField="{parameter}" tooltipField="SITENAME" markerType="{EnumMarkerType.ABUNDANCE}"/>
+			<wcmc:ToolControl map="{Application.application.map}" imageURL="images/speciesTop10.png" Label="Top 10" Description="Shows a table and a map of the top 10 colonies for this species." url="{AXIOM_DATA_URL}" returnFields="SITENAME,{parameter}" abundanceField="{parameter}" tooltipField="SITENAME" markerType="{EnumMarkerType.TOP10}"/>
+			<wcmc:ToolControl map="{Application.application.map}" imageURL="images/abundanceUDA.png" Label="By user-defined area" Description="Summarises the counts for a species by user-defined area." url="{AXIOM_DATA_URL}" returnFields="{parameter}" abundanceField="{parameter}" tooltipField="SITENAME" markerType="{EnumMarkerType.ABUNDANCE_UDA}" cursorType="draw" scribbleLayer="{Application.application.scribbleOverlayLayer}"/>
+		</mx:VBox>
+	</mx:VBox>
+	<mx:HBox>
+		<mx:Label text="Productivity" styleName="toolCategoryName"/>
+	</mx:HBox> 
+	<mx:VBox width="95%" styleName="toolbox">
+		<mx:VBox verticalGap="0" width="100%">
+			<wcmc:ToolControl map="{Application.application.map}" imageURL="images/productivity.png" Label="Map of seabird productivity" Description="Shows a map of species productivity." url="{AXIOM_SIN_WFS}" returnFields="SITENAME,{parameter}" tooltipField="SITENAME" markerType="{EnumMarkerType.PRODUCTIVITY}" serviceType="wfs"/>
+		</mx:VBox>
+	</mx:VBox>
+	<!-- NON-VISUAL COMPONENTS-->
+	<wcmc_classes:FlickrProvider id="flickrProvider" flickrSearchCompleted="flickrCompleted(event)"/>
+	<wcmc_classes:WikipediaProvider id="_wikipediaProvider" textArea="{SpeciesDescriptionTextArea}"/>
+	<mx:Fade id="fader" duration="250"/>
+	<!-- END OF NON-VISUAL COMPONENTS-->
+	<mx:Script> 
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.core.Application;
+			import mx.events.ListEvent;
+			import mx.collections.ArrayCollection;
+			import wcmc.classes.*; 
+			[Bindable]private var currentPhoto:FlickrPhoto;
+			[Bindable]private var imagesAvailable:Boolean;
+			[Bindable]private var imagesLoading:Boolean;
+			[Bindable]private var actualImageWidth:Number=120;
+            private const AXIOM_DATA_URL:String = "http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Axiom_WFS_North_Pacific/MapServer/0";
+            private const AXIOM_SIN_WFS:String = "http://maps.axiomalaska.com/geoserver/wfs?request=GetFeature&SERVICE=wfs&VERSION=1.1.0&typeName=axiom:SINSeabirdProductivityWFS&outputFormat=GML3&CQL_FILTER=SpeciesCode=";
+			private const MAXIMAGEHEIGHT:Number=140;
+			private var imageIndex:Number=0;
+			private function loadFlickr():void
+			{
+				if (species)
+				{
+					var commonName:String=species.CommonName;
+					var scientificName:String=species.ScientificName;
+					_wikipediaProvider.callWikipediaPage(scientificName.toLowerCase());
+					var keyword:String = (commonName + " " + scientificName);
+					flickrProvider.photos=[]; //reset the photo information
+					imageIndex=0; //reset the image counter
+					SpeciesImage.source=""; //clear the last image
+					flickrImage.visible=true;
+					imagesLoading=true;
+					imagesAvailable=true;
+					SpeciesDescriptionTextArea.text="";
+					SpeciesDescriptionTextArea.visible=false;
+					flickrProvider.search(escape(keyword));
+				}
+			}
+			private function nextImage(event:MouseEvent):void
+			{
+				imageIndex++;
+				if (imageIndex<flickrProvider.photos.length-1)
+				{
+					imagesLoading=true;
+					setPhoto(imageIndex+1);
+				}
+			}
+			private function flickrCompleted(event:FlickrSearchEventCompleted):void
+			{
+				if (flickrProvider.photos.length>0)
+				{
+					imagesAvailable=true;
+					setPhoto(0);
+				}
+				else
+				{
+					flickrImage.visible=false;
+					imagesLoading=false;
+					imagesAvailable=false;
+				}
+			}
+			private function setPhoto(index:Number):void
+			{
+				currentPhoto=flickrProvider.photos[index];	
+			}
+			
+			private function loadData():void
+			{
+				loadFlickr();
+			}
+			private function showImage():void
+			{
+				imagesLoading=false;
+				flickrImage.visible=false;
+				if (SpeciesImage.maxHeight<SpeciesImage.contentHeight)
+				{
+					actualImageWidth=((SpeciesImage.maxHeight/SpeciesImage.contentHeight)*SpeciesImage.contentWidth);
+				}
+				else
+				{
+					actualImageWidth=SpeciesImage.contentWidth;
+				}
+				SpeciesDescriptionTextArea.visible=true;
+			}
+	        private function handleClick(event:Event):void
+	        {
+	        	var urlRequest:URLRequest=new URLRequest(currentPhoto.flickrPage);
+	        	navigateToURL(urlRequest,"_blank");
+	        }
+		]]>
+	</mx:Script>
+</wcmc_classes:ContentBoxSpecies>
+

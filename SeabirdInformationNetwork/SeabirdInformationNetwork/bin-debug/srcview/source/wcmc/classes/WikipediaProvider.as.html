@@ -1,0 +1,151 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>WikipediaProvider.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">classes</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">IOErrorEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">TextEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">URLLoader</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">URLRequest</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">net</span>.<span class="ActionScriptDefault_Text">navigateToURL</span>;
+    
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">TextArea</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">WikipediaProvider</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">WIKIPEDIA_ENDPOINT</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;http://en.wikipedia.org/w/api.php&quot;</span>;
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptReserved">const</span> <span class="ActionScriptDefault_Text">WIKIPEDIA_SITE</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;http://en.wikipedia.org/wiki/&quot;</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">textArea</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextArea</span>;
+<span class="ActionScriptComment">//        public function callWikipedia(keyword:String):void
+</span><span class="ActionScriptComment">//        { 
+</span><span class="ActionScriptComment">//            var service:HTTPService = new HTTPService();
+</span><span class="ActionScriptComment">//            service.method=&quot;GET&quot;;
+</span><span class="ActionScriptComment">//            service.url = WIKIPEDIA_ENDPOINT + &quot;?action=query&amp;list=search&amp;srsearch=&quot; + keyword + &quot;&amp;format=xml&quot;;
+</span><span class="ActionScriptComment">//            service.addEventListener(ResultEvent.RESULT, wikipediaResultHandler);
+</span><span class="ActionScriptComment">//            service.addEventListener(FaultEvent.FAULT,fault);
+</span><span class="ActionScriptComment">//            service.send();                
+</span><span class="ActionScriptComment">//        }
+</span><span class="ActionScriptComment">//        private function wikipediaResultHandler(event:ResultEvent):void 
+</span><span class="ActionScriptComment">//        {
+</span><span class="ActionScriptComment">//            var body:XML=new XML(event.message.body);
+</span><span class="ActionScriptComment">//            var _XMLList:XMLList=body..p; //get tll of the &lt;gml:pos&gt; elements from the gml 
+</span><span class="ActionScriptComment">//            if (_XMLList)
+</span><span class="ActionScriptComment">//            {
+</span><span class="ActionScriptComment">//                var page:XML=_XMLList[0];
+</span><span class="ActionScriptComment">//                if (page)
+</span><span class="ActionScriptComment">//                {
+</span><span class="ActionScriptComment">//                    var snippet:String= page.@snippet;
+</span><span class="ActionScriptComment">//                    var htmlText:String= &quot;&lt;a href=&apos;&quot; + WIKIPEDIA_SITE + escape(page.@title) + &quot;&apos; target=&apos;_blank&apos;&gt;&lt;img src=&apos;images/wikipedia.jpg&apos; vspace=&apos;3&apos; hspace=&apos;6&apos;/&gt;&lt;/a&gt;&quot; + snippet;
+</span><span class="ActionScriptComment">//                    textArea.htmlText =htmlText;
+</span><span class="ActionScriptComment">//                    textArea.toolTip=&quot;Full description on Wikipedia&quot;;
+</span><span class="ActionScriptComment">//                    var appear:Dissolve=new Dissolve(textArea);
+</span><span class="ActionScriptComment">//                    appear.alphaFrom=0;
+</span><span class="ActionScriptComment">//                    appear.alphaTo=1;
+</span><span class="ActionScriptComment">//                    appear.duration=1000;
+</span><span class="ActionScriptComment">//                    appear.play();
+</span><span class="ActionScriptComment">//                }
+</span><span class="ActionScriptComment">//            }
+</span><span class="ActionScriptComment">//        }            
+</span><span class="ActionScriptComment">//        private function wikipediaResultHandler2(event:ResultEvent):void 
+</span><span class="ActionScriptComment">//        {
+</span><span class="ActionScriptComment">//            var _body:XML=new XML(event.message.body);
+</span><span class="ActionScriptComment">//            var _ns:Namespace=new Namespace(&quot;http://www.w3.org/1999/xhtml&quot;);
+</span><span class="ActionScriptComment">//            var _XMLList:XMLList=_body.._ns::p; //get the paragraph
+</span><span class="ActionScriptComment">//            if (_XMLList)
+</span><span class="ActionScriptComment">//            {
+</span><span class="ActionScriptComment">//                var paragraph:XML=_XMLList[0];
+</span><span class="ActionScriptComment">//                if (paragraph)
+</span><span class="ActionScriptComment">//                {
+</span><span class="ActionScriptComment">//                    var snippet:String= paragraph.toString();
+</span><span class="ActionScriptComment">//                    var htmlText:String= &quot;&lt;a href=&apos;http://en.wikipedia.org/wiki/Crested_Auklet&apos; target=&apos;_blank&apos;&gt;&lt;img src=&apos;images/wikipedia.jpg&apos; vspace=&apos;3&apos; hspace=&apos;6&apos;/&gt;&lt;/a&gt;&quot; + snippet;
+</span><span class="ActionScriptComment">//                    textArea.htmlText =htmlText;
+</span><span class="ActionScriptComment">//                    textArea.toolTip=&quot;Full description on Wikipedia&quot;;
+</span><span class="ActionScriptComment">//                    var appear:Dissolve=new Dissolve(textArea);
+</span><span class="ActionScriptComment">//                    appear.alphaFrom=0;
+</span><span class="ActionScriptComment">//                    appear.alphaTo=1;
+</span><span class="ActionScriptComment">//                    appear.duration=1000;
+</span><span class="ActionScriptComment">//                    appear.play();
+</span><span class="ActionScriptComment">//                }
+</span><span class="ActionScriptComment">//            }
+</span><span class="ActionScriptComment">//        }            
+</span><span class="ActionScriptComment">//        private function fault(e:FaultEvent):void
+</span><span class="ActionScriptComment">//        {
+</span><span class="ActionScriptComment">//            textArea.text=&quot;Unable to get content from Wikipedia:&quot; + e.message.toString();
+</span><span class="ActionScriptComment">//        }
+</span>        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">callWikipediaPage</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">keyword</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span> <span class="ActionScriptComment">//calls a aspx page on the Server to get the content from Wikipedia otherwise we have Security Sandbox Violation errors because we are calling a different domain
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">request</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;default.aspx?searchTerm=&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">keyword</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">loader</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLLoader</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">loader</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">Event</span>.<span class="ActionScriptDefault_Text">COMPLETE</span>, <span class="ActionScriptDefault_Text">wikipediaResultHandler</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">loader</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">IOErrorEvent</span>.<span class="ActionScriptDefault_Text">IO_ERROR</span>,<span class="ActionScriptDefault_Text">ioError</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">loader</span>.<span class="ActionScriptDefault_Text">load</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">request</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ioError</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">error</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">IOErrorEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">textArea</span>.<span class="ActionScriptDefault_Text">htmlText</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Unable to get Wikipedia content&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">error</span>.<span class="ActionScriptDefault_Text">text</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">wikipediaResultHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">text</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">target</span>.<span class="ActionScriptDefault_Text">data</span>; <span class="ActionScriptComment">//get the description from the aspx page
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">description</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">text</span><span class="ActionScriptOperator">==</span><span class="ActionScriptString">&quot;&quot;</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">textArea</span>.<span class="ActionScriptDefault_Text">htmlText</span> <span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;No information found on Wikipedia&quot;</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">startofDescription</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;&lt;description&gt;&quot;</span><span class="ActionScriptBracket/Brace">)</span>; <span class="ActionScriptComment">//find the position of the &lt;description&gt; element which is the text description for the species
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startofDescription</span><span class="ActionScriptOperator">&gt;-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">endofDescription</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;&lt;/description&gt;&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endofDescription</span><span class="ActionScriptOperator">&gt;-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">description</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startofDescription</span> <span class="ActionScriptOperator">+</span> 13,<span class="ActionScriptDefault_Text">endofDescription</span><span class="ActionScriptBracket/Brace">)</span>; <span class="ActionScriptComment">//get the description elements value
+</span>                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">startofPage</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;&lt;page&gt;&quot;</span><span class="ActionScriptBracket/Brace">)</span>; <span class="ActionScriptComment">//find the position of the &lt;page&gt; element which is the url of the Wikipedia page where the info came from 
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startofPage</span><span class="ActionScriptOperator">&gt;-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">endofPage</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;&lt;/page&gt;&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">endofPage</span><span class="ActionScriptOperator">&gt;-</span>1<span class="ActionScriptBracket/Brace">)</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">page</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">substring</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">startofPage</span> <span class="ActionScriptOperator">+</span> 6,<span class="ActionScriptDefault_Text">endofPage</span><span class="ActionScriptBracket/Brace">)</span>; <span class="ActionScriptComment">//get the page element
+</span>                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">pos</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">description</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;&lt;/table&gt;&quot;</span><span class="ActionScriptBracket/Brace">)</span>; <span class="ActionScriptComment">//sometimes a species with synonyms has a table with paragraph marks in which return the synonyms before the main species description so we need to ID them
+</span>                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pos</span><span class="ActionScriptOperator">&gt;</span>0<span class="ActionScriptBracket/Brace">)</span>
+                <span class="ActionScriptBracket/Brace">{</span>
+                    <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">pos2</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">description</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;&lt;table&gt;&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pos2</span><span class="ActionScriptOperator">&lt;</span>0<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptComment">//no start &lt;table&gt; tag found
+</span>                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptDefault_Text">description</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">description</span>.<span class="ActionScriptDefault_Text">substr</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pos</span> <span class="ActionScriptOperator">+</span> 8<span class="ActionScriptBracket/Brace">)</span>;
+                    <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptReserved">else</span>
+                    <span class="ActionScriptBracket/Brace">{</span>
+                        <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pos2</span><span class="ActionScriptOperator">&gt;</span><span class="ActionScriptDefault_Text">pos</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptComment">//i.e. the first element is a closing &lt;/table&gt; which is wrong
+</span>                        <span class="ActionScriptBracket/Brace">{</span>
+                            <span class="ActionScriptDefault_Text">description</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">description</span>.<span class="ActionScriptDefault_Text">substr</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pos</span> <span class="ActionScriptOperator">+</span> 8<span class="ActionScriptBracket/Brace">)</span>;
+                        <span class="ActionScriptBracket/Brace">}</span>
+                    <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptBracket/Brace">}</span>
+                <span class="ActionScriptDefault_Text">pos</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">description</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;&lt;p&gt;&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">((</span><span class="ActionScriptDefault_Text">pos</span><span class="ActionScriptOperator">&lt;</span>3<span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">&amp;&amp;</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pos</span><span class="ActionScriptOperator">&gt;-</span>1<span class="ActionScriptBracket/Brace">))</span> <span class="ActionScriptDefault_Text">description</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">description</span>.<span class="ActionScriptDefault_Text">substr</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">pos</span><span class="ActionScriptOperator">+</span>3<span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptDefault_Text">description</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">description</span>.<span class="ActionScriptDefault_Text">replace</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">/a href=\&quot;/</span><span class="ActionScriptDefault_Text">g</span>,<span class="ActionScriptString">&quot;a href=\&quot;event:&quot;</span><span class="ActionScriptBracket/Brace">)</span>; <span class="ActionScriptComment">//in order for links to work from the TextArea we need to replace all links with the prefix event:
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">htmlText</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">=</span> <span class="ActionScriptString">&quot;&lt;a href=&apos;&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">page</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot;&apos; target=&apos;_blank&apos;&gt;&lt;img src=&apos;images/wikipedia.jpg&apos; vspace=&apos;3&apos; hspace=&apos;6&apos;/&gt;&lt;/a&gt;&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">description</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptString">&quot; ...&quot;</span>;
+                <span class="ActionScriptDefault_Text">textArea</span>.<span class="ActionScriptDefault_Text">htmlText</span> <span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">htmlText</span>;
+                <span class="ActionScriptDefault_Text">textArea</span>.<span class="ActionScriptDefault_Text">toolTip</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;Click here to visit the Wikipedia page&quot;</span>;
+                <span class="ActionScriptDefault_Text">textArea</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(T</span><span class="ActionScriptDefault_Text">extEvent</span>.<span class="ActionScriptDefault_Text">LINK</span>,<span class="ActionScriptDefault_Text">linkClicked</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>            
+            <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">linkClicked</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptDefault_Text">navigateToURL</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">URLRequest</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;http://en.wikipedia.org&quot;</span> <span class="ActionScriptOperator">+</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">text</span><span class="ActionScriptBracket/Brace">)</span>,<span class="ActionScriptString">&quot;_blank&quot;</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptBracket/Brace">}</span>    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

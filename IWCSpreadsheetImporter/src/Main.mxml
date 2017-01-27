@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:fc="http://ns.adobe.com/flashcatalyst/2009"
+			   xmlns:components="wcmc.components.*"
+			   xmlns:classes="wcmc.classes.*"
+			   xmlns:esri="http://www.esri.com/2008/ags"
+			   width="100%" height="100%" backgroundColor="#FFFFFF" preloaderChromeColor="#FFFFFF"
+			   fc:previewHeight="600" fc:previewWidth="955" xmlns:layers="com.esri.ags.layers.*" xmlns:iwcuserservices="services.iwcuserservices.*" xmlns:mx="library://ns.adobe.com/flex/mx" currentState="loggedOut" initialize="initialise(event)">	
+	
+	<!-- Styles ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	
+	<fx:Style source="styles.css"/>
+	
+	<fx:Declarations>
+		<iwcuserservices:IWCUserServices id="logonService" result="logonResult(event)" fault="loginFault(event)"/>
+		<classes:ValidateDataServiceClient id="serviceClient" DataImported="serviceClient_DataImportedHandler(event)"/>
+		<esri:QueryTask id="uncheckedDataQuery" url="http://dev.unep-wcmc.org/ArcGIS/rest/services/IWC/SpreadsheetImport/MapServer/1"/>
+		<esri:Query id="query" outFields="[*]" where="checked=0"/>
+		<esri:Extent id="initialExtent" xmin="2000000" ymin="4000000" xmax="2100000" ymax="10000000">
+			<esri:SpatialReference wkid="102100"/>
+		</esri:Extent>
+	</fx:Declarations>
+	<s:states>
+		<s:State name="loggedOut"/>
+		<s:State name="loggedInUser" stateGroups="loggedIn"/>
+		<s:State name="loggedInAdmin" stateGroups="loggedIn"/>
+		<s:State name="loggingIn"/>
+	</s:states>
+	<s:SkinnableContainer id="mainFrame" skinClass="wcmc.skins.MainSkin" width="100%">
+		<s:SkinnableContainer skinClass="wcmc.skins.Header" width="100%">
+			<s:Image source="assets/images/wetlands.jpg"/>
+			<s:Group height="100%">
+				<s:layout>
+					<s:VerticalLayout paddingTop="10"/>
+				</s:layout>
+				<s:Label text="International Waterbird Census Website" color="#0D2C89" fontSize="23"/>
+				<s:Group>
+					<s:layout>
+						<s:HorizontalLayout verticalAlign="middle"/>
+					</s:layout>
+					<s:Button label="Login" click="showLoginForm(event)" includeIn="loggedOut"/>
+					<s:Button label="Logging in.." click="showLoginForm(event)" includeIn="loggingIn"/>
+					<s:Button label="Logout" click="logout(event)" includeIn="loggedIn"/>
+					<s:Label text="Logged in as: {user.username}" includeIn="loggedIn" styleName="defaultFont"/>
+					<mx:LinkButton label="register" click="showRegisterForm(event)" includeIn="loggedOut" styleName="defaultFont"/>
+				</s:Group>
+			</s:Group>
+		</s:SkinnableContainer>
+		<s:Group includeIn="loggedIn">
+			<s:layout>
+				<s:VerticalLayout/>
+			</s:layout>
+			<s:Group id="navBar">
+				<s:layout>
+					<s:BasicLayout/>
+				</s:layout>
+				<s:Button label="Import data" click="viewStack.selectedIndex=0"/>
+				<s:Button x="90" label="Maps" click="viewStack.selectedIndex=1"/>
+				<s:Button x="169" label="Reports" includeIn="loggedInAdmin" click="viewStack.selectedIndex=2"/>
+			</s:Group>
+			<mx:ViewStack id="viewStack">
+				<s:NavigatorContent id="importSpreadsheetPane">
+					<s:Group y="20">
+						<s:layout>
+							<s:BasicLayout/>
+						</s:layout>
+						<s:Button label="Load spreadsheet" visible="{!loadingSpreadsheet}" click="loadSpreadsheet(event)"/>
+						<s:Button label="Loading.." visible="{loadingSpreadsheet}" enabled="false"/>
+						<s:Label text="Showing data in: {xlsFilename}" styleName="defaultFont" x="150" y="7" visible="{(!loadingSpreadsheet &amp;&amp; speciesCounts)}"/>
+						<s:Group visible="{(!loadingSpreadsheet &amp;&amp; speciesCounts)}" y="40" x="30">
+							<s:layout>
+								<s:BasicLayout/>
+							</s:layout>
+							<!--<s:TabBar id="sheetList" labelField="name"/>-->
+							<components:SpeciesCountsGrid dataProvider="{speciesCounts}" id="speciesCountsGrid" main="{this}"/>
+							<components:ValidatorSummaryContainer speciesCountsGrid="{speciesCountsGrid}" y="349"/>
+							<s:Group width="100%" y="372">
+								<s:layout>
+									<s:HorizontalLayout horizontalAlign="right"/>
+								</s:layout>
+								<s:Button label="Validate" click="validateSpeciesCounts(event)" enabled="{speciesCounts.length&gt;0}" visible="{speciesCountsGrid.validators.validationFinished}"/>
+								<s:Button label="Validating.." enabled="false" visible="{!speciesCountsGrid.validators.validationFinished}" includeInLayout="{!speciesCountsGrid.validators.validationFinished}"/>
+								<s:Button label="Import" enabled="{speciesCountsGrid.validators.validationStatus==ValidatorBase.VALIDATION_STATUS_VALID}" click="submitData(event)" visible="{!postingData}" includeInLayout="{!postingData}"/>
+								<s:Button label="Importing.." enabled="false" includeInLayout="{postingData}" visible="{postingData}"/>
+							</s:Group>
+							<s:Group width="100%" y="402" visible="false">
+								<s:layout>
+									<s:HorizontalLayout horizontalAlign="right"/>
+								</s:layout>
+								<s:Button label="Make valid" click="button1_clickHandler(event)"/>
+								<s:Button label="Make invalid" click="button2_clickHandler(event)"/>
+							</s:Group>
+						</s:Group>
+					</s:Group>
+				</s:NavigatorContent>
+				<s:NavigatorContent id="mapsPane">
+					<s:layout>
+						<s:VerticalLayout/>
+					</s:layout>
+					<esri:Map id="map" width="500" height="500" extent="{initialExtent}">
+						<esri:ArcGISTiledMapServiceLayer url="http://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer"/>
+						<esri:ArcGISDynamicMapServiceLayer id="iwcLayer" url="http://dev.unep-wcmc.org/ArcGIS/rest/services/CSN/Sites/MapServer" alpha="0.7" visible="{showAllIWCSiteCheckBox.selected}">
+							<esri:visibleLayers>
+								<s:ArrayCollection>
+									<fx:Number>4</fx:Number><!--IWC layer-->
+								</s:ArrayCollection>
+							</esri:visibleLayers>
+						</esri:ArcGISDynamicMapServiceLayer>
+						<esri:ArcGISDynamicMapServiceLayer id="spreadsheetLayer" url="http://dev.unep-wcmc.org/ArcGIS/rest/services/CSN/Sites/MapServer" alpha="0.7">
+							<esri:visibleLayers>
+								<s:ArrayCollection>
+									<fx:Number>4</fx:Number><!--IWC layer-->
+								</s:ArrayCollection>
+							</esri:visibleLayers>
+							<esri:layerDefinitions>
+								<fx:Array>
+									<fx:String></fx:String>
+									<fx:String></fx:String>
+									<fx:String></fx:String>
+									<fx:String></fx:String>
+									<fx:String>SiteCode={speciesCountsGrid.siteCodesString}</fx:String>
+								</fx:Array>
+							</esri:layerDefinitions>
+						</esri:ArcGISDynamicMapServiceLayer>
+					</esri:Map>
+					<s:CheckBox id="showAllIWCSiteCheckBox" x="471" y="424" label="Show all IWC sites"/>
+				</s:NavigatorContent>
+				<s:NavigatorContent id="reportsPane">
+					<s:layout>
+						<s:VerticalLayout/>
+					</s:layout>
+					<s:DataGrid dataProvider="{new ArrayList(uncheckedDataQuery.executeLastResult.attributes)}"/>
+				</s:NavigatorContent>
+			</mx:ViewStack>
+		</s:Group>
+	</s:SkinnableContainer>
+	<fx:Script>
+		<![CDATA[
+			import com.as3xls.xls.ExcelFile;
+			import com.as3xls.xls.Sheet;
+			
+			import mx.collections.ArrayList;
+			import mx.controls.Alert;
+			import mx.core.IFlexDisplayObject;
+			import mx.events.FlexEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			import services.iwcuserservices.IWCUserServices;
+			
+			import wcmc.classes.DatabaseValidator;
+			import wcmc.classes.User;
+			import wcmc.classes.ValidateDataServiceClient;
+			import wcmc.classes.ValidatorBase;
+			import wcmc.components.LoginForm;
+			import wcmc.components.RegisterForm;
+			private var file:FileReference;
+			private var so:SharedObject
+			private var iwcUserServices:IWCUserServices=new IWCUserServices();
+			[Bindable] public var user:User=new User();
+			[Bindable] private var xls:ExcelFile;
+			[Bindable] private var xlsFilename:String;
+			[Bindable] private var loadingSpreadsheet:Boolean=false;
+			[Bindable] private var postingData:Boolean=false;
+			[Bindable] public var speciesCounts:ArrayCollection;
+			protected function loadSpreadsheet(event:MouseEvent):void
+			{
+				file = new FileReference();
+				file.addEventListener(Event.SELECT, onSelect);	
+				file.addEventListener(Event.COMPLETE, onComplete);
+				file.browse();
+			}
+			
+			private function onSelect(event:Event):void {
+				var file:FileReference = FileReference(event.target);
+				xlsFilename=file.name;
+				file.load();
+				loadingSpreadsheet=true;
+			}
+			
+			private function onComplete(event:Event):void {
+				var b:ByteArray = event.target.data;
+				xls = new ExcelFile();
+				try
+				{
+					xls.loadFromByteArray(b);
+					//					sheetList.dataProvider = xls.sheets;
+					var countSheet:Sheet = xls.sheets[1];
+					speciesCounts = (xls.sheets[1] as Sheet).getSpeciesCounts();
+				} 
+				catch(error:Error) 
+				{
+					Alert.show("Unable to read the spreadsheet. Ensure that the spreadsheet is in the correct format.");					
+				}
+				finally
+				{
+					loadingSpreadsheet=false;
+				}
+			}
+			
+			protected function validateSpeciesCounts(event:MouseEvent):void
+			{
+				speciesCountsGrid.validateAll();
+				speciesCountsGrid.validated=true;
+			}
+			
+			protected function button1_clickHandler(event:MouseEvent):void
+			{
+				for each (var v:ValidatorBase in speciesCountsGrid.validators)
+				{
+					v.validationStatus="valid";
+				}
+			}
+			
+			protected function button2_clickHandler(event:MouseEvent):void
+			{
+				for each (var v:ValidatorBase in speciesCountsGrid.validators)
+				{
+					v.validationStatus="invalid";
+				}
+			}
+			
+			protected function showLoginForm(event:MouseEvent):void
+			{
+				var loginForm:IFlexDisplayObject=PopUpManager.createPopUp(this as DisplayObject,wcmc.components.LoginForm,true);
+				loginForm.x=240;
+				loginForm.y=67;
+				loginForm.visible=true;
+				(loginForm as LoginForm).userName.setFocus();
+			}
+			protected function showRegisterForm(event:MouseEvent):void
+			{
+				var registerForm:IFlexDisplayObject=PopUpManager.createPopUp(this as DisplayObject,wcmc.components.RegisterForm,true);
+				registerForm.x=240;
+				registerForm.y=67;
+				registerForm.visible=true;
+				(registerForm as RegisterForm).userName.setFocus();
+			}
+			public function login(username:String):void
+			{
+				currentState="loggingIn";
+				logonService.GetUser(username);
+			}
+			protected function logonResult(event:ResultEvent):void
+			{
+				if (event.result)
+				{
+					var userArray:Array=event.result.toString().split(";");
+					user.username=userArray[0].toString().split("=")[1];
+					user.id=userArray[1].toString().split("=")[1];
+					user.email=userArray[2].toString().split("=")[1];
+					var roles:String=userArray[3].toString().split("=")[1];
+					user.roles=roles.split(",");
+					so.data.username=user.username;
+					so.flush();
+					(user.roles.indexOf("IWCManager")>-1) ? currentState="loggedInAdmin" : currentState="loggedInUser";
+					if (viewStack) viewStack.selectedIndex=0;
+				}
+				else
+				{
+					Alert.show("Unable to log in.");
+				}
+			}
+			protected function loginFault(event:FaultEvent):void
+			{
+				Alert.show("The logon service is unavailable");
+			}
+			protected function logout(event:MouseEvent):void
+			{
+				currentState="loggedOut";
+				so.data.username=null;
+			}
+			protected function initialise(event:FlexEvent):void
+			{
+				so=SharedObject.getLocal("iwc"); //on my MBA - /Users/andrewcottam/Library/Preferences/Macromedia/Flash Player/#SharedObjects/4JCGEUDE/localhost/iwc.sol
+				if (so.data.username) login(so.data.username);
+				uncheckedDataQuery.execute(query);
+			}
+			protected function submitData(event:MouseEvent):void
+			{
+				postingData=true;
+				serviceClient.postSpreadsheet(speciesCounts,user.id);				
+			}
+			
+			protected function serviceClient_DataImportedHandler(event:Event):void
+			{
+				postingData=false;				
+			}
+			
+		]]>
+	</fx:Script>
+</s:Application>

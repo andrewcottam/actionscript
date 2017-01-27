@@ -1,0 +1,70 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>MapLayerInfo.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptASDoc">/**
+ * MapLayerInfo.as
+ * This file was auto-generated from WSDL by the Apache Axis2 generator modified by Adobe
+ * Any change made to this file will be overwritten when the code is re-generated.
+ */</span>
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span><span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ObjectProxy</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ByteArray</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">rpc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">types</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptASDoc">/**
+     * Wrapper class for a operation required type
+     */</span>
+    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">MapLayerInfo</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">MapTableInfo</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptASDoc">/**
+         * Constructor, initializes the type class
+         */</span>
+<span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">MapLayerInfo</span><span class="ActionScriptBracket/Brace">()</span> <span class="ActionScriptBracket/Brace">{}</span>
+                
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">LayerID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Name</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Description</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">LayerType</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">SourceDescription</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">HasLabels</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">CanSelect</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">CanScaleSymbols</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">MinScale</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">MaxScale</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Extent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">Envelope</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">HasHyperlinks</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">HasAttributes</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">CanIdentify</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">CanFind</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">IsFeatureLayer</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">Fields</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">Fields</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">DisplayField</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">IDField</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">IsComposite</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">SubLayerIDs</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">ArrayOfInt</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">ParentLayerID</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FieldAliases</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">ArrayOfString</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">CopyrightText</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">RelateInfos</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">ArrayOfRelateInfo</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">SubtypeFieldName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">DefaultSubtypeCode</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">SubtypeInfos</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">ArrayOfSubtypeInfo</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">SupportsTime</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">StartTimeFieldName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">EndTimeFieldName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TimeValueFormat</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TrackIDFieldName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TimeReference</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">TimeReference</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">FullTimeExtent</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">TimeExtent</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TimeInterval</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Number</span>;
+                   <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">TimeIntervalUnits</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">EsriTimeUnits</span>;
+               <span class="ActionScriptBracket/Brace">}</span>
+           <span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

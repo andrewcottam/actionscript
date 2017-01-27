@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009"
+					  xmlns:s="library://ns.adobe.com/flex/spark"
+					  xmlns:fc="http://ns.adobe.com/flashcatalyst/2009"
+					  xmlns:iwcuserservices="services.iwcuserservices.*"
+					  width="218" height="64" skinClass="wcmc.skins.Popup">
+	<fx:Declarations>
+	</fx:Declarations>
+	<s:Label x="19" y="10" text="Do you want to create a new site?"/>
+	<s:Group>
+		<s:layout>
+			<s:HorizontalLayout/>
+		</s:layout>
+	</s:Group>
+	<s:Button x="113" y="30" label="Yes" click="createNewSite(event)" id="yesBtn" keyDown="if (event.keyCode == Keyboard.ENTER) createNewSite(null)"/>
+	<s:Button x="35" y="30" label="No" click="closeMe(event)"/>
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.Alert;
+			import mx.core.IFlexDisplayObject;
+			import mx.managers.PopUpManager;
+			public var siteName:String;
+			private function createNewSite(event:MouseEvent):void
+			{
+				closeMe(null);
+				var newSiteForm:IFlexDisplayObject= PopUpManager.createPopUp(this as DisplayObject,wcmc.components.CreateNewSiteForm,true);
+				(newSiteForm as CreateNewSiteForm).siteNameInDataGrid=siteName;
+				PopUpManager.centerPopUp(newSiteForm);
+			}
+			private function closeMe(event:MouseEvent):void
+			{
+				PopUpManager.removePopUp(this);
+			}
+		]]>
+	</fx:Script>
+</s:SkinnableContainer>

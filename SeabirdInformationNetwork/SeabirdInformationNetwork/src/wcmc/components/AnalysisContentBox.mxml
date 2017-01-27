@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wcmc_classes:ContentBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:wcmc="wcmc.components.*" xmlns:wcmc_classes="wcmc.classes.*" width="100%">
+	<mx:VBox width="100%">
+		<mx:HBox styleName="commonNameHBox" width="100%" verticalAlign="middle">
+			<mx:Label text="Analysis tools" styleName="commonNameLabel" width="100%"/>
+		    <mx:Image source="@Embed(source='images/toolbox.png')" alpha="0.7"/>
+		</mx:HBox>
+	</mx:VBox>
+	<mx:HBox width="100%" paddingTop="15">
+		<mx:Text text="The following analysis tools are available for exploring how various threats could potentially affect seabirds:" width="100%" styleName="noBorder"/>
+	</mx:HBox>
+	<mx:HBox paddingTop="10">
+		<mx:Label text="Threats" styleName="toolCategoryName"/>
+	</mx:HBox>
+	<mx:VBox width="95%" styleName="toolbox">
+		<mx:VBox verticalGap="0" width="100%">
+			<wcmc:ToolControl map="{Application.application.map}" imageURL="images/chart.png" Label="Sea level rise" Description="Analysis tool that shows the potential impact on seabird colonies given a user-defined sea level rise." url="{AXIOM_DATA_URL}" returnFields="SITENAME,ALTE,Height" abundanceField="ALTE" tooltipField="SITENAME" markerType="{EnumMarkerType.SEALEVELRISE}" parameter="ALTE"/>
+		</mx:VBox>
+		<mx:VBox verticalGap="0" width="100%">
+			<wcmc:RasterToolControl map="{Application.application.map}" imageURL="images/pollution.png" Label="Pollution" Description="Analysis tool that shows the human impact on marine environments data." url="http://dev.unep-wcmc.org/ArcGIS/rest/services/Seabirds/MarineImpact/MapServer" metadata="The source for this map is from:&lt;br&gt;&lt;br&gt;&lt;b&gt;A Global Map of Human Impact on Marine Ecosystems&lt;/b&gt;&lt;br&gt;&lt;br&gt;Halpern, B.S &lt;i&gt;et al&lt;/i&gt; (2008) Science Vol.319 (5865:948-952). For more information click &lt;a href='event:http://www.sciencemag.org/cgi/content/short/319/5865/948'&gt;here&lt;/a&gt;"/>
+		</mx:VBox>
+		<mx:VBox verticalGap="0" width="100%">
+			<wcmc:RasterToolControl map="{Application.application.map}" imageURL="images/persecution.png" Label="Persecution" Description="Analysis tool that shows accessibility of the Arctic region to hunters." url="http://dev.unep-wcmc.org/ArcGIS/rest/services/Seabirds/Accessibility/MapServer" metadata="The source for this map is from:&lt;br&gt;&lt;br&gt;&lt;b&gt;Travel time to major cities: A global map of Accessibility&lt;/b&gt;&lt;br&gt;&lt;br&gt;Andrew Nelson, Joint Research Centre.&lt;br&gt;For more information click &lt;a href='event:http://bioval.jrc.ec.europa.eu/products/gam/'&gt;here&lt;/a&gt;"/>
+		</mx:VBox>
+	</mx:VBox>
+	<mx:HBox>
+		<mx:Label text="Protection" styleName="toolCategoryName"/>
+	</mx:HBox>
+	<mx:VBox width="95%" styleName="toolbox">
+		<mx:VBox verticalGap="0" width="100%">
+			<wcmc:ToolControl map="{Application.application.map}" imageURL="images/gap.png" Label="Gap analysis" Description="Shows the proportion of an individual species that is protected." url="{AXIOM_DATA_URL}" returnFields="SITENAME,ALTE,DistanceTo" abundanceField="ALTE" distanceToPAField="DistanceTo" tooltipField="SITENAME" markerType="{EnumMarkerType.PROTECTION}" parameter="ALTE"/>
+		</mx:VBox>
+	</mx:VBox>
+
+<!--	<wcmc:MapServiceCheckBox MapServiceURL="http://maps.unep-wcmc.org/ArcGIS/rest/services/WDPAv2_0/wdpa_all/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="World Database of Protected Areas"/>
+	<wcmc:MapServiceCheckBox MapServiceURL="http://dev.unep-wcmc.org/ArcGIS/rest/services/WingsOverWetlands/IBAs/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="IBA layer"/>
+	<wcmc:MapServiceCheckBox MapServiceURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Iceland_Shipping_Routes/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="Iceland shipping routes"/>
+	<wcmc:MapServiceCheckBox MapServiceURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Accidents_Incidents/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="Accidents"/>
+	<wcmc:MapServiceCheckBox MapServiceURL="http://development3.unep-wcmc.org/ArcGIS/rest/services/Islands/Threats_raster/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="A Global Map of Human Impacts to Marine Ecosystems"/>
+	<wcmc:MapServiceCheckBox MapServiceURL="http://dev.unep-wcmc.org/ArcGIS/rest/services/Seabirds/Circumarctic_resource_appraisal/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="USGS CARA Gas"/>
+	<wcmc:MapServiceCheckBox MapServiceURL="http://dev.unep-wcmc.org/ArcGIS/rest/services/Seabirds/Accessibility/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="Accessibility"/>
+	<wcmc:MapServiceCheckBox MapServiceURL="http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Axiom_WFS_North_Pacific/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="Axiom North Pacific Dataset"/>
+	<wcmc:MapServiceCheckBox MapServiceURL="http://certmapper.cr.usgs.gov/arcgis/rest/services/geology/arctic/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="USGS Arctic Geology"/>
+	<wcmc:MapServiceCheckBox MapServiceURL="http://certmapper.cr.usgs.gov/arcgis/rest/services/world/cara/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="USGS CARA"/>
+	<wcmc:MapServiceCheckBox MapServiceURL="http://sampleserver1.arcgisonline.com/ArcGIS/rest/services/Demographics/ESRI_Census_USA/MapServer" alpha="0.7" layerManager="{Application.application.layerManager}" label="Dynamic ESRI layer"/>-->
+	<mx:Script>
+	<![CDATA[
+		import wcmc.classes.EnumMarkerType;
+		import wcmc.classes.ContentAreaChangeEvent;
+		import wcmc.classes.EnumStates;
+		import mx.core.Application;
+        [Embed(source="images/climateChange.jpg")] 
+        public var climateChange:Class; 
+        private const AXIOM_DATA_URL:String = "http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Axiom_WFS_North_Pacific/MapServer/0";
+	]]>
+	</mx:Script>
+</wcmc_classes:ContentBox>

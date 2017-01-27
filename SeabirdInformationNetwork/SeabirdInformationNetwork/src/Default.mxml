@@ -1,0 +1,717 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"  
+				xmlns:wcmc="wcmc.components.*" 
+				xmlns:wcmc_classes="wcmc.classes.*" 
+				xmlns:esri="http://www.esri.com/2008/ags"
+	            xmlns:reflexutil="net.kandov.reflexutil.*" 
+				layout="absolute"
+				implements="mx.managers.IHistoryManagerClient"
+				error="Alert.show(event.text)"
+				creationComplete="initApp()" viewSourceURL="srcview/index.html"> 
+	<reflexutil:ReflexUtil/> 
+	<mx:Style source="/styles/default.css"/>
+    <mx:states>
+        <mx:State name="{EnumStates.START}">
+            <mx:AddChild relativeTo="{contentBoxContainer}" position="firstChild" creationPolicy="all">
+            	<wcmc:StartContentBox id="startContentBox" width="100%" height="100%"/>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State name="{EnumStates.ALLSPECIES}">
+            <mx:AddChild relativeTo="{contentBoxContainer}" position="firstChild" creationPolicy="all">
+            	<wcmc:AllSpeciesContentBox id="AllSpeciesContentBox" width="100%"/>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State name="{EnumStates.ALLSITES}">
+            <mx:AddChild relativeTo="{contentBoxContainer}" position="firstChild" creationPolicy="all">
+            	<wcmc:AllSitesContentBox id="AllSitesContentBox" width="100%"/>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State name="{EnumStates.SPECIES}">
+            <mx:AddChild relativeTo="{contentBoxContainer}" position="firstChild" creationPolicy="all">
+            	<wcmc:SpeciesContentBox id="SpeciesContentBox" width="100%"/>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State name="{EnumStates.SITES}">
+            <mx:AddChild relativeTo="{contentBoxContainer}" position="firstChild" creationPolicy="all">
+            	<wcmc:SiteContentBox id="SitesContentBox" width="100%"/>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State name="{EnumStates.SURVEYS}">
+            <mx:AddChild relativeTo="{contentBoxContainer}" position="firstChild" creationPolicy="all">
+            	<wcmc:SurveysContentBox id="SurveysContentBox" width="100%"/>
+            </mx:AddChild>
+        </mx:State> 
+        <mx:State name="{EnumStates.MAP_CONFIG}">
+            <mx:AddChild relativeTo="{contentBoxContainer}" position="firstChild" creationPolicy="all">
+                <wcmc:LayersContentBox id="MapConfig" width="100%" ChangeBaseMap="changeBaseMap(event)"/>
+            </mx:AddChild>
+        </mx:State>
+        <mx:State name="{EnumStates.ANALYSIS}">
+            <mx:AddChild relativeTo="{contentBoxContainer}" position="firstChild" creationPolicy="all">
+                <wcmc:AnalysisContentBox id="analysisContentBox"/>
+            </mx:AddChild>
+        </mx:State>
+    </mx:states>
+    <mx:transitions>
+        <mx:Transition id="myTransition" fromState="*" toState="*">
+            <mx:Parallel id="Transition1" target="{SpeciesContentBox}">
+				<mx:Fade alphaFrom="0" alphaTo="1.0" duration="300"/>
+            </mx:Parallel>
+        </mx:Transition>
+    </mx:transitions>
+    <!--temp solution to holds species data in an array as there is no way to access a table in ArcGIS Server at the moment-->
+	<mx:ArrayCollection id="speciesArray">
+		<wcmc_classes:Species speciesID="ALTE" CommonName="Aleutian tern" ScientificName="Sterna aleutica" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="ANMU" CommonName="Ancient murrelet" ScientificName="Synthliboramphus antiquus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="ARTE" CommonName="Arctic tern" ScientificName="Sterna paradisaea" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="AUSH" CommonName="Audubon's shearwater" ScientificName="Puffinus lherminieri" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="BHGU" CommonName="Black-headed gull" ScientificName="Larus ridibundus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="BLGU" CommonName="Black guillemot" ScientificName="Cepphus grylle" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="BLKI" CommonName="Black-legged kittiwake" ScientificName="Rissa tridactyla" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="BLOY" CommonName="Black oystercatcher" ScientificName="Haematopus Bachmani" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="BOGU" CommonName="Bonaparte's gull" ScientificName="Larus philadelphia" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="BRCO" CommonName="Brandt's cormorant" ScientificName="Phalacrocorax penicillatus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="BTGU" CommonName="Black-tailed gull" ScientificName="Larus crassirostris" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="CAAU" CommonName="Cassin's auklet" ScientificName="Ptychoramphus aleuticus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="CATE" CommonName="Caspian Tern" ScientificName="Sterna caspia" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="COEI" CommonName="Common eider" ScientificName="Somateria mollisima" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="COMU" CommonName="Common murre" ScientificName="Uria aalge" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="COTE" CommonName="Common tern" ScientificName="Sterna hirundo" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="CRAU" CommonName="Crested auklet" ScientificName="Aethia cristatella" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="DCCO" CommonName="Double-crested cormorant" ScientificName="Phalacrocorax auritus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="DOVE" CommonName="Dovekie" ScientificName="Alle alle" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="FTSP" CommonName="Fork-tailed storm-petrel" ScientificName="Oceanodrama furcata" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="GGGU" CommonName="Glaucous x glaucous-winged gul" ScientificName="Larus sp." SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="GHGU" CommonName="Glaucous-wing x herring gull" ScientificName="Larus sp." SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="GLGU" CommonName="Glaucous gull" ScientificName="Larus hyperboreus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="GRCO" CommonName="Great cormorant" ScientificName="Phalacrocorax carbo" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="GWGU" CommonName="Glaucous-winged gull" ScientificName="Larus glaucescens" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="HEGU" CommonName="Herring gull" ScientificName="Larus argentatus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="HOPU" CommonName="Horned puffin" ScientificName="Fratercula corniculata" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="KIMU" CommonName="Kittlitz's murrelet" ScientificName="Brachyramphus brevirostris" SpcRedCategory="CR"/>
+		<wcmc_classes:Species speciesID="LEAU" CommonName="Least auklet" ScientificName="Aethia pusilla" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="LESP" CommonName="Leach's storm-petrel" ScientificName="Oceanodrama leucorhoa" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="MAMU" CommonName="Marbled murrelet" ScientificName="Brachyramphus marmoratus" SpcRedCategory="EN"/>
+		<wcmc_classes:Species speciesID="MEGU" CommonName="Mew gull" ScientificName="Larus canus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="NOFU" CommonName="Northern fulmar" ScientificName="Fulmarus glacialis" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="PAAU" CommonName="Parakeet auklet" ScientificName="Cyclorrhynchus psittacula" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="PECO" CommonName="Pelagic cormorant" ScientificName="Phalacrocorax pelagicus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="PIGU" CommonName="Pigeon guillemot" ScientificName="Cepphus columba" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="RFCO" CommonName="Red-faced cormorant" ScientificName="Phalacrocorax urile" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="RHAU" CommonName="Rhinoceros auklet" ScientificName="Cerorhinca monocerata" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="RLKI" CommonName="Red-legged kittiwake" ScientificName="Rissa brevirostris" SpcRedCategory="VU"/>
+		<wcmc_classes:Species speciesID="SAGU" CommonName="Sabine's gull" ScientificName="Xema sabini" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="SBGU" CommonName="Slaty-backed gull" ScientificName="Larus schistisagus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="SPGU" CommonName="Spectacled guillemot" ScientificName="Cepphus carbo" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="SWSP" CommonName="Swinhoe's storm-petrel" ScientificName="Oceanodrama monorhis" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="TBMU" CommonName="Thick-billed murre" ScientificName="Uria lomvia" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="TECO" CommonName="Temminck's cormorant" ScientificName="Phalacrocorax capillatus" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="TUPU" CommonName="Tufted puffin" ScientificName="Fratercula cirrhata" SpcRedCategory="LC"/>
+		<wcmc_classes:Species speciesID="UNAL" CommonName="Unidentified alcid" ScientificName="" SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="UNAU" CommonName="Unidentified auklet" ScientificName="Aethia sp." SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="UNCO" CommonName="Unidentified cormorant" ScientificName="Phalacrocorax sp." SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="UNGU" CommonName="Unidentified gull" ScientificName="Larus sp." SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="UNIG" CommonName="Unidentified guillemot" ScientificName="Cepphus spp" SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="UNKI" CommonName="Unidentified kittiwake" ScientificName="Rissa sp." SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="UNMU" CommonName="Unidentified murre" ScientificName="Uria sp." SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="UNPU" CommonName="Unidentified puffin" ScientificName="Fratercula sp." SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="UNSP" CommonName="Unidentified storm petrel" ScientificName="" SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="UNTE" CommonName="Unidentified tern" ScientificName="Sterna sp." SpcRedCategory="NA"/>
+		<wcmc_classes:Species speciesID="WHAU" CommonName="Whiskered auklet" ScientificName="Aethia pygmaea" SpcRedCategory="LC"/>
+	</mx:ArrayCollection>
+    <!--Start of GUI-->
+    <wcmc:UserInterface id="userInterface" ContentAreaChangeEvent="changeContentArea(event)" StartDataLoad="toolInProgress=true" EndDataLoad="toolDataLoaded(event)">
+	<maps:Map3D xmlns:maps="com.google.maps.*" id="map" mapevent_mappreinitialize="onMapPreinitialize(event)" mapevent_mapready="onMapReady(event)" width="100%" height="100%" key="ABQIAAAA765f6kSuF8ZcQCnIrgiPABRE8S7Q0QcplLnRYhkYxwkGhq03LxR5R0gbwUJbnee2PqvGumw4eZC-yQ"/>
+    <mx:Canvas id="informationPanel" styleName="InformationPanel" showEffect="fader" hideEffect="fader" width="450" maxHeight="900"	height="95%" top="20" right="20">
+	    <mx:Canvas id="contentPanel" styleName="ContentPanel" height="{(informationPanel.height - 20)}" width="{informationPanel.width-20}" x="10" y="10">
+			<mx:Canvas id="contentBoxContainer" styleName="ContentBoxContainer" height="{(contentPanel.height - 42)}" horizontalScrollPolicy="off" width="{contentPanel.width-14}" x="7"/>
+				<mx:HBox id="toolbar" bottom="0">
+					<mx:VBox width="20%" verticalAlign="middle">
+							<mx:Image id="homeImage" toolTip="Home" source="@Embed(source='images/home.png')" alpha="0.7" styleName="imageButton" click="userInterface.dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.START,'-2'))" mouseOver="homeImage.alpha=1" mouseOut="homeImage.alpha=0.7"/>
+					</mx:VBox>
+					<mx:VBox width="20%" verticalAlign="middle"> 
+							<mx:Image id="speciesImage" toolTip="Species" source="@Embed(source='images/puffinsmall2.png')" alpha="0.7" styleName="imageButton" click="userInterface.dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.ALLSPECIES,'-3'))" mouseOver="speciesImage.alpha=1" mouseOut="speciesImage.alpha=0.7"/>
+					</mx:VBox>
+					<mx:VBox width="20%" verticalAlign="middle">
+							<mx:Image id="sitesImage" toolTip="Sites" source="@Embed(source='images/sitessmall.png')" alpha="0.7" styleName="imageButton" click="userInterface.dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.ALLSITES,'-4'))" mouseOver="sitesImage.alpha=1" mouseOut="sitesImage.alpha=0.7"/>
+					</mx:VBox>
+					<mx:VBox width="20%" verticalAlign="middle">
+							<mx:Image id="analysisImage" toolTip="Analysis tools" source="@Embed(source='images/toolbox.png')" alpha="0.7" styleName="imageButton" click="userInterface.dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.ANALYSIS,'-5'))" mouseOver="analysisImage.alpha=1" mouseOut="analysisImage.alpha=0.7"/>
+					</mx:VBox>
+					<mx:VBox width="20%" verticalAlign="middle">
+							<mx:Image id="surveysImage" toolTip="Surveys" source="@Embed(source='images/ClipboardBsmall.png')" alpha="0.7" styleName="imageButton" click="userInterface.dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.SURVEYS,'-6'))" mouseOver="surveysImage.alpha=1" mouseOut="surveysImage.alpha=0.7"/>
+					</mx:VBox>
+					<mx:VBox width="20%" verticalAlign="middle">
+							<mx:Image id="mapConfigImage" toolTip="Map configure" source="@Embed(source='images/configsmall.png')" alpha="0.7" styleName="imageButton" click="userInterface.dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.MAP_CONFIG,'-7'))" mouseOver="mapConfigImage.alpha=1" mouseOut="mapConfigImage.alpha=0.7"/>
+					</mx:VBox>
+				</mx:HBox>
+	    	</mx:Canvas>
+		</mx:Canvas>
+		<mx:Image id="hideShowImage" source="images/hidePanel.png" click="informationPanel.visible=!informationPanel.visible;hideshow()" toolTip="Click to show/hide the panel" x="{informationPanel.x+informationPanel.width-32}" y="{informationPanel.y+informationPanel.height-32}"/>
+	    <mx:Canvas visible="{toolInProgress}" horizontalCenter="0" verticalCenter="0">
+	    	<mx:SWFLoader source="@Embed(source='images/loader2.swf')"/>
+	    </mx:Canvas>
+		<mx:Canvas id="abundanceTable" showEffect="{fader}" hideEffect="{fader}" visible="false" x="{informationPanel.x-20-abundanceTable.width}" y="{informationPanel.y+informationPanel.height-abundanceTable.height}">
+			<mx:VBox styleName="table" id="floatingTableVBox">
+				<wcmc_classes:GridExtended width="100%" height="100%" id="datagrid"/>
+			</mx:VBox>
+			<mx:SWFLoader source="@Embed(source='images/loader.swf')" horizontalCenter="0" verticalCenter="0" id="loader" visible="false"/>
+		</mx:Canvas>
+		<mx:Canvas id="siteAbundanceTable" showEffect="{fader}" hideEffect="{fader}" visible="false" x="{informationPanel.x-20-siteAbundanceTable.width}" y="{informationPanel.y+informationPanel.height-siteAbundanceTable.height}">
+			<mx:VBox styleName="table">
+				<wcmc_classes:GridExtended width="100%" height="100%" id="siteDatagrid"/>
+			</mx:VBox>
+			<mx:SWFLoader source="@Embed(source='images/loader.swf')" horizontalCenter="0" verticalCenter="0" id="loader3" visible="false"/>
+		</mx:Canvas>
+		<mx:Canvas id="top10Table" showEffect="{fader}" hideEffect="{fader}" visible="false" x="{informationPanel.x-20-top10Table.width}" y="{informationPanel.y+informationPanel.height-top10Table.height}">
+			<mx:VBox styleName="table" id="top10TableVBox">
+				<wcmc_classes:GridExtended width="100%" height="100%" id="top10TableDatagrid"/>
+			</mx:VBox>
+		</mx:Canvas>
+		<mx:Canvas id="UDAAbundanceCanvas" styleName="InformationPanel" showEffect="{fader}" hideEffect="{fader}" visible="false" height="40" width="170">
+			<mx:Canvas styleName="ContentPanel" id="floatingCanvasVBox" verticalCenter="0" horizontalCenter="0" width="{UDAAbundanceCanvas.width-10}" height="{UDAAbundanceCanvas.height-10}">
+				<mx:Label id="floatingCanvasLabel" styleName="categoryName" verticalCenter="0" horizontalCenter="0" />
+			</mx:Canvas>
+		</mx:Canvas>
+		<mx:Canvas id="sealevelRiseUI" styleName="InformationPanel" showEffect="{fader}" hideEffect="{fader}" visible="false" height="325" width="243" x="{informationPanel.x-20-sealevelRiseUI.width}" y="{informationPanel.y+informationPanel.height-sealevelRiseUI.height}">
+			<mx:VBox styleName="ToolWindow" verticalCenter="0" horizontalCenter="0" width="233" height="315" verticalGap="0" horizontalAlign="left" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+				<mx:HBox width="100%" styleName="ToolWindowTitleHBox">
+					<mx:Label text="Sea level rise" styleName="ToolWindowTitle"/>
+				</mx:HBox>
+				<mx:Label text="Select a species:" styleName="categoryName" paddingTop="9"/>
+				<mx:ComboBox dataProvider="{speciesArray}" labelField="CommonName" id="speciesComboBox" styleName="categoryName" fontWeight="normal" width="200" change="changeSeaLevelRiseSpecies(event)"/>
+				<mx:Label text="Set the sea level rise (m):" styleName="categoryName" paddingTop="11"/>
+				<mx:HSlider minimum="0" maximum="10" id="slider" snapInterval="1" width="200" change="showAffectedSites(event)" horizontalCenter="0" labels="[0,2,4,6,8,10]" tickInterval="2" labelOffset="-3" tickOffset="0" liveDragging="true" showDataTip="false"/>
+				<mx:Canvas width="100%">
+					<mx:PieChart id="seaLevelRiseChart" showDataTips="true" width="120" height="120" horizontalCenter="-10" dataProvider="{abundances}">
+				        <mx:series>
+				           <mx:PieSeries field="abundance" nameField="populationType" labelPosition="inside" startAngle="90" showDataEffect="{interpolateIn}" fills="{[sc1, sc2]}"/>
+				        </mx:series>
+				     </mx:PieChart>	
+				</mx:Canvas>
+				<mx:HBox height="100%" verticalAlign="bottom" horizontalGap="0" visible="{slider.value!=0}" showEffect="{fader}">
+					<mx:Label styleName="percentaffected" id="affectedLabel" text="{percent.format((((abundances.getItemAt(1) as Population).abundance)/currentTool.totalAbundance)*100)}% "/>
+					<mx:Label text="of population affected" styleName="categoryName"/>
+				</mx:HBox>
+        </mx:VBox>
+		</mx:Canvas>
+		<mx:Canvas id="protectionUI" styleName="InformationPanel" showEffect="{fader}" hideEffect="{fader}" visible="false" height="325" width="253" x="{informationPanel.x-20-sealevelRiseUI.width}" y="{informationPanel.y+informationPanel.height-sealevelRiseUI.height}">
+			<mx:VBox styleName="ToolWindow" verticalCenter="0" horizontalCenter="0" width="243" height="315" verticalGap="0" horizontalAlign="left">
+				<mx:HBox width="100%" styleName="ToolWindowTitleHBox">
+					<mx:Label text="Gap analysis" styleName="ToolWindowTitle"/>
+				</mx:HBox>
+				<mx:Label text="Select a species:" styleName="categoryName" paddingTop="9"/>
+				<mx:ComboBox dataProvider="{speciesArray}" labelField="CommonName" id="speciesComboBox2" styleName="categoryName" fontWeight="normal" width="200" change="changeProtectionSpecies(event)"/>
+				<mx:HBox horizontalGap="0" paddingTop="9" verticalAlign="bottom" visible="{!toolInProgress}" showEffect="{fader}">
+					<mx:Label styleName="percentaffected" id="percentProtected" text="{(currentTool.totalAbundance==0) ? 'No data' : percent.format((currentTool.totalAbundanceProtected/currentTool.totalAbundance) *100) + '%'}"/>
+					<mx:Label text="{(currentTool.totalAbundance==0) ? '' : ' of population protected'}" styleName="categoryName"/>
+				</mx:HBox>
+				<wcmc:MapServiceCheckBox MapServiceURL="http://maps.unep-wcmc.org/ArcGIS/rest/services/WDPAv2_0/wdpa_all/MapServer" alpha="0.7" layerManager="{layerManager}" label="World Database of Protected Areas" paddingTop="13" mapAlpha="0.7"/>
+				<wcmc:MapServiceCheckBox MapServiceURL="http://dev.unep-wcmc.org/ArcGIS/rest/services/WingsOverWetlands/IBAs/MapServer" alpha="0.7" layerManager="{layerManager}" label="Important Bird Areas layer" mapAlpha="0.7"/>
+				<wcmc:MapServiceCheckBox MapServiceURL="http://dev.unep-wcmc.org/ArcGIS/rest/services/WingsOverWetlands/IBAs/MapServer" alpha="0.7" layerManager="{layerManager}" label="Ramsar Sites" mapAlpha="0.7"/>
+        	</mx:VBox>
+			<mx:SWFLoader source="@Embed(source='images/loader.swf')" id="loader2" visible="{toolInProgress}" y="108" x="50"/>
+		</mx:Canvas>
+	</wcmc:UserInterface>	
+	<!--End of GUI-->
+	<!--NON-VISUAL CONTROLS-->
+	<!--EFFECTS-->  
+    <mx:NumberFormatter id="percent" precision="0" rounding="up" decimalSeparatorTo="." />
+    <mx:SeriesInterpolate id="interpolateIn" duration="250"/>    
+	<mx:Fade id="fader" duration="250"/>
+    <mx:SolidColor id="sc2" color="red" alpha=".7"/>
+    <mx:SolidColor id="sc1" color="blue" alpha=".7"/>
+    <!--END OF EFFECTS-->
+	<wcmc_classes:LayerManager id="layerManager" map="{map}"/>
+	<!--END OF NON-VISUAL CONTROLS-->
+    <mx:Script> 
+        <![CDATA[
+        	import mx.events.ListEvent;
+        	import mx.binding.utils.BindingUtils;
+        	import mx.events.SliderEvent;
+        	import com.google.maps.interfaces.IPane;
+        	import com.google.maps.interfaces.IPaneManager;
+        	import com.esri.ags.utils.GraphicUtil;
+        	import mx.controls.dataGridClasses.DataGridColumn;
+        	import mx.binding.utils.ChangeWatcher;
+        	import com.google.maps.extras.rubberbandctrl.RubberBandCtrl;
+        	import com.google.maps.interfaces.IProjection;
+        	import mx.managers.BrowserManager;
+        	import mx.managers.IBrowserManager;
+        	import com.esri.ags.geometry.Polygon;
+        	import com.google.maps.InfoWindowOptions;
+        	import com.google.maps.MapMoveEvent;
+        	import mx.messaging.AbstractConsumer;
+        	import com.google.maps.LatLngBounds;
+        	import com.esri.ags.tasks.IdentifyTask;
+        	import com.esri.ags.tasks.IdentifyParameters;
+        	import mx.controls.DataGrid;
+        	import com.google.maps.interfaces.IMapType;
+        	import com.google.maps.extras.arcgislink.ArcGISUtil;
+        	import com.google.maps.extras.arcgislink.ArcGISMapType;
+        	import com.google.maps.MapAction;
+        	import com.google.maps.MapMouseEvent;
+        	import com.esri.ags.geometry.Multipoint;
+        	import com.esri.ags.geometry.MapPoint;
+        	import com.esri.ags.Graphic;
+        	import com.google.maps.Color;
+        	import com.google.maps.controls.MapTypeControl;
+        	import com.google.maps.geom.Attitude;
+        	import com.google.maps.MapEvent;
+        	import com.google.maps.controls.NavigationControl;
+        	import com.google.maps.View;
+        	import com.google.maps.MapTypeOptions;
+        	import com.google.maps.MapOptions;
+        	import com.google.maps.styles.FillStyle;
+        	import com.google.maps.styles.StrokeStyle;
+        	import com.google.maps.overlays.MarkerOptions;
+        	import com.google.maps.overlays.Marker;
+        	import com.google.maps.LatLng;
+        	import com.google.maps.MapType;
+        	import wcmc.classes.*;
+        	import wcmc.components.*;
+        	import mx.collections.ArrayCollection;
+        	import mx.collections.SortField;
+        	import mx.collections.Sort;
+        	import mx.controls.List;
+        	import mx.controls.Alert;
+        	import mx.controls.Button;
+        	import mx.rpc.AsyncResponder;
+            import mx.events.ItemClickEvent;
+        	import mx.managers.HistoryManager;
+        	import com.esri.ags.geometry.Extent;
+        	import com.esri.ags.SpatialReference; 
+        	import com.esri.ags.tasks.Query;
+        	import com.esri.ags.tasks.QueryTask;
+        	import com.esri.ags.tasks.FeatureSet;
+        	import com.esri.ags.geometry.Geometry;
+        	import com.esri.ags.events.DrawEvent;
+        	import com.esri.ags.toolbars.Navigation;
+            private const AXIOM_DATA_URL:String = "http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Axiom_WFS_North_Pacific/MapServer/0";
+            private const AXIOM_SIN_WFS:String = "http://maps.axiomalaska.com/geoserver/wfs?request=GetFeature&SERVICE=wfs&VERSION=1.1.0&typeName=axiom:SINSeabirdProductivityWFS&outputFormat=GML3&CQL_FILTER=SpeciesCode=";
+			public const QUERY_FIELDS:Array = ["SITENAME","NOFU","AUSH","FTSP","SWSP","LESP","UNSP","DCCO","BRCO","GRCO","TECO","PECO","RFCO","UNCO","COEI","BLOY","MEGU","BTGU","HEGU","SBGU","GWGU","GHGU","GLGU","GGGU","BHGU","BLKI","RLKI","SAGU","UNGU","COTE","ARTE","ALTE","CATE","UNTE","DOVE","COMU","TBMU","UNMU","BLGU","PIGU","SPGU","UNIG","MAMU","ANMU","CAAU","PAAU","LEAU","WHAU","CRAU","RHAU","UNAU","TUPU","HOPU","UNPU","UNAL","TOMU"];
+			private const FIELDNAME_SITENAME:String="SITENAME";
+       		[Bindable][Embed(source="/images/distribution.png")]public var distributionMapIcon:Class;
+       		[Bindable][Embed(source="/images/distributionGone.png")]public var distributionGone:Class;
+       		[Bindable][Embed(source="/images/distributionZero.png")]public var distributionZeroIcon:Class;
+       		[Bindable][Embed(source="/images/small.png")]public var small:Class;
+       		[Bindable][Embed(source="/images/medium.png")]public var medium:Class;
+       		[Bindable][Embed(source="/images/large.png")]public var large:Class;
+       		[Bindable][Embed(source="/images/red.png")]public var red:Class;
+       		[Bindable][Embed(source="/images/green.png")]public var green:Class;
+       		[Bindable][Embed(source="/images/yellow.png")]public var yellow:Class;
+			[Bindable]public var toolInProgress:Boolean=false; //simple flag that is set to true when a tool starts and false when it stops
+	  		[Bindable]public var showZeroAbundance:Boolean=false; //flag to specify whether to include zero abundance records     
+			[Bindable]public var currentHeight:Number;
+	        [Bindable]public var abundances:ArrayCollection;
+	        [Bindable]public var currentParameter:String; //the current parameter for the species or site
+			[Bindable]public var currentTool:ToolControl;
+        	private var _SeaLevelRiseLayerOverlay:SeaLevelRiseLayerOverlay;
+       		private var numClasses:int=3; //default number of classes to use for any symolised mapping
+			private var classValues:Array=new Array(); //the values from a multiple class symbolisation of data
+			private var paneID:Number;
+			private var UDAGeometry:Geometry;
+	  		public var scribbleOverlayLayer:ScribbleOverlayLayer=new ScribbleOverlayLayer(); //a custom  object layer that is used to capture a user-defined polygon for map querying
+            public var rbCtrl:RubberBandCtrl;
+	        private function initApp():void
+	        {
+				HistoryManager.register(this); //register this class as implementing the historymanager class
+				var browserManager:IBrowserManager = BrowserManager.getInstance(); //get the browser manager instance
+				var ext:String=browserManager.url.substring(browserManager.url.length-4,browserManager.url.length); //see if we are calling the page directly with parameters
+				if (ext=="html"||ext=="tml#")
+				{
+				  loadState(null); //load the start state of the application if no parameters are passed in the url
+				}
+	        }
+		    //set the initial parameters for the google map
+		    private function onMapPreinitialize(event:MapEvent):void 
+		    {
+ 			  var myMapOptions:MapOptions = new MapOptions();
+		      myMapOptions.zoom = 4;
+		      myMapOptions.center = new LatLng(60.756054, -133.986951);
+		      myMapOptions.mapType = MapType.PHYSICAL_MAP_TYPE;
+		      myMapOptions.viewMode = View.VIEWMODE_2D;
+		      myMapOptions.attitude = new Attitude(20,30,0);
+		      map.setInitOptions(myMapOptions);
+		    }		    
+		    //called when the map has been loaded properly
+			private function onMapReady(event:MapEvent):void 
+			{
+				map.addControl(new NavigationControl());
+		      	map.enableScrollWheelZoom();
+                rbCtrl = new RubberBandCtrl ();
+ 				rbCtrl.enable (map);
+			}      
+	        // Restore the state and parameter value from the history manager state object
+	        public function loadState(state:Object):void 
+	        {
+	            if (state) 
+	            {
+	                currentState = state.currentState;
+	                currentParameter=unescape(state.currentParameter);
+					var _displayObject:DisplayObject = contentBoxContainer.getChildAt(0); //get the current content box that is loaded
+					if (_displayObject)
+					{
+						if (_displayObject is ContentBox)
+						{	
+							(_displayObject as ContentBox).parameter = currentParameter; //set the content box parameter							
+						}
+					}
+	            }
+	            else 
+	            {
+	                currentState = "start";
+	            }
+	        }
+	        // Save the current state and the parameter value.
+	        public function saveState():Object 
+	        {
+	            var state:Object = {};
+	            state.currentState = currentState;
+				state.currentParameter = currentParameter;
+				//get the content box that has been added and set the parameter
+				var _displayObject:DisplayObject = contentBoxContainer.getChildAt(0);
+				if (_displayObject)
+				{
+					if (_displayObject is ContentBox)
+					{	
+						(_displayObject as ContentBox).parameter = currentParameter;
+					}
+				}
+	            return state;
+	        }   
+			private function changeContentArea(event:ContentAreaChangeEvent):void //function to change the state of the application
+			{
+				if (event.target is List) (event.target as List).selectedIndex=-1;
+				currentState = event.state;
+				currentParameter=event.parameter;
+				HistoryManager.save();
+			}
+			//calculate statistics for a site - this is called from the create species counts
+			private function calculateAbundanceForAllSpecies(featureSet:Object):void
+			{
+				var fieldname: String; //value for the current fieldname
+				var abundance:Number;
+				var tableArray:Array=new Array();
+				for (var field:Number = 0; field < QUERY_FIELDS.length; field++) 
+				{
+					fieldname = QUERY_FIELDS[field]; //get the next species
+					if (fieldname!=FIELDNAME_SITENAME) 
+					{
+						var _species:Species=getSpeciesFromArray(fieldname);
+						(featureSet[fieldname]>0) ? abundance=featureSet[fieldname] : abundance=0;
+						if ((_species)&&(abundance>0))
+						{
+							var obj:Object={commonName:_species.CommonName,abundance:abundance};
+							tableArray.push(obj)
+						}
+					}
+				}				
+				if (tableArray.length>0)
+				{
+					var sort:Sort = new Sort(); //sort the array
+					sort.fields = [new SortField("abundance",false,true)]; //sort on abundance descending
+					var arrayCollection: ArrayCollection = new ArrayCollection(tableArray as Array); //create a new array collection to hold the sorted counts
+					arrayCollection.sort = sort; //apply the sort
+					arrayCollection.refresh(); //refresh the data
+					var a:DataGridColumn = new DataGridColumn("Common name");
+					a.dataField="commonName";
+					a.width=200;
+					var b:DataGridColumn = new DataGridColumn("Abundance");
+					b.dataField="abundance";
+					siteDatagrid.columns = [a,b];
+					siteDatagrid.dataProvider=arrayCollection;
+				}
+			}	
+			//this is called whenever a new base map is selected int he config map layers content box
+		    private function changeBaseMap(event:ChangeBaseMapEvent):void
+		    {
+				switch (event.newBaseMap) //take action depending on the base map set
+				{
+					case (EnumBaseMap.GOOGLE_IMAGERY):
+					{
+		          		map.setMapType(MapType.HYBRID_MAP_TYPE);
+		          		break;
+					}
+					case (EnumBaseMap.GOOGLE_ROAD):
+					{
+		          		map.setMapType(MapType.NORMAL_MAP_TYPE);
+		          		break;
+					}
+					case (EnumBaseMap.GOOGLE_TERRAIN):
+					{
+		          		map.setMapType(MapType.PHYSICAL_MAP_TYPE);
+		          		break;
+					}
+				}
+		    }
+	        //simple function that zooms to the site and shows its position on the map
+			public function zoomToSite():void
+			{
+				var querySpatialRel:String = "esriSpatialRelIntersects";
+				var queryTask:QueryTask = new QueryTask(AXIOM_DATA_URL);
+				var query:Query = new Query();
+				query.where=FIELDNAME_SITENAME + "='" + currentParameter + "'";
+				query.outFields = QUERY_FIELDS;
+				query.returnGeometry = true;
+				query.spatialRelationship = querySpatialRel;
+				queryTask.execute(query, new AsyncResponder(onResult, onFault));  
+				function onResult(featureSet:FeatureSet, token:Object = null):void   //callback function             
+				{   
+					try
+					{
+						if (featureSet.features.length>0)
+						{
+							var _LatLng:LatLng=getLatLng(featureSet.features[0]); //get the lat/long
+							map.setCenter(_LatLng,10,map.getCurrentMapType()); //move the map to centre on the site
+						} 
+					}
+					catch (error:Error)
+					{
+						Alert.show(error.message);
+					}	
+					userInterface.dispatchEvent(new ToolStopEvent("ToolStop")); //fire the tool stop event
+			  	}						
+				function onFault(info:Object, token:Object = null) : void
+				{                    
+					Alert.show(info.toString());
+				}  
+			}
+			//returns the lat/long of the passed point
+			private function getLatLng(feature:Graphic):LatLng
+			{
+				var myPoint:MapPoint;
+				if (feature.geometry is Multipoint)
+				{
+					myPoint = MapPoint((feature.geometry as Multipoint).points[0]);	
+				}
+				else
+				{
+					myPoint = MapPoint(feature.geometry);
+				}
+				return new LatLng(myPoint.y,myPoint.x);
+			}
+			//not currently used
+	        private function zoomToExtent(features:Array):void
+	        {
+				for each (var myGraphic:Graphic in features)
+				{
+					var ext:Extent;
+					var myPoint:MapPoint;
+					if (myGraphic.geometry is Multipoint)
+					{
+						myPoint = MapPoint((myGraphic.geometry as Multipoint).points[0]);	
+					}
+					else
+					{
+						myPoint = MapPoint(myGraphic.geometry);
+					}
+	            	if (ext == null) 
+	            	{
+	            		ext= new Extent(myPoint.x,myPoint.y,myPoint.x,myPoint.y);
+	            	}
+	            	else
+	            	{
+		            	if (myPoint.x > ext.xmax) {ext.xmax=myPoint.x;}
+		            	if (myPoint.y > ext.ymax) {ext.ymax=myPoint.y;}
+		            	if (myPoint.x < ext.xmin) {ext.xmin=myPoint.x;}
+		            	if (myPoint.y < ext.ymin) {ext.ymin=myPoint.y;}
+	            	}   
+				}        	
+	        }
+			private function hideshow():void
+			{
+				if (informationPanel.visible)
+				{
+					hideShowImage.load("images/hidePanel.png");
+				}
+				else
+				{
+					hideShowImage.load("images/showPanel.png");
+				}
+			}
+			public function getSpeciesFromArray(parameter:String):Species
+			{
+				for each (var _species:Species in speciesArray)
+				{
+					if (_species.speciesID==parameter)
+					{
+						return _species;
+					}
+				}
+				return null;
+			}
+			public function clearScribbleLayer():void
+			{
+				UDAAbundanceCanvas.visible=false;
+			}
+			private function createPane():IPane
+			{
+					var mapPaneManager:IPaneManager=map.getPaneManager();
+					return mapPaneManager.createPane(mapPaneManager.paneCount); //create the new pane at the top of the pane stack
+					paneID++;
+			} 
+			private function toolDataLoaded(event:Event):void
+			{
+				toolInProgress=false;
+				switch (event.target.className)
+				{
+					case "ToolControl":
+					{
+						var _tool:ToolControl=event.target as ToolControl;
+						switch (_tool.markerType)
+						{
+							case (EnumMarkerType.ABUNDANCE):
+							{
+								createAbundanceTable(_tool);
+								break;
+							}
+							case (EnumMarkerType.TOP10):
+							{
+								createAbundanceTable(_tool);
+								break;
+							}
+							case (EnumMarkerType.SEALEVELRISE):
+							{
+								createSeaLevelRiseTool(_tool);
+								break;
+							}
+							case (EnumMarkerType.PROTECTION):
+							{
+								createProtectionTool(_tool);
+								break;
+							}
+						}
+						if (_tool.scribbleLayer) createUDASummaryBox(_tool);
+						break;
+					}
+					case "ToolControlSite":
+					{
+						var _toolSite:ToolControlSite=event.target as ToolControlSite;
+						switch (_toolSite.markerType)
+						{
+							case (EnumMarkerType.DISTRIBUTION):
+							{
+								zoomToSite();
+								break;
+							}
+							case (EnumMarkerType.ABUNDANCE):
+							{
+								if (_toolSite.markers.length>0)
+								{
+									var attributes:Object=(_toolSite.markers[0] as myMarker).attributes;
+									calculateAbundanceForAllSpecies(attributes);
+									_toolSite.addDisplayObject(siteAbundanceTable);
+								}
+								break;
+							}
+						}				
+						break;		
+					}
+				}
+			}
+			private function createAbundanceTable(tool:ToolControl):void
+			{
+				var _counts:Array=new Array();
+				for (var i:int= 0;i<tool.markers.length;i++) //iterate through the markers
+				{
+					var attributes:Object=(tool.markers[i] as myMarker).attributes;
+					var _count:SpeciesCount=new SpeciesCount;
+					_count.uniqueID=i+1;
+					_count.abundance=attributes[currentParameter];
+					_count.site=attributes[FIELDNAME_SITENAME];
+					var markerOptions:MarkerOptions=(tool.markers[i] as myMarker).getOptions();
+					_count.bitmap=getBitmap(markerOptions.icon);
+					_counts.push(_count);	
+				}
+				if (tool.markerType==EnumMarkerType.ABUNDANCE) _counts.reverse();
+				var c:DataGridColumn= new DataGridColumn(" ");
+				c.itemRenderer= new ClassFactory(wcmc.components.AbundanceImageRenderer);
+				c.width=20;
+				c.dataField="bitmap";
+				var a:DataGridColumn = new DataGridColumn("Site");
+				a.dataField="site";
+				a.width=200;
+				var b:DataGridColumn = new DataGridColumn("Abundance");
+				b.dataField="abundance";
+				datagrid.columns = [c,a,b];
+				datagrid.dataProvider = _counts;
+				tool.addDisplayObject(abundanceTable);
+			}
+			public function getBitmap(icon:DisplayObject):Bitmap
+			{
+				var _bitmap:Bitmap;
+				if (icon is Sprite)
+				{
+					var imgBitmap:BitmapData=new BitmapData(icon.width, icon.height,true,0x0); 
+					imgBitmap.draw(icon); 
+					_bitmap=new Bitmap(imgBitmap);
+				}
+				else
+				{
+					_bitmap=new Bitmap((icon as Bitmap).bitmapData);
+				}
+				if (_bitmap) _bitmap.cacheAsBitmap=true;
+				return _bitmap;
+			}
+			private function createUDASummaryBox(tool:ToolControl):void
+			{
+				if (tool.UDAGeometry)
+				{
+					floatingCanvasLabel.text="Total abundance: " + tool.totalAbundance.toString();
+					var latLng:LatLng=new LatLng(tool.UDAGeometry.extent.ymin,tool.UDAGeometry.extent.xmax);
+					UDAAbundanceCanvas.x=map.fromLatLngToViewport(latLng).x;
+					UDAAbundanceCanvas.y=map.fromLatLngToViewport(latLng).y;
+				}
+                tool.addDisplayObject(UDAAbundanceCanvas);
+			}	
+			private function createSeaLevelRiseTool(tool:ToolControl):void
+			{
+				currentTool=tool;
+				if (!_SeaLevelRiseLayerOverlay) _SeaLevelRiseLayerOverlay= new SeaLevelRiseLayerOverlay("http://downloads.wdpa.org/ArcGIS/rest/services/GID/DEM_Greyscale_reclass/MapServer",map,slider);
+				slider.value=0;
+				currentHeight=0;
+				abundances=new ArrayCollection();
+				var _Population:Population=new Population();
+				_Population.abundance=tool.totalAbundance;
+				_Population.populationType="Population unaffected";
+				abundances.addItem(_Population);
+				var _Population2:Population=new Population();
+				_Population2.abundance=0;
+				_Population2.populationType="Population affected";
+				abundances.addItem(_Population2);
+				tool.addDisplayObject(sealevelRiseUI);
+			}
+			private function showAffectedSites(event:SliderEvent):void
+			{ 
+				(abundances[0] as Population).abundance=0;
+				(abundances[1] as Population).abundance=0;
+				currentHeight=slider.value;
+			}
+			private function changeSeaLevelRiseSpecies(event:ListEvent):void
+			{
+				var parameter:String=(speciesComboBox.selectedItem as Species).speciesID;
+				slider.value=0;
+        		currentTool.clearMarkers();
+				currentTool.parameter=parameter;
+				currentTool.abundanceField=parameter;
+				currentTool.returnFields="SITENAME,Height," + parameter;
+				currentTool.loadData();
+			}
+			private function createProtectionTool(tool:ToolControl):void
+			{
+				currentTool=tool;
+				tool.addDisplayObject(protectionUI);
+			}
+			private function changeProtectionSpecies(event:ListEvent):void
+			{
+				var parameter:String=(speciesComboBox2.selectedItem as Species).speciesID;
+        		currentTool.clearMarkers();
+				currentTool.parameter=parameter;
+				currentTool.abundanceField=parameter;
+				currentTool.returnFields="SITENAME,DistanceTo," + parameter;
+				currentTool.loadData();
+			}
+		]]>
+    </mx:Script>
+</mx:Application>

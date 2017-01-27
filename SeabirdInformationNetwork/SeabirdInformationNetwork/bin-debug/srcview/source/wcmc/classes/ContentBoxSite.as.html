@@ -1,0 +1,42 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ContentBoxSite.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/* file            contentboxsite.as
+date            oct 2009
+author            andrew cottam
+hierarchy        contentbox &gt; contentboxsite
+description        this file is a descendent class from the content box which introduces custom behavior for all site content boxes and descendents
+                the class has a site content box header which has a site name label which is populated when the content box&apos;s parameter value is set
+                descendent classes therefore inherit this site content box header and will have their own specific content as well
+*/</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">classes</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">components</span>.<span class="ActionScriptDefault_Text">SiteContentBoxHeader</span>;
+    <span class="ActionScriptASDoc">/**
+     * Descendent class from the content box which introduces custom behavior for all site content boxes and descendents. The class has a site content box header which has a site name label which is populated when the content box&apos;s parameter value is set.
+     * Descendent classes therefore inherit this site content box header and will have their own specific content as well 
+     * @author andrewcottam
+     * 
+     */</span>    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ContentBoxSite</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">ContentBox</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_SiteContentBoxHeader</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SiteContentBoxHeader</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">SiteContentBoxHeader</span><span class="ActionScriptBracket/Brace">()</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ContentBoxSite</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;ContentBoxParameterSet&quot;</span>,<span class="ActionScriptDefault_Text">loadData</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">addChild</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_SiteContentBoxHeader</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">loadData</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ContentBoxParameterSetEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_SiteContentBoxHeader</span>.<span class="ActionScriptDefault_Text">SiteNameLabel</span>.<span class="ActionScriptDefault_Text">text</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">parameter</span>;            
+        <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:google="com.google.maps.*" xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" viewSourceURL="srcview/index.html">
+	<mx:Canvas id="applicationCanvas" width="100%" height="100%">
+		<google:Map3D id="map" key="ABQIAAAA765f6kSuF8ZcQCnIrgiPABRE8S7Q0QcplLnRYhkYxwkGhq03LxR5R0gbwUJbnee2PqvGumw4eZC-yQ" width="100%" height="100%" mapevent_mappreinitialize="onMapPreinitialize(event)" mapevent_mapready="mapReady(event)"/>
+		<mx:Canvas horizontalCenter="0" bottom="50"	borderStyle="solid" borderThickness="1" cornerRadius="5" backgroundAlpha="0.4" backgroundColor="#111111" dropShadowEnabled="true" shadowDirection="right" shadowDistance="2" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+			<mx:Label text="Sea level rise: {int(slider.value)}m" top="20" color="#FFFFFF" horizontalCenter="0"/>		
+			<mx:HSlider minimum="0" maximum="255" id="slider" liveDragging="true" snapInterval="1" width="256"/>
+		</mx:Canvas>
+	</mx:Canvas>
+	<mx:Script>
+		<![CDATA[
+			import wcmc.classes.SeaLevelRiseLayerOverlay;
+			import mx.events.FlexEvent;
+			import com.google.maps.extras.arcgislink.ArcGISUtil;
+			import com.google.maps.extras.rubberbandctrl.RubberBandCtrl;
+			import com.google.maps.View;
+			import com.google.maps.MapZoomEvent;
+			import com.google.maps.MapMoveEvent;
+			import com.google.maps.controls.NavigationControl;
+			import com.google.maps.geom.Attitude;
+			import com.google.maps.MapType;
+			import com.google.maps.LatLng;
+			import com.google.maps.MapOptions;
+			import com.google.maps.MapEvent;
+            public var rbCtrl:RubberBandCtrl;
+            private var _SeaLevelRiseLayerOverlay:SeaLevelRiseLayerOverlay;
+		    //set the initial parameters for the google map
+		    private function onMapPreinitialize(event:MapEvent ):void 
+		    {
+ 			  var myMapOptions:MapOptions = new MapOptions();
+		      myMapOptions.zoom = 5;
+		      myMapOptions.center = new LatLng(-5, 120);
+		      myMapOptions.mapType = MapType.PHYSICAL_MAP_TYPE;
+		      myMapOptions.viewMode = View.VIEWMODE_2D;
+		      myMapOptions.attitude = new Attitude(20,30,0);
+		      map.setInitOptions(myMapOptions);
+		    }		    
+		    private function mapReady(event:MapEvent):void
+		    {
+                map.addControl(new NavigationControl());
+                map.enableScrollWheelZoom();
+                rbCtrl = new RubberBandCtrl ();
+ 				rbCtrl.enable (map);
+				_SeaLevelRiseLayerOverlay= new SeaLevelRiseLayerOverlay("http://downloads.wdpa.org/ArcGIS/rest/services/GID/DEM_Greyscale_reclass/MapServer",map,slider);
+		    }
+		]]>
+	</mx:Script>	
+</mx:Application>

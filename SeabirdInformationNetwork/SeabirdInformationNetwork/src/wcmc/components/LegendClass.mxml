@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Image id="legendImage"/>
+	<mx:Label styleName="newLabel10" text="{legendClassName}" id="text" height="{textHeight}"/>
+	<mx:Script>
+		<![CDATA[
+			import wcmc.soap.MapServerLegendClass;
+			[Bindable] private var legendClassName:String;
+			[Bindable] public var textHeight:Number;
+			private var _MapServerLegendClass:MapServerLegendClass;
+			public function get mapServerLegendClass():MapServerLegendClass
+			{
+				return _MapServerLegendClass;
+			}
+			public function set mapServerLegendClass(value:MapServerLegendClass):void
+			{
+				_MapServerLegendClass = value;
+				if (_MapServerLegendClass.Label=="")
+				{
+					text.includeInLayout = false;					
+				}
+				else
+				{
+					legendClassName = _MapServerLegendClass.Label;
+				}	
+				legendImage.load(_MapServerLegendClass.SymbolImage.ImageData);
+			}
+		]]>
+	</mx:Script>
+</mx:HBox>

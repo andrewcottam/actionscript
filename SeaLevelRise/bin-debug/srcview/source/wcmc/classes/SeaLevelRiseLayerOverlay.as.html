@@ -1,0 +1,61 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>SeaLevelRiseLayerOverlay.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/*
+ * ArcGIS for Google Maps Flash API
+ *
+ * License http://www.apache.org/licenses/LICENSE-2.0
+ */</span>
+ <span class="ActionScriptASDoc">/**
+ * @author nianwei at gmail dot com
+ */</span> 
+
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">classes</span>
+<span class="ActionScriptBracket/Brace">{</span>
+  <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">google</span>.<span class="ActionScriptDefault_Text">maps</span>.<span class="ActionScriptDefault_Text">Map3D</span>;
+  <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">google</span>.<span class="ActionScriptDefault_Text">maps</span>.<span class="ActionScriptDefault_Text">MapMoveEvent</span>;
+  <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">google</span>.<span class="ActionScriptDefault_Text">maps</span>.<span class="ActionScriptDefault_Text">MapZoomEvent</span>;
+  <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">google</span>.<span class="ActionScriptDefault_Text">maps</span>.<span class="ActionScriptDefault_Text">extras</span>.<span class="ActionScriptDefault_Text">arcgislink</span>.<span class="ActionScriptDefault_Text">ArcGISTileLayerOptions</span>;
+  <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">google</span>.<span class="ActionScriptDefault_Text">maps</span>.<span class="ActionScriptDefault_Text">extras</span>.<span class="ActionScriptDefault_Text">arcgislink</span>.<span class="ActionScriptDefault_Text">ServiceEvent</span>;
+  <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">com</span>.<span class="ActionScriptDefault_Text">google</span>.<span class="ActionScriptDefault_Text">maps</span>.<span class="ActionScriptDefault_Text">overlays</span>.<span class="ActionScriptDefault_Text">TileLayerOverlay</span>;
+  
+  <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">HSlider</span>;
+<span class="ActionScriptASDoc">/**
+ * Tile layer as overlay. tile layer must be loaded first.
+ */</span> 
+  <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">SeaLevelRiseLayerOverlay</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">TileLayerOverlay</span>
+  <span class="ActionScriptBracket/Brace">{</span>
+      <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_SeaLevelRiseLayer</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">SeaLevelRiseLayer</span>;
+      <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Map3D</span>;
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">SeaLevelRiseLayerOverlay</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">url</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>,<span class="ActionScriptDefault_Text">_map</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Map3D</span>,<span class="ActionScriptDefault_Text">_slider</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">HSlider</span><span class="ActionScriptBracket/Brace">)</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">map</span><span class="ActionScriptOperator">=</span><span class="ActionScriptDefault_Text">_map</span>;
+        <span class="ActionScriptDefault_Text">_SeaLevelRiseLayer</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">SeaLevelRiseLayer</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">url</span>, <span class="ActionScriptReserved">this</span>,<span class="ActionScriptDefault_Text">_slider</span>, <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ArcGISTileLayerOptions</span><span class="ActionScriptBracket/Brace">({</span><span class="ActionScriptDefault_Text">alpha</span><span class="ActionScriptOperator">:</span> 1<span class="ActionScriptBracket/Brace">}))</span>;
+        <span class="ActionScriptDefault_Text">_SeaLevelRiseLayer</span>.<span class="ActionScriptDefault_Text">showDEM</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">false</span>;
+        <span class="ActionScriptDefault_Text">_SeaLevelRiseLayer</span>.<span class="ActionScriptDefault_Text">highlightColor</span><span class="ActionScriptOperator">=</span>0<span class="ActionScriptDefault_Text">xdd99b3cc</span>; 
+        <span class="ActionScriptDefault_Text">_SeaLevelRiseLayer</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">ServiceEvent</span>.<span class="ActionScriptDefault_Text">LOAD</span>, <span class="ActionScriptDefault_Text">addOverlay</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">map</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MapMoveEvent</span>.<span class="ActionScriptDefault_Text">MOVE_END</span>,<span class="ActionScriptDefault_Text">mapMoveEnd</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptDefault_Text">map</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">MapZoomEvent</span>.<span class="ActionScriptDefault_Text">ZOOM_CHANGED</span>,<span class="ActionScriptDefault_Text">zoomChanged</span><span class="ActionScriptBracket/Brace">)</span>;
+         <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_SeaLevelRiseLayer</span>, <span class="ActionScriptDefault_Text">_SeaLevelRiseLayer</span>.<span class="ActionScriptDefault_Text">getProjection</span><span class="ActionScriptBracket/Brace">()</span>.<span class="ActionScriptDefault_Text">getTileSize</span><span class="ActionScriptBracket/Brace">()</span>, <span class="ActionScriptDefault_Text">_SeaLevelRiseLayer</span>.<span class="ActionScriptDefault_Text">getProjection</span><span class="ActionScriptBracket/Brace">())</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addOverlay</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ServiceEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">map</span>.<span class="ActionScriptDefault_Text">addOverlay</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">this</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">mapMoveEnd</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MapMoveEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_SeaLevelRiseLayer</span>.<span class="ActionScriptDefault_Text">applyThreshold</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">zoomChanged</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MapZoomEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptDefault_Text">_SeaLevelRiseLayer</span>.<span class="ActionScriptDefault_Text">applyThreshold</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>;
+    <span class="ActionScriptBracket/Brace">}</span>
+  <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>

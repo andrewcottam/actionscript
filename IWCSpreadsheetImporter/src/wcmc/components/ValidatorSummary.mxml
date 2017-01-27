@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:fc="http://ns.adobe.com/flashcatalyst/2009" currentState="{validator.validationStatus}">
+	<s:states>
+		<s:State name="notChecked"/> 
+		<s:State name="invalid"/>
+		<s:State name="valid"/>
+		<s:State name="inProgress"/>
+	</s:states>
+	<fx:Declarations>
+	</fx:Declarations>
+	<s:SkinnableContainer includeIn="invalid" click="toggleFilter(event)" skinClass="wcmc.skins.ValidatorSummaryItem" width="100%" backgroundColor="0xff4444" toolTip="Click to filter/unfilter rows">
+		<!--<s:Image source="assets/images/invalid2.png"/>--> 
+		<s:Label text="{validator.invalidCount} errors" styleName="whiteText"/>
+	</s:SkinnableContainer>
+	<s:SkinnableContainer includeIn="valid" skinClass="wcmc.skins.ValidatorSummaryItem" width="100%" backgroundColor="0x44ff44">
+		<!--<s:Image source="assets/images/valid2.png"/>-->
+		<s:Label text="No errors" styleName="whiteText"/>
+	</s:SkinnableContainer>
+	<s:SkinnableContainer includeIn="inProgress" skinClass="wcmc.skins.ValidatorSummaryItem" width="100%" backgroundColor="0xffffff">
+		<s:SWFLoader includeIn="inProgress" source="assets/images/inProgress12.swf"/>
+		<s:Label text="Validating.."/>
+	</s:SkinnableContainer>
+	<fx:Script>
+		<![CDATA[
+			import wcmc.classes.ValidatorBase;
+			[Bindable]public var validator:ValidatorBase;
+			protected function toggleFilter(event:MouseEvent):void
+			{
+				if (validator) 
+				{
+					if (!validator.filtered) validator.validators.removeFilters();
+					validator.toggleFilter();
+				}
+			}
+			
+		]]>
+	</fx:Script>
+</s:SkinnableContainer>

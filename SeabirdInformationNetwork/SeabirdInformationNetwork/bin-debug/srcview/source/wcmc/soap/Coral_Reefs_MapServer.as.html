@@ -1,0 +1,189 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>Coral_Reefs_MapServer.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre>
+<span class="ActionScriptASDoc">/**
+ * Coral_Reefs_MapServerService.as
+ * This file was auto-generated from WSDL by the Apache Axis2 generator modified by Adobe
+ * Any change made to this file will be overwritten when the code is re-generated.
+ */</span>
+ <span class="ActionScriptASDoc">/**
+  * Usage example: to use this service from within your Flex application you have two choices:
+  * Use it via Actionscript only
+  * Use it via MXML tags
+  * Actionscript sample code:
+  * Step 1: create an instance of the service; pass it the LCDS destination string if any
+  * var myService:Coral_Reefs_MapServer= new Coral_Reefs_MapServer();
+  * Step 2: for the desired operation add a result handler (a function that you have already defined previously)  
+  * myService.addGetLegendInfoEventListener(myResultHandlingFunction);
+  * Step 3: Call the operation as a method on the service. Pass the right values as arguments:
+  * myService.GetLegendInfo(myMapName,myLayerIDs,myLegendPatch,myImageType);
+  *
+  * MXML sample code:
+  * First you need to map the package where the files were generated to a namespace, usually on the &lt;mx:Application&gt; tag, 
+  * like this: xmlns:srv=&quot;wcmc.soap.*&quot;
+  * Define the service and within its tags set the request wrapper for the desired operation
+  * &lt;srv:Coral_Reefs_MapServer id=&quot;myService&quot;&gt;
+  *   &lt;srv:GetLegendInfo_request_var&gt;
+  *        &lt;srv:GetLegendInfo_request MapName=myValue,LayerIDs=myValue,LegendPatch=myValue,ImageType=myValue/&gt;
+  *   &lt;/srv:GetLegendInfo_request_var&gt;
+  * &lt;/srv:Coral_Reefs_MapServer&gt;
+  * Then call the operation for which you have set the request wrapper value above, like this:
+  * &lt;mx:Button id=&quot;myButton&quot; label=&quot;Call operation&quot; click=&quot;myService.GetLegendInfo_send()&quot; /&gt;
+  */</span>
+ <span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">soap</span><span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">rpc</span>.<span class="ActionScriptDefault_Text">AsyncToken</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">EventDispatcher</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">rpc</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">ResultEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">rpc</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">FaultEvent</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">utils</span>.<span class="ActionScriptDefault_Text">ByteArray</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">rpc</span>.<span class="ActionScriptDefault_Text">soap</span>.<span class="ActionScriptDefault_Text">types</span>.<span class="ActionScriptOperator">*</span>;
+
+    <span class="ActionScriptASDoc">/**
+     * Dispatches when a call to the operation GetLegendInfo completes with success
+     * and returns some data
+     * @eventType GetLegendInfoResultEvent
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;GetLegendInfo_result&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;wcmc.soap.GetLegendInfoResultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+    
+    <span class="ActionScriptASDoc">/**
+     * Dispatches when the operation that has been called fails. The fault event is common for all operations
+     * of the WSDL
+     * @eventType mx.rpc.events.FaultEvent
+     */</span>
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;fault&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;mx.rpc.events.FaultEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">Coral_Reefs_MapServer</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">EventDispatcher</span> <span class="ActionScriptReserved">implements</span> <span class="ActionScriptDefault_Text">ICoral_Reefs_MapServer</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_baseService</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BaseCoral_Reefs_MapServer</span>;
+        
+        <span class="ActionScriptASDoc">/**
+         * Constructor for the facade; sets the destination and create a baseService instance
+         * @param The LCDS destination (if any) associated with the imported WSDL
+         */</span>  
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">Coral_Reefs_MapServer</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">destination</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span>,<span class="ActionScriptDefault_Text">rootURL</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptOperator">=</span><span class="ActionScriptReserved">null</span><span class="ActionScriptBracket/Brace">)</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_baseService</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">BaseCoral_Reefs_MapServer</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">destination</span>,<span class="ActionScriptDefault_Text">rootURL</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptComment">//stub functions for the GetLegendInfo operation
+</span>          
+
+        <span class="ActionScriptASDoc">/**
+         * @see ICoral_Reefs_MapServer#GetLegendInfo()
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getLegendInfo</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">mapName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>,<span class="ActionScriptDefault_Text">layerIDs</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ArrayOfInt</span>,<span class="ActionScriptDefault_Text">legendPatch</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">MapServerLegendPatch</span>,<span class="ActionScriptDefault_Text">imageType</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ImageType</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">AsyncToken</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+             <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_internal_token</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">AsyncToken</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_baseService</span>.<span class="ActionScriptDefault_Text">getLegendInfo</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">mapName</span>,<span class="ActionScriptDefault_Text">layerIDs</span>,<span class="ActionScriptDefault_Text">legendPatch</span>,<span class="ActionScriptDefault_Text">imageType</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">_internal_token</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;result&quot;</span>,<span class="ActionScriptDefault_Text">_GetLegendInfo_populate_results</span><span class="ActionScriptBracket/Brace">)</span>;
+            <span class="ActionScriptDefault_Text">_internal_token</span>.<span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;fault&quot;</span>,<span class="ActionScriptDefault_Text">throwFault</span><span class="ActionScriptBracket/Brace">)</span>; 
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_internal_token</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptASDoc">/**
+         * @see ICoral_Reefs_MapServer#GetLegendInfo_send()
+         */</span>    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getLegendInfo_send</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">AsyncToken</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">getLegendInfo</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">_GetLegendInfo_request</span>.<span class="ActionScriptDefault_Text">MapName</span>,<span class="ActionScriptDefault_Text">_GetLegendInfo_request</span>.<span class="ActionScriptDefault_Text">LayerIDs</span>,<span class="ActionScriptDefault_Text">_GetLegendInfo_request</span>.<span class="ActionScriptDefault_Text">LegendPatch</span>,<span class="ActionScriptDefault_Text">_GetLegendInfo_request</span>.<span class="ActionScriptDefault_Text">ImageType</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+              
+        <span class="ActionScriptASDoc">/**
+         * Internal representation of the request wrapper for the operation
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_GetLegendInfo_request</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">GetLegendInfo_request</span>;
+        <span class="ActionScriptASDoc">/**
+         * @see ICoral_Reefs_MapServer#GetLegendInfo_request_var
+         */</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">getLegendInfo_request_var</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">GetLegendInfo_request</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_GetLegendInfo_request</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">getLegendInfo_request_var</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">request</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">GetLegendInfo_request</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_GetLegendInfo_request</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">request</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+              <span class="ActionScriptASDoc">/**
+         * Internal variable to store the operation&apos;s lastResult
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_GetLegendInfo_lastResult</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ArrayOfMapServerLegendInfo</span>;
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span>
+        <span class="ActionScriptASDoc">/**
+         * @see ICoral_Reefs_MapServer#GetLegendInfo_lastResult
+         */</span>      
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">getLegendInfo_lastResult</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ArrayOfMapServerLegendInfo</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_GetLegendInfo_lastResult</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">getLegendInfo_lastResult</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">lastResult</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ArrayOfMapServerLegendInfo</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_GetLegendInfo_lastResult</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">lastResult</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * @see ICoral_Reefs_MapServer#addGetLegendInfo()
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addgetLegendInfoEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">listener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">GetLegendInfoResultEvent</span>.<span class="ActionScriptDefault_Text">GetLegendInfo_RESULT</span>,<span class="ActionScriptDefault_Text">listener</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+            
+        <span class="ActionScriptASDoc">/**
+         * @private
+         */</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">_GetLegendInfo_populate_results</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ResultEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+        <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">e</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">GetLegendInfoResultEvent</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">GetLegendInfoResultEvent</span><span class="ActionScriptBracket/Brace">()</span>;
+                    <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">result</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">ArrayOfMapServerLegendInfo</span>;
+                               <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">headers</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">event</span>.<span class="ActionScriptDefault_Text">headers</span>;
+                     <span class="ActionScriptDefault_Text">getLegendInfo_lastResult</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">e</span>.<span class="ActionScriptDefault_Text">result</span>;
+                     <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">e</span><span class="ActionScriptBracket/Brace">)</span>;
+                    
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptComment">//service-wide functions
+</span>        <span class="ActionScriptASDoc">/**
+         * @see ICoral_Reefs_MapServer#getWebService()
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">getWebService</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">BaseCoral_Reefs_MapServer</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_baseService</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Set the event listener for the fault event which can be triggered by each of the operations defined by the facade
+         */</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addCoral_Reefs_MapServerFaultEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">listener</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Function</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;fault&quot;</span>,<span class="ActionScriptDefault_Text">listener</span><span class="ActionScriptBracket/Brace">)</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        
+        <span class="ActionScriptASDoc">/**
+         * Internal function to re-dispatch the fault event passed on by the base service implementation
+         * @private
+         */</span>
+         
+         <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">throwFault</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">FaultEvent</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+         <span class="ActionScriptBracket/Brace">{</span>
+             <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptBracket/Brace">)</span>;
+         <span class="ActionScriptBracket/Brace">}</span>
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span>
+</pre></body>
+</html>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Image xmlns:mx="http://www.adobe.com/2006/mxml">
+	<mx:Script>
+		<![CDATA[
+			import wcmc.classes.SpeciesPhotoInfo;
+			private var _speciesPhotoInfo:SpeciesPhotoInfo;
+			public function set speciesPhotoInfo(photoInfo:SpeciesPhotoInfo):void
+			{
+				_speciesPhotoInfo=photoInfo;
+				if (photoInfo)
+				{
+					toolTip=photoInfo.title;
+					source=photoInfo.url;
+				}
+			}
+			public function get speciesPhotoInfo():SpeciesPhotoInfo
+			{
+				return _speciesPhotoInfo;
+			}
+		]]>
+	</mx:Script>
+</mx:Image>

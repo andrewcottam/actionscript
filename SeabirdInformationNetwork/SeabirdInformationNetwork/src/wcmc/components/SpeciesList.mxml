@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:List xmlns:mx="http://www.adobe.com/2006/mxml" itemRenderer="wcmc.components.SpeciesListRenderer" change="dispatchEvent(new ContentAreaChangeEvent('ContentAreaChangeEvent',EnumStates.SPECIES,selectedItem.speciesID))" width="100%">
+<mx:Script>
+	<![CDATA[
+		import wcmc.classes.*;
+	]]>
+</mx:Script>	
+</mx:List>

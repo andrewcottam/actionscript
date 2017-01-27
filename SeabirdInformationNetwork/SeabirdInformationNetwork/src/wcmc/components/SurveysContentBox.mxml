@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Class: 			SurveysContentBox
+Description:	MXML Component Class that holds information on Surveys.	
+-->
+<wcmc_classes:ContentBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:wcmc="wcmc.components.*" xmlns:wcmc_classes="wcmc.classes.*" height="90%" width="100%">
+	<mx:VBox width="100%" height="10%">
+		<mx:HBox styleName="commonNameHBox" width="100%">
+			<mx:Label text="Surveys" styleName="commonNameLabel" width="100%"/>
+		    <mx:Image source="@Embed(source='images/ClipboardBsmall.png')" alpha="0.7"/>
+		</mx:HBox>
+	</mx:VBox>
+	<mx:HBox width="100%" >
+		<mx:TextArea text="The following datasets are providing information for this web mapping system:" width="100%" height="75" styleName="noBorder"/>
+	</mx:HBox>
+	<mx:HBox width="100%" >	
+		<mx:VBox width="10%">
+			<mx:Image source="@Embed(source='../../images/ClipboardBsmall.png')"/>
+		</mx:VBox>
+		<mx:VBox width="100%">
+			<mx:HBox width="100%">
+				<mx:Label text="North Pacific Colony Dataset" styleName="toolLabel" width="100%" />
+			</mx:HBox>
+			<mx:HBox width="100%">
+				<mx:TextArea id="toolDescriptionTextArea" height="60" text="The North Pacific Colony Dataset has been created to provide the best available estimates of seabird populations. The database is being migrated to a more complete database with timed counts in to allow trend analyses." width="100%" styleName="toolDescription" editable="false"/>	
+			</mx:HBox>
+		</mx:VBox>
+	</mx:HBox>
+	<mx:HBox width="100%" >	
+		<mx:VBox width="10%">
+			<mx:Image source="@Embed(source='../../images/ClipboardBsmall.png')"/>
+		</mx:VBox>
+		<mx:VBox width="100%">
+			<mx:HBox width="100%">
+				<mx:Label text="Seabird Information Network Database" styleName="toolLabel" width="100%" />
+			</mx:HBox>
+			<mx:HBox width="100%">
+				<mx:TextArea height="60" text="The The Seabird Information Network Database holds information on productivity for seabirds in the Arctic region according to a traffic light system. This measures breeding success as failed, normal or good." width="100%" styleName="toolDescription" editable="false"/>	
+			</mx:HBox>
+		</mx:VBox>
+	</mx:HBox>
+</wcmc_classes:ContentBox>

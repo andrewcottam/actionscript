@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Class: 			SpeciesList
+Description:	MXML Component Class that shows a vertical list of species. 	
+-->
+<mx:VBox xmlns="*" xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:wcmc_classes="wcmc.classes.*" creationComplete="loadItems()" width="100%">
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			import mx.collections.ArrayCollection;
+			import wcmc.classes.EnumStates;
+			import wcmc.classes.ContentAreaChangeEvent;
+	        [Bindable]
+	        [Embed(source="/images/puffin.png")]
+	        public var puffin:Class;
+	        private function loadItems():void
+	        {
+				var _SpeciesList:SpeciesList = new SpeciesList();
+				//set the species names as the data provider for the list
+				_SpeciesList.dataProvider = Application.application.speciesArray;
+				_SpeciesList.rowCount = Application.application.speciesArray.length;
+				//add the species list to this control
+				addChild(_SpeciesList);
+	        }	
+		]]>
+	</mx:Script>
+</mx:VBox>
+

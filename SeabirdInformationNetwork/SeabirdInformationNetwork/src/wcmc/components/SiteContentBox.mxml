@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Class: 			SitesContentBox
+Description:	MXML Component Class that shows information and allows you to look at outputs for a single site. 	
+-->
+<wcmc_classes:ContentBoxSite xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:wcmc="wcmc.components.*" xmlns:wcmc_classes="wcmc.classes.*">
+	<mx:HBox>
+		<mx:Label text="Distribution" styleName="toolCategoryName"/>
+	</mx:HBox>
+	<mx:VBox width="95%" styleName="toolbox">
+		<mx:VBox verticalGap="0" width="100%">
+			<wcmc:ToolControlSite map="{Application.application.map}" imageURL="images/zoomToSite.png" Label="Zoom to site" Description="Zoom to the site and show its position on a map." url="{AXIOM_DATA_URL}" tooltipField="SITENAME" markerType="{EnumMarkerType.DISTRIBUTION}"/>
+		</mx:VBox>
+	</mx:VBox>
+	<mx:HBox>
+		<mx:Label text="Abundance" styleName="toolCategoryName"/>
+	</mx:HBox>
+	<mx:VBox width="95%" styleName="toolbox">
+		<mx:VBox verticalGap="0" width="100%">
+			<wcmc:ToolControlSite map="{Application.application.map}" imageURL="images/table.gif" Label="Show species abundances" Description="Shows a table of abundances for all species recorded at the site." url="{AXIOM_DATA_URL}" tooltipField="SITENAME" markerType="{EnumMarkerType.ABUNDANCE}"/>
+		</mx:VBox>
+	</mx:VBox>
+	<mx:Script>
+		<![CDATA[
+			import wcmc.classes.EnumMarkerType;
+			import mx.controls.Alert;
+			import mx.core.Application;
+            private const AXIOM_DATA_URL:String = "http://downloads.wdpa.org/ArcGIS/rest/services/SeabirdInformationNetwork/Axiom_WFS_North_Pacific/MapServer/0";
+		]]>
+	</mx:Script>
+</wcmc_classes:ContentBoxSite>
+ 

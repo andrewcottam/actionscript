@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns:components="wcmc.components.*">
+	<mx:Label styleName="newLabel10" text="{legendGroupHeading}" id="text"/>
+	<mx:Repeater id="legendClasses">
+		<components:LegendClass mapServerLegendClass="{legendClasses.currentItem}" textHeight="{_textHeight}"/>
+	</mx:Repeater>
+	<mx:Script>
+		<![CDATA[
+			import wcmc.soap.MapServerLegendGroup;
+			[Bindable]private var legendGroupHeading:String;
+			[Bindable]private var _textHeight:Number;
+			public var ShowLabel:Boolean;
+			private var _MapServerLegendGroup:MapServerLegendGroup;
+			private const SWATCH_HEIGHT:Number = 16;
+			public function get mapServerLegendGroup():MapServerLegendGroup
+			{
+				return _MapServerLegendGroup;
+			}
+			public function set mapServerLegendGroup(value:MapServerLegendGroup):void
+			{
+				if (value.LegendClasses[0].Label == "<all other values>")
+				{
+					includeInLayout = false;
+					text.includeInLayout = false;
+					return;
+				}
+				_MapServerLegendGroup = value;
+				legendClasses.dataProvider = _MapServerLegendGroup.LegendClasses;
+				if (_MapServerLegendGroup.Heading == "Value")//i.e. graduated symbol - swatches need to be adjacent and continuous
+				{
+					setStyle("verticalGap",0);
+					_textHeight = SWATCH_HEIGHT;//bound to the text control of the LegendClassWidget
+				}
+				if (ShowLabel)
+				{
+					legendGroupHeading = _MapServerLegendGroup.Heading;
+				}
+					else
+				{
+					text.includeInLayout = false;	
+				}
+			}
+		]]>
+	</mx:Script>
+</mx:VBox>

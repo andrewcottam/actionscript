@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:HBox xmlns:mx="http://www.adobe.com/2006/mxml" xmlns="wcmc.classes.*"  creationComplete="CreationComplete(event)" verticalGap="0" width="100%" paddingBottom="8" paddingLeft="4" paddingRight="4" paddingTop="8" mouseOver="MouseOver(event)" mouseOut="MouseOut(event)" rollOut="RollOut(event)" xmlns:components="wcmc.components.*">
+	<mx:String id="imageURL"/>
+	<mx:VBox width="10%" verticalAlign="middle" height="100%">
+		<mx:Image source="{imageURL}"/>
+	</mx:VBox>
+	<mx:VBox width="100%" verticalGap="0">
+		<mx:HBox>
+			<components:MapServiceCheckBox id="checkBox" MapServiceURL="{url}" mapAlpha="0.7"/>
+			<mx:Label text="{Label}" color="0x444444" fontSize="12"/>
+		</mx:HBox>
+		<mx:HBox width="100%">
+			<mx:Text id="toolDescriptionTextArea" text="{Description}" width="100%" fontSize="9" color="0xaaaaaa"/>	
+		</mx:HBox>
+	</mx:VBox>
+	<mx:Canvas right="0" top="0">
+		<mx:Image source="@Embed(source='images/info.png')" click="setLegendVisibility(event)" id="legendImage" visible="false" showEffect="{fader}" hideEffect="{fader}"/>
+	</mx:Canvas>
+	<mx:Fade id="fader" duration="250"/>
+	<mx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			import com.google.maps.Map3D;
+			public var infoBox:InfoBox=new InfoBox();
+			[Bindable]public var Label:String;
+			[Bindable]public var Description:String;
+			[Bindable]public var url:String;
+			[Bindable]public var map:Map3D;
+			[Bindable]public var metadata:String;
+			private function CreationComplete(event:Event):void
+			{
+				infoBox.mapServiceURL=url;
+				(infoBox as InfoBox).tool=this;
+				Application.application.addChild(infoBox);
+			}
+			private function MouseOver(event:MouseEvent):void
+			{
+				setStyle('backgroundColor','0xb2e1ff');
+				legendImage.visible=true;
+			}
+			private function MouseOut(event:MouseEvent):void
+			{
+				setStyle('backgroundColor','0xffffff');
+			}
+			private function RollOut(event:MouseEvent):void
+			{
+				if (event.relatedObject!==infoBox)
+				{
+					legendImage.visible=false;
+					infoBox.visible=false;
+				}
+			}
+			private function setLegendVisibility(event:MouseEvent):void
+			{
+				infoBox.visible=!infoBox.visible;
+			}
+		]]>
+	</mx:Script>
+</mx:HBox>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:RadioButton xmlns:mx="http://www.adobe.com/2006/mxml" click="toggleLayer(event)" xmlns:classes="wcmc.classes.*" initialize="init()">
+	<mx:String id="MapServiceURL"/>
+	<mx:Script>
+		<![CDATA[
+			import com.google.maps.interfaces.IOverlay;
+			import wcmc.classes.LayerManager;
+			import wcmc.classes.Layer;
+			import wcmc.classes.ChangeLayerVisibilityEvent;
+			private var _layerManager:LayerManager;
+			public var layer:Layer;
+			private function init():void
+			{
+				layer=new Layer(MapServiceURL);
+			}
+			private function toggleLayer(event:MouseEvent):void
+			{
+				if (layerManager)
+				{
+					for (var i:Number=0;i<group.numRadioButtons;i++)
+					{
+						var radioButton:RadioButton=group.getRadioButtonAt(i);
+						if (radioButton!==this)
+						{
+							if (radioButton is MapServiceRadioButton)
+							{
+								if (MapServiceRadioButton(radioButton).layer.visible) layerManager.dispatchEvent(new ChangeLayerVisibilityEvent(MapServiceRadioButton(radioButton).layer,ChangeLayerVisibilityEvent.CHANGE_LAYER_VISIBILITY_EVENT));
+							}
+						}
+					}
+					layerManager.dispatchEvent(new ChangeLayerVisibilityEvent(layer,ChangeLayerVisibilityEvent.CHANGE_LAYER_VISIBILITY_EVENT));
+				}
+			}
+			public function get layerManager():LayerManager
+			{
+				return _layerManager;
+			}
+			public function set layerManager(value:LayerManager):void
+			{
+				_layerManager=value;
+				_layerManager.layers.push(layer);
+			}
+		]]>
+	</mx:Script>
+</mx:RadioButton>

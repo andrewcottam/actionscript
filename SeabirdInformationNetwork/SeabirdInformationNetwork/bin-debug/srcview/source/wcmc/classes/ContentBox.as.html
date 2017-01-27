@@ -1,0 +1,106 @@
+<!-- saved from url=(0014)about:internet -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>ContentBox.as</title>
+<link rel="stylesheet" type="text/css" href="../../../SourceStyles.css"/>
+</head>
+
+<body><pre><span class="ActionScriptComment">/* file            contentbox.mxml
+date            oct 2009
+author            andrew cottam
+description        this file is the definition for a custom base class for all content baxes in the application
+                all content boxes in the application descend from this class which includes some generic behavior common to all content boxes
+descendents        contentboxsite, contentboxsitetool, contentboxspecies, contentboxspeciestool
+properties        parameter (String) - all content boxes have a parameter property that controls the content of the content box, e.g. species BTLS
+                searchbox (TextInput) - if specified in a class instance this is used to filter search results in the results box
+                resultsbox (VBox) - if specified in a class instance this is used to display searhc results 
+events            contentboxparametersetevent - is dispatched when the parameter is set and can be used by descendent classes to do custom processing, e.g. loading data
+                
+
+ */</span>
+<span class="ActionScriptpackage">package</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">classes</span>
+<span class="ActionScriptBracket/Brace">{</span>
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">flash</span>.<span class="ActionScriptDefault_Text">events</span>.<span class="ActionScriptDefault_Text">Event</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">collections</span>.<span class="ActionScriptDefault_Text">ArrayCollection</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">containers</span>.<span class="ActionScriptDefault_Text">VBox</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">List</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">controls</span>.<span class="ActionScriptDefault_Text">TextInput</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">mx</span>.<span class="ActionScriptDefault_Text">states</span>.<span class="ActionScriptDefault_Text">SetStyle</span>;
+    <span class="ActionScriptReserved">import</span> <span class="ActionScriptDefault_Text">wcmc</span>.<span class="ActionScriptDefault_Text">components</span>.<span class="ActionScriptOperator">*</span>;
+    <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Event</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">name</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;ContentBoxParameterSet&quot;</span>, <span class="ActionScriptDefault_Text">type</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;wcmc.classes.ContentBoxParameterSetEvent&quot;</span><span class="ActionScriptBracket/Brace">)]</span>
+<span class="ActionScriptASDoc">/**
+* Custom base class for all content baxes in the application.&lt;/p&gt;&lt;p&gt;All content boxes in the application descend from this class which includes some generic behavior common to all content boxes.&lt;/p&gt;
+* @see ContentBoxSite
+ * @see ContentBoxSiteTool
+ * @see ContentBoxSpecies
+ * @see ContentBoxSpeciesTool
+*/</span>    
+    <span class="ActionScriptReserved">public</span> <span class="ActionScriptclass">class</span> <span class="ActionScriptDefault_Text">ContentBox</span> <span class="ActionScriptReserved">extends</span> <span class="ActionScriptDefault_Text">VBox</span>
+    <span class="ActionScriptBracket/Brace">{</span>
+<span class="ActionScriptASDoc">/**
+* Constructor 
+*/</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">ContentBox</span><span class="ActionScriptBracket/Brace">()</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">super</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;add&quot;</span>,<span class="ActionScriptDefault_Text">addHandler</span><span class="ActionScriptBracket/Brace">)</span>;<span class="ActionScriptComment">//dispatched when the specific ContentBox is added to the ContentBox area
+</span>            <span class="ActionScriptDefault_Text">addEventListener</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;change&quot;</span>,<span class="ActionScriptDefault_Text">searchTextChanged</span><span class="ActionScriptBracket/Brace">)</span>;<span class="ActionScriptComment">//dispatched when a text change event occurs
+</span>            <span class="ActionScriptDefault_Text">styleName</span><span class="ActionScriptOperator">=</span><span class="ActionScriptString">&quot;ContentBox&quot;</span>;
+<span class="ActionScriptASDoc">/**
+* Parameter value for the content box. This value controls the content of the content box and is either a species or site unique identifier, e.g. ALTN is Aleutian tern. 
+*/</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptMetadata">Bindable</span><span class="ActionScriptBracket/Brace">]</span><span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">set</span> <span class="ActionScriptDefault_Text">parameter</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">value</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptDefault_Text">_parameter</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">value</span>;
+            <span class="ActionScriptDefault_Text">dispatchEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptReserved">new</span> <span class="ActionScriptDefault_Text">ContentBoxParameterSetEvent</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptString">&quot;ContentBoxParameterSet&quot;</span><span class="ActionScriptBracket/Brace">))</span>; <span class="ActionScriptComment">//fire the content box parameter set event
+</span>        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptReserved">get</span> <span class="ActionScriptDefault_Text">parameter</span><span class="ActionScriptBracket/Brace">()</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">return</span> <span class="ActionScriptDefault_Text">_parameter</span>;
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_parameter</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>;
+        <span class="ActionScriptASDoc">/**
+         *  
+         */</span>        
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">searchBox</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">TextInput</span>;
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">resultsBox</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">VBox</span>;    
+        <span class="ActionScriptReserved">public</span> <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">filterOn</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span>; <span class="ActionScriptComment">//can be set in a class instance to allow search and results filtering
+</span>        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">addHandler</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            
+        <span class="ActionScriptBracket/Brace">}</span>    
+        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">searchTextChanged</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">event</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Event</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptReserved">void</span>
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">resultsBox</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptOperator">!</span><span class="ActionScriptDefault_Text">searchBox</span><span class="ActionScriptBracket/Brace">){</span><span class="ActionScriptReserved">return</span><span class="ActionScriptBracket/Brace">}</span>; <span class="ActionScriptComment">//filter the data in the list box
+</span>            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">resultsBox</span>.<span class="ActionScriptDefault_Text">getChildAt</span><span class="ActionScriptBracket/Brace">(</span>0<span class="ActionScriptBracket/Brace">)</span>; <span class="ActionScriptComment">//see if the results box has a list box to list the results
+</span>            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span> <span class="ActionScriptReserved">is</span> <span class="ActionScriptDefault_Text">List</span><span class="ActionScriptBracket/Brace">)</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_List</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">List</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">List</span><span class="ActionScriptBracket/Brace">)</span>;
+                <span class="ActionScriptComment">//filter the array 
+</span>                <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_ArrayCollection</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">ArrayCollection</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_List</span>.<span class="ActionScriptDefault_Text">dataProvider</span> <span class="ActionScriptReserved">as</span> <span class="ActionScriptDefault_Text">ArrayCollection</span>;
+                <span class="ActionScriptDefault_Text">_ArrayCollection</span>.<span class="ActionScriptDefault_Text">filterFunction</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">filter</span>;    
+                <span class="ActionScriptDefault_Text">_ArrayCollection</span>.<span class="ActionScriptDefault_Text">refresh</span><span class="ActionScriptBracket/Brace">()</span>;    
+                <span class="ActionScriptDefault_Text">_List</span>.<span class="ActionScriptDefault_Text">rowCount</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_ArrayCollection</span>.<span class="ActionScriptDefault_Text">length</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptComment">//custom filter function which returns a boolean indicating if the passed object matches the filteron value
+</span>        <span class="ActionScriptReserved">private</span> <span class="ActionScriptfunction">function</span> <span class="ActionScriptDefault_Text">filter</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Object</span><span class="ActionScriptBracket/Brace">)</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">Boolean</span> 
+        <span class="ActionScriptBracket/Brace">{</span>
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">(!</span><span class="ActionScriptDefault_Text">obj</span>.<span class="ActionScriptDefault_Text">hasOwnProperty</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">filterOn</span><span class="ActionScriptBracket/Brace">)){</span><span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span><span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">_testName</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">String</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">obj</span><span class="ActionScriptBracket/Brace">[</span><span class="ActionScriptDefault_Text">filterOn</span><span class="ActionScriptBracket/Brace">]</span>.<span class="ActionScriptDefault_Text">toUpperCase</span><span class="ActionScriptBracket/Brace">()</span>;
+            <span class="ActionScriptvar">var</span> <span class="ActionScriptDefault_Text">pos</span><span class="ActionScriptOperator">:</span><span class="ActionScriptDefault_Text">int</span> <span class="ActionScriptOperator">=</span> <span class="ActionScriptDefault_Text">_testName</span>.<span class="ActionScriptDefault_Text">indexOf</span><span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">searchBox</span>.<span class="ActionScriptDefault_Text">text</span>.<span class="ActionScriptDefault_Text">toUpperCase</span><span class="ActionScriptBracket/Brace">())</span>;
+            <span class="ActionScriptReserved">if</span> <span class="ActionScriptBracket/Brace">((</span><span class="ActionScriptDefault_Text">pos</span> <span class="ActionScriptOperator">&gt;</span> <span class="ActionScriptOperator">-</span>1<span class="ActionScriptBracket/Brace">)</span> <span class="ActionScriptOperator">||</span> <span class="ActionScriptBracket/Brace">(</span><span class="ActionScriptDefault_Text">searchBox</span>.<span class="ActionScriptDefault_Text">text</span><span class="ActionScriptOperator">==</span><span class="ActionScriptString">&quot;&quot;</span><span class="ActionScriptBracket/Brace">))</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">true</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+            <span class="ActionScriptReserved">else</span>
+            <span class="ActionScriptBracket/Brace">{</span>
+                <span class="ActionScriptReserved">return</span> <span class="ActionScriptReserved">false</span>;
+            <span class="ActionScriptBracket/Brace">}</span>
+        <span class="ActionScriptBracket/Brace">}</span>            
+    <span class="ActionScriptBracket/Brace">}</span>
+<span class="ActionScriptBracket/Brace">}</span></pre></body>
+</html>
